@@ -1,7 +1,7 @@
 #include "ship.h"
 
 void Ship::render(){
-	DrawMesh
+	// draw the mesh
 }
 
 void Ship::set_position(Vector3 position) {

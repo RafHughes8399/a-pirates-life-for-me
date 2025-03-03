@@ -60,10 +60,6 @@ void camera_debug(Camera3D& camera) {
 	DrawRectangle(600, 5, 195, 100, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(600, 5, 195, 100, BLUE);
 	DrawText("Camera status:", 610, 15, 10, BLACK);
-	DrawText(TextFormat("- Mode: %s", (camera_mode == CAMERA_FREE) ? "FREE" :
-		(camera_mode == CAMERA_FIRST_PERSON) ? "FIRST_PERSON" :
-		(camera_mode == CAMERA_THIRD_PERSON) ? "THIRD_PERSON" :
-		(camera_mode == CAMERA_ORBITAL) ? "ORBITAL" : "CUSTOM"), 610, 30, 10, BLACK);
 	DrawText(TextFormat("- Projection: %s", (camera.projection == CAMERA_PERSPECTIVE) ? "PERSPECTIVE" :
 		(camera.projection == CAMERA_ORTHOGRAPHIC) ? "ORTHOGRAPHIC" : "CUSTOM"), 610, 45, 10, BLACK);
 	DrawText(TextFormat("- Position: (%06.3f, %06.3f, %06.3f)", camera.position.x, camera.position.y, camera.position.z), 610, 60, 10, BLACK);
