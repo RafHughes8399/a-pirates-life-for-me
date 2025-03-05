@@ -1,17 +1,22 @@
 #pragma once
-#include "raylib.h"
-#include "Ocean.h"
-#include "land.h"
-#include "../game/Player.h"
-// ok ok the World, what does the World have
+#include <vector>
+#include <memory>
 
-// well the World has 
+#include "raylib.h"
+#include "ocean.h"
+#include "land.h"
+#include "../game/player.h"
+#include "../objects/object.h"
 class World {
 public:
 	// CONSTRUCTORS
-	World();
+	World()
+		: ocean_(Ocean()), player_(Player()) {
+	};
 	
-	World(const World& other);
+	World(const World& other)
+		: ocean_(other.ocean_), player_(other.player_) {
+	};
 
 	World(const World&& other);
 
@@ -21,8 +26,14 @@ public:
 	void update();
 	void render();
 
+	Player get_player();
+	Ocean get_ocean();
+
 private:
-	Ocean Ocean_;
-	// the World has a Ship
-	Player Player_;
+
+	// currently ocean and player, to be expanded upon
+	Ocean ocean_;
+	Player player_;
+	std::vector<std::unique_ptr<Object>> world_objects_;
+	float gravity_;
 };

@@ -2,56 +2,45 @@
 //
 
 #include "pirate-cmake.h"
+#include "environment/world.h"
 #include "raylib.h"
+#include "game/config.h"
 
-
-
-// some numbers that need to be set first
-// 0.0 y is sea level. these values reflfect metres
-
-static const Vector3 ORIGIN = { 0.0, 0.0, 0.0 };
-static const float SEA_LEVEL = 0.0;
-void tick(Camera3D & camera);
-void render(Camera3D & camera, int camera_mode);
+void tick(World& world);
+void render(World& world);
 void camera_debug(Camera3D& camera);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
 	InitWindow(width, height, "a pirate life for me");
 	// setup the camera
-	Camera3D camera = {}; // takes a position, target, an up vector, field of view and projection
-	camera.position = Vector3{ 0.0, 5.0, 5.0 };
-	camera.target = Vector3{ 0.0,0.5,0.0 }; // the camera looks at the cube, slightly above sea level
-	camera.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
-	camera.fovy = 90;
-	camera.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
 
+	World world = World();
 	DisableCursor();
-	SetTargetFPS(60);
+	SetTargetFPS(FPS);
 	while (!WindowShouldClose()) {
-		tick(camera);
-		auto camera_mode = CAMERA_THIRD_PERSON;
-		render(camera, camera_mode);
+		tick(world);
+		render(world);
 	}
 	CloseWindow();
 }
 
-void tick(Camera3D & camera) {
-	UpdateCamera(&camera, CAMERA_THIRD_PERSON);
+void tick(World& world) {
+	world.update();
 }
 
-void render(Camera3D & camera, int camera_mode) {
+void render(World& world) {
 	BeginDrawing();
 	ClearBackground(WHITE);
+	auto camera = world.get_player().get_camera();
 	BeginMode3D(camera);
-	DrawGrid(100, 1);
-	// draw the water
-	auto ocean_origin = Vector3{ ORIGIN.x , ORIGIN.y - 5.0f, ORIGIN.z };
-	DrawCube(ocean_origin, 100.0f, 10.0f, 100.0f, BLUE);
-	// draw the Ship
-	DrawCube(camera.target, 1.0, 1.5, 4.5, DARKGREEN);
+	
+	world.render();
+
 	EndMode3D();
+
 	camera_debug(camera);
+
 	EndDrawing();
 }
 
