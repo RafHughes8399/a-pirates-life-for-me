@@ -1,0 +1,53 @@
+
+
+A PIRATE'S LIFE FOR ME MARCH LOGS 
+
+5th of March
+
+implementing collision algorithm that is not O(n^2) that is stinky and yucky algorithm. I found resources for a 
+linear algorithm
+
+sort and sweep algorithm lets break it down: 
+
+
+dealing with the AABB axis-aligned bounding box of an object
+
+
+the idea is to maintain a sorted linked list 
+
+on each axis, a box corresponds to an interval [b, e] on the axis. For all objects, these intervals
+can be placed into a sorted list. The list is traversed to track active intervals
+
+for an internval [b,e] if there are any other intervals [bi, ei] such that bi < e then 
+the AABB is added to the list and a collision is potentially detected
+
+then an interaction needs to occur, for that there can be an interaction class
+
+the world objects list is sorted by the AABB, raylib can get you the bounding box of each object
+
+do it for the axis with the highest variance
+
+
+
+find the axis of maximal variance
+sort the list of objects by their bounding box position on that axis
+then find intersections for each entity by check the bounds with the next closest
+
+if the bounds do not match end early, otherwise if they do, check for an intersection (hitboxes)
+
+but you can set this up tomorrow easily enough I think (maybe aside from hitboxes for now)
+
+
+
+
+then perform an interaction
+
+defined by an interaction manager or something 
+i think i should rewatch the videos to understand the logic better
+
+there is a list of all interactions that could possibly happen in the game, you define then 
+i.e ship-water interaction, ship-cannonball interaction, etc 
+
+the interaction implementation should manipulate the two entiteis
+
+you call the interaction based on the entiteis that are intersecting (rewatch the videos for this logic )

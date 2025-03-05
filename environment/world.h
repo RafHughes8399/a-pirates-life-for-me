@@ -11,11 +11,17 @@ class World {
 public:
 	// CONSTRUCTORS
 	World()
-		: ocean_(Ocean()), player_(Player()) {
+		: player_(Player()) {
+		// change this once the model manager is in play, and change the volume calculation
+		world_objects_.push_back(std::make_unique<Object>(Object(Vector3{ 0.0f, -12.5f,0.0f },
+			LoadModelFromMesh(GenMeshCube(1000.f, 25.0f, 1000.f)), WATER_DENISTY, 1000.0 * 25.0 * 1000.0)));
 	};
 	
 	World(const World& other)
-		: ocean_(other.ocean_), player_(other.player_) {
+		: player_(other.player_) {
+		for (auto& o : world_objects_) {
+			world_objects_.push_back(std::move(o));
+		}
 	};
 
 	World(const World&& other);
@@ -27,13 +33,11 @@ public:
 	void render();
 
 	Player get_player();
-	Ocean get_ocean();
+	Object* get_ocean();
 
 private:
 
 	// currently ocean and player, to be expanded upon
-	Ocean ocean_;
 	Player player_;
 	std::vector<std::unique_ptr<Object>> world_objects_;
-	float gravity_;
 };

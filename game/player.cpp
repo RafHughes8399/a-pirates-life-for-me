@@ -10,7 +10,7 @@ void Player::update(){
 	
 	
 	move_camera(camera_mode_, target_difference);
-	UpdateCamera(&camera_, CAMERA_THIRD_PERSON);
+	//UpdateCamera(&camera_, CAMERA_THIRD_PERSON);
 }
 void Player::render() {
 

@@ -5,7 +5,7 @@
 class Player {
 public:
 	Player()
-		:camera_(Camera3D{}), ship_(Ship(Vector3{ 0.0,0.0,0.0 }, GenMeshCube(2.0f, 4.5f, 4.0f), 40.0f, (2.0f * 4.5f * 4.0f), 0.0, Vector3{ 0.0,0.0,0.0 }, 0.0f)), camera_mode_(CAMERA_THIRD_PERSON) {
+		:camera_(Camera3D{}), ship_(Ship(Vector3{ 0.0,0.0,0.0 }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, Vector3{ 0.0,0.0,0.0 }, 0.0f)), camera_mode_(CAMERA_THIRD_PERSON) {
 
 		camera_.position = Vector3{ 0.0, 5.0, 5.0 };
 		camera_.target = Vector3{ 0.0,0.5,0.0 }; // the camera looks at the cube, slightly above sea level

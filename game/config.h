@@ -3,7 +3,7 @@
 
 #define FPS 60
 #define GRAVITY -9.8f //  units per second
-#define WATER_DENISTY  
+#define WATER_DENISTY 1000.0f // subject to change ? 
 
 
 #define CAMERA_MOVE_SPEED 5.4f       // Units per second
