@@ -13,7 +13,7 @@ void Object::render(){
 	return;
 }
 
-void Object::interact(Object& other){
+void Object::interact(Object* other){
 	return;
 }
 
@@ -36,6 +36,10 @@ Model& Object::get_model(){
 	return model_;
 }
 
+float Object::get_density(){
+	return density_;
+}
+
 void MoveableObject::update(){
 	return;
 }
@@ -52,3 +56,8 @@ Vector3 MoveableObject::get_acceleration(){
 void MoveableObject::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }
+
+
+
+
+

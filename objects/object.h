@@ -2,6 +2,7 @@
 #include <utility>
 #include <string>
 #include <cmath>
+#include <iostream>
 #include "raylib.h"
 #include "raymath.h"
 class Object {
@@ -27,9 +28,13 @@ public:
 	float get_height();
 	float get_width();
 	float get_length();
+
 	// getters and setters 
 	Model& get_model();
+	float get_density();
 
+
+	// operator overloads
 protected:
 
 	// all objects have a model and position, and a hitbox
@@ -67,6 +72,10 @@ protected:
 	Vector3 acceleration_;
 };
 
+
+
+
+
 class Ship : public MoveableObject {
 public:
 
@@ -98,4 +107,22 @@ private:
 	Vector3 sail_direction_;
 	float sail_length_;
 	bool anchored_ = false;
+};
+
+
+class Ocean : public Object {
+public:
+	Ocean(Vector3 position, Model model, float density, float volume)
+		: Object(position, model, density, volume){
+	};
+
+	Ocean(const Ocean& other)
+		: Object(other){
+	};
+
+	Ocean(const Ocean&& other)
+		: Object(other){
+	};
+	void interact(Object* other) override;
+private:
 };

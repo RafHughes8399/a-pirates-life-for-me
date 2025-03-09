@@ -76,3 +76,13 @@ FOR THIS YOU NEED A CUSTOM COMPARATOR, that can sort AABB on the axis of most va
 -> turning the wheel
 -> dropping and raising anchor
 
+but where am I at now. Trying to implement entity interaction
+
+there is an interaction class with a list of interactors and interactees
+a list of interactions is stored in the world
+
+an object has a list of interactors and interactees (the interactions for which it is an interactor, and 
+the interactiosn for whcih it is an interactee)
+
+
+first things first, what I do know is that i need an ocean class
