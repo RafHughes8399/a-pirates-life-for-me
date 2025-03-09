@@ -20,6 +20,12 @@ void Ship::render(){
 	DrawModel(model_, position_, 1.0f, DARKGREEN);
 }
 
+void Ship::interact(Object* other){
+	auto ocean = dynamic_cast<Ocean*>(other);
+	// cast to ocean
+
+}
+
 void Ship::set_position(Vector3 position) {
 	position_ = position;
 }

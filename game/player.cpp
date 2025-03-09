@@ -2,11 +2,10 @@
 #include "config.h"
 #include "raymath.h"
 #include "rcamera.h"
+// player is updated after the objects so this should wok
 void Player::update(){
-	auto ship_before = ship_.get_position();
-	ship_.update();
-	auto ship_after = ship_.get_position();
-	auto target_difference = Vector3Subtract(ship_after, ship_before);
+	auto ship_position = ship_->get_position();
+	auto target_difference = Vector3Subtract(ship_position, camera_.target);
 	
 	
 	move_camera(camera_mode_, target_difference);
@@ -14,7 +13,7 @@ void Player::update(){
 }
 void Player::render() {
 
-	ship_.render();
+	//ship_.render(); - the ship is rendered by the world
 }
 
 Camera3D Player::get_camera(){
@@ -46,6 +45,10 @@ void Player::move_camera(int mode, Vector3& difference){
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
 }
 
-Ship Player::get_ship(){
+Ship* Player::get_ship(){
 	return ship_;
+}
+
+void Player::set_ship(Ship* ship){
+	ship_ = ship;
 }

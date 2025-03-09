@@ -51,3 +51,28 @@ i.e ship-water interaction, ship-cannonball interaction, etc
 the interaction implementation should manipulate the two entiteis
 
 you call the interaction based on the entiteis that are intersecting (rewatch the videos for this logic )
+
+
+
+6th and 7th of March
+
+ok final time chatting bout dis
+
+sort and sweep
+
+SORT GAME OBJECTS BY THEIR AABBs ON THE AXIS OF MOST VARIANCE
+
+FOR THIS YOU NEED A CUSTOM COMPARATOR, that can sort AABB on the axis of most variance
+
+
+9th of March
+-> define an ocean class 
+-> use ocean class for the ocean
+-> implement ship interact
+-> test buoyancy and collison
+
+-> implement wind and ship controls 
+-> adjusting sail direction and length
+-> turning the wheel
+-> dropping and raising anchor
+

@@ -1,6 +1,9 @@
 #pragma once
 #include <utility>
+#include <string>
+#include <cmath>
 #include "raylib.h"
+#include "raymath.h"
 class Object {
 public:
 	Object(Vector3 position, Model model, float density, float volume)
@@ -20,6 +23,13 @@ public:
 	// a default update and render, the default update does nothing, render just draws the 
 	virtual void update();
 	virtual void render();
+	virtual void interact(Object* other);
+	float get_height();
+	float get_width();
+	float get_length();
+	// getters and setters 
+	Model& get_model();
+
 protected:
 
 	// all objects have a model and position, and a hitbox
@@ -37,23 +47,29 @@ class MoveableObject : public Object {
 public:
 	MoveableObject(Vector3 position, Model model, float density, float volume, Vector3 velocity)
 		: Object(position, model, density, volume), velocity_(velocity) {
+		acceleration_ = Vector3{ 0.0,0.0,0.0 };
 	};
 	MoveableObject(const MoveableObject& other)
-		: Object(other), velocity_(other.velocity_){
+		: Object(other), velocity_(other.velocity_), acceleration_(other.acceleration_){
 	};
 
 	MoveableObject(const MoveableObject&& other)
-		: Object(other), velocity_(std::move(other.velocity_)) {
+		: Object(other), velocity_(std::move(other.velocity_)), acceleration_(std::move(other.acceleration_)) {
 	}
 	void update() override;
 	void render() override;
 
+	Vector3 get_acceleration();
+	void adjust_acceleration(Vector3 acceleration);
+
 protected:
 	Vector3 velocity_;
+	Vector3 acceleration_;
 };
 
 class Ship : public MoveableObject {
 public:
+
 	Ship(Vector3 position, Model model, float density, float volume, Vector3 velocity,
 		Vector3 sail_direction, float sail_length)
 		: MoveableObject(position, model, density, volume, velocity), sail_direction_(sail_direction),  sail_length_(sail_length){
@@ -73,7 +89,7 @@ public:
 
 	void update() override;
 	void render() override;
-
+	void interact(Object* other) override;
 	void set_position(Vector3 position);
 	Vector3 get_position();
 	void drop_anchor();

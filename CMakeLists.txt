@@ -27,7 +27,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   endif()
 endif()
 # Add source to this project's executable.
-add_executable (pirate-cmake "pirate-cmake.cpp" "pirate-cmake.h" "environment/World.h" "environment/Ocean.h" "environment/land.h" "game/Player.h" "game/player.cpp" "objects/ship.cpp" "environment/world.cpp" "environment/ocean.cpp" "game/config.h"  "objects/object.h" "game/managers.h" "objects/object.cpp")
+add_executable (pirate-cmake "pirate-cmake.cpp" "pirate-cmake.h" "environment/World.h" "environment/Ocean.h" "environment/land.h" "game/Player.h" "game/player.cpp" "objects/ship.cpp" "environment/world.cpp" "environment/ocean.cpp" "game/config.h"  "objects/object.h" "game/managers.h" "objects/object.cpp" "game/managers.cpp")
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
