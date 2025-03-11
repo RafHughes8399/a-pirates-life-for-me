@@ -2,6 +2,7 @@
 
 void Object::update(){
 	// default does nothing
+	update_bounding_box();
 	return;
 }
 
@@ -38,6 +39,23 @@ Model& Object::get_model(){
 
 float Object::get_density(){
 	return density_;
+}
+
+Vector3 Object::get_position(){
+	return position_;
+}
+
+Vector3 Object::get_size(){
+	return size_;
+}
+
+BoundingBox Object::get_bounding_box(){
+	return bounding_box_;
+}
+
+void Object::update_bounding_box(){
+	bounding_box_ = BoundingBox{ position_.x - (size_.x / 2), position_.y - (size_.y / 2), position_.z - (size_.z / 2),
+								position_.x + (size_.x / 2), position_.y + (size_.y / 2), position_.z + (size_.z / 2) };
 }
 
 void MoveableObject::update(){

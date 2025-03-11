@@ -8,7 +8,7 @@
 
 void tick(World& world);
 void render(World& world);
-void camera_debug(Camera3D& camera);
+void debug(Camera3D& camera);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
@@ -39,12 +39,15 @@ void render(World& world) {
 
 	EndMode3D();
 
-	camera_debug(camera);
+	debug(camera);
 
 	EndDrawing();
 }
 
-void camera_debug(Camera3D& camera) {
+void debug(Camera3D& camera) {
+
+	// FPS Counter
+	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
 	// camera debug info
 	DrawRectangle(600, 5, 195, 100, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(600, 5, 195, 100, BLUE);

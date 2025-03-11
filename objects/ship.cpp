@@ -2,17 +2,22 @@
 #include "raymath.h"
 #include "../game/config.h"
 void Ship::update(){
+
+	Object::update(); // update the bounding box
+
 	// update the ship position
 	auto delta_time = GetFrameTime();
 
 	// so the ship currently should just fall through world
 	// temporarily move the ship forward
 
-	acceleration_.y += GRAVITY / density_;
+	acceleration_.y += GRAVITY;
+	acceleration_.y /= density_;
 	
 	// factor in buoyancy and wind, etc. 
 	velocity_ = Vector3Scale(acceleration_, delta_time);
 	position_ = Vector3Add(position_, velocity_);
+	acceleration_ = { 0.0f, 0.0f, 0.0f };
 }
 
 void Ship::render(){
@@ -23,7 +28,7 @@ void Ship::interact(Object* other){
 	auto ocean = dynamic_cast<Ocean*>(other);
 	// cast to ocean
 	if (ocean != nullptr) {
-		std::cout << "interact with ocean " << std::endl;
+		//std::cout << "interact with ocean " << std::endl;
 		auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
 		auto submerged_height = std::abs(0.0f - position_.y);
 		auto p = ocean->get_density();

@@ -3,20 +3,25 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+
 #include "raylib.h"
 #include "raymath.h"
+
+#include "ship_components.h"
 class Object {
 public:
-	Object(Vector3 position, Model model, float density, float volume)
-		: position_(position), model_(model), density_(density), volume_(volume){
+	Object(Vector3 position, Vector3 size, Model model, float density, float volume)
+		: position_(position), model_(model), size_(size), density_(density), volume_(volume){
+		// generate the bounding box, min and max
+		update_bounding_box();
 	};
 
 	Object(const Object& other)
-		: position_(other.position_), model_(other.model_), density_(other.density_), volume_(other.volume_){
+		: position_(other.position_), size_(other.size_), model_(other.model_), bounding_box_(other.bounding_box_), density_(other.density_), volume_(other.volume_){
 	};
 
-	Object(const Object&& other)
-		: position_(std::move(other.position_)), model_(std::move(other.model_)), density_(std::move(other.density_)),
+	Object(Object&& other)
+		: position_(std::move(other.position_)), size_(std::move(other.size_)), model_(std::move(other.model_)), bounding_box_(std::move(other.bounding_box_)), density_(std::move(other.density_)),
 		volume_(std::move(other.volume_)) {
 	};
 
@@ -32,15 +37,18 @@ public:
 	// getters and setters 
 	Model& get_model();
 	float get_density();
-
-
+	Vector3 get_position();
+	Vector3 get_size();
+	BoundingBox get_bounding_box();
+	void update_bounding_box();
 	// operator overloads
 protected:
 
 	// all objects have a model and position, and a hitbox
 	Model model_;
 	Vector3 position_;
-
+	Vector3 size_;
+	BoundingBox bounding_box_;
 	//Hitbox hitbox_;
 
 	// objects also have 
@@ -50,16 +58,16 @@ protected:
 
 class MoveableObject : public Object {
 public:
-	MoveableObject(Vector3 position, Model model, float density, float volume, Vector3 velocity)
-		: Object(position, model, density, volume), velocity_(velocity) {
+	MoveableObject(Vector3 position, Vector3 size, Model model, float density, float volume, Vector3 velocity, Vector3 direction)
+		: Object(position, size, model, density, volume), velocity_(velocity), direction_(direction) {
 		acceleration_ = Vector3{ 0.0,0.0,0.0 };
 	};
 	MoveableObject(const MoveableObject& other)
-		: Object(other), velocity_(other.velocity_), acceleration_(other.acceleration_){
+		: Object(other), velocity_(other.velocity_), acceleration_(other.acceleration_), direction_(other.direction_){
 	};
 
-	MoveableObject(const MoveableObject&& other)
-		: Object(other), velocity_(std::move(other.velocity_)), acceleration_(std::move(other.acceleration_)) {
+	MoveableObject(MoveableObject&& other)
+		: Object(other), velocity_(std::move(other.velocity_)), acceleration_(std::move(other.acceleration_)), direction_(std::move(other.direction_)) {
 	}
 	void update() override;
 	void render() override;
@@ -70,6 +78,7 @@ public:
 protected:
 	Vector3 velocity_;
 	Vector3 acceleration_;
+	Vector3 direction_;
 };
 
 
@@ -79,18 +88,16 @@ protected:
 class Ship : public MoveableObject {
 public:
 
-	Ship(Vector3 position, Model model, float density, float volume, Vector3 velocity,
-		Vector3 sail_direction, float sail_length)
-		: MoveableObject(position, model, density, volume, velocity), sail_direction_(sail_direction),  sail_length_(sail_length){
+	Ship(Vector3 position, Vector3 size,  Model model, float density, float volume, Vector3 velocity, Vector3 direction)
+		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction)), anchor_(Anchor()){
 	};
 
 	Ship(const Ship& other)
-		: MoveableObject(other), sail_direction_(other.sail_direction_), sail_length_(other.sail_length_), anchored_(other.anchored_){
+		: MoveableObject(other), sail_(other.sail_), anchor_(other.anchor_){
 	};
 
-	Ship(const Ship&& other)
-		: MoveableObject(other), sail_direction_(std::move(other.sail_direction_)), sail_length_(std::move(other.sail_length_)),
-		anchored_(std::move(other.anchored_)) {
+	Ship(Ship&& other)
+		: MoveableObject(other), sail_(std::move(other.sail_)), anchor_(std::move(other.anchor_)){
 	};
 
 	Ship& operator=(const Ship& ohter);
@@ -101,26 +108,27 @@ public:
 	void interact(Object* other) override;
 	void set_position(Vector3 position);
 	Vector3 get_position();
+
 	void drop_anchor();
 	void raise_anchor();
 private:
-	Vector3 sail_direction_;
-	float sail_length_;
-	bool anchored_ = false;
+	Sail sail_;
+	Anchor anchor_;
+
 };
 
 
 class Ocean : public Object {
 public:
-	Ocean(Vector3 position, Model model, float density, float volume)
-		: Object(position, model, density, volume){
+	Ocean(Vector3 position, Vector3 size, Model model, float density, float volume)
+		: Object(position, size, model, density, volume){
 	};
 
 	Ocean(const Ocean& other)
 		: Object(other){
 	};
 
-	Ocean(const Ocean&& other)
+	Ocean(Ocean&& other)
 		: Object(other){
 	};
 	void interact(Object* other) override;

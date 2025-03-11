@@ -43,9 +43,9 @@ public:
 	World()
 		: player_(Player()){
 		// change this once the model manager is in play, and change the volume calculation
-		world_objects_.push_back(std::make_unique<Ocean>(Ocean(Vector3{ 0.0f, -12.5f,0.0f },
+		world_objects_.push_back(std::make_unique<Ocean>(Ocean(Vector3{ 0.0f, -12.5f,0.0f }, Vector3{1000.f, 25.0f, 1000.f},
 			LoadModelFromMesh(GenMeshCube(1000.f, 25.0f, 1000.f)), WATER_DENISTY, 1000.0 * 25.0 * 1000.0)));
-		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, Vector3{ 0.0,0.0,0.0 }, 0.0f));
+		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, Vector3{1.0,0.0,0.0 })); // starts pointing north
 		player_.set_ship(ship.get());
 		world_objects_.push_back(std::move(ship));
 		cmp_.axis_ = 0; // default axis of most variance is the x axis

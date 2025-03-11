@@ -86,3 +86,35 @@ the interactiosn for whcih it is an interactee)
 
 
 first things first, what I do know is that i need an ocean class
+
+
+10th of March
+I think collision is there , I just need to test it to make sure the interactions don't double up.
+
+I also need to change the value of water density, that is too large
+
+
+I think acceleration is being compounded over each frame, but it 
+
+
+ok there's some funky freaky stuff happening, the bounding boxes are not changing over each frame ?
+which is compounding the interaction over and over again, causing the buounacy to go to infinity
+
+
+think about a template method for object update 
+-> update the position
+-> update the bounding box
+
+
+11th of March
+time to support player actions and allow them to control parts of the ship 
+
+1. the anchor
+	 - can be lowered and raised 
+	 - when the anchor is lowered is affects acceleration on the x and z axis by n units per frame, until acceleration reaches 0
+	 - while the anchor is lowered the ship cannot accelerate on the x and z axis 
+
+	 - the anchor is raised 
+
+
+after wind is done, i would work on the object builder and factory 
