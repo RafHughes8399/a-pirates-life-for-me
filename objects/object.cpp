@@ -71,6 +71,10 @@ Vector3 MoveableObject::get_acceleration(){
 	return acceleration_;
 }
 
+float MoveableObject::get_direction(){
+	return direction_;
+}
+
 void MoveableObject::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }

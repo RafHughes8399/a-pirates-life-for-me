@@ -8,7 +8,7 @@
 
 void tick(World& world);
 void render(World& world);
-void debug(Camera3D& camera);
+void debug(Camera3D& camera, Ship& ship);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
@@ -39,15 +39,16 @@ void render(World& world) {
 
 	EndMode3D();
 
-	debug(camera);
+	debug(camera, *world.get_player().get_ship());
 
 	EndDrawing();
 }
 
-void debug(Camera3D& camera) {
+void debug(Camera3D& camera, Ship& ship) {
 
 	// FPS Counter
 	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
+
 	// camera debug info
 	DrawRectangle(600, 5, 195, 100, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(600, 5, 195, 100, BLUE);
@@ -57,4 +58,19 @@ void debug(Camera3D& camera) {
 	DrawText(TextFormat("- Position: (%06.3f, %06.3f, %06.3f)", camera.position.x, camera.position.y, camera.position.z), 610, 60, 10, BLACK);
 	DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", camera.target.x, camera.target.y, camera.target.z), 610, 75, 10, BLACK);
 	DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", camera.up.x, camera.up.y, camera.up.z), 610, 90, 10, BLACK);
+
+	// player debug info
+	auto text_y = 15;
+	DrawRectangle(200, 5, 195, 170, Fade(SKYBLUE, 0.5f));
+	DrawRectangleLines(200, 5, 195, 170, BLUE);
+	DrawText("Ship status: ", 210, text_y, 10, BLACK);
+	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", ship.get_position().x, ship.get_position().y, ship.get_position().z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Direction: %06.3f", ship.get_direction()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Sail Angle: %06.3f", ship.get_sail().get_sail_direction()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Sail Length: %06.3f", ship.get_sail().get_sail_length()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Anchor Depth: %06.3f", ship.get_anchor().get_depth()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Anchor Speed: %06.3f", ship.get_anchor().get_speed()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Acceleration"), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Velocity"), 210, text_y += 17, 10, BLACK);
+
 }

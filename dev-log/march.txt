@@ -118,3 +118,76 @@ time to support player actions and allow them to control parts of the ship
 
 
 after wind is done, i would work on the object builder and factory 
+
+12th of March
+Ship Controls
+Sails (Raise/Lower, Rotate Left/Right)
+Helm (Turn Left / Right, Centre)
+Anchor(Raise / Lower)
+
+Currently I'm thinking you press a button to go into a mode (i.e sail mode, helm mode, anchor mode)
+and then you press the button 
+
+or or:
+A, D for helm steering
+R for anchor raise / lower
+F is the interact key 
+W. S for sail rasing / lowering
+Q, E for sail rotating
+
+
+ok, controls can be thought of mapping a key to a player action 
+and then when updating the player you check if any of the mapped keys are pressed, if they are, invoke
+ the method
+
+ steering and turning happens at a constant rate (i.e a set amount of units per function call)
+
+ there are two types of key interactions, is key down and is key pressed
+
+ 13th of March
+ -> implement the player control functions
+ -> setup a debug screen 
+ -> test controls 
+
+ -> add wind 
+ -> test movement
+
+
+ -> ship methods
+ -> player update x 
+ -> world debug
+
+ -> in ship update calculate the directoin coefficients from the direction and append to velocity
+ -> visual debug
+
+
+
+ ok little update good progress boy
+ -> have basic controls over the ship aside from anchor
+ how should the anchor work ? there are some options
+ 1. have a button to raise the anchor, and one to lower it, like the sail
+ 2. have one button that raises/lowers the anchor. It stops moving when it reaches the top or bottom
+
+ option 1 is simple, you can copy the code from the sail
+ option 2 is less simple, what happens depends on the state of the anchor. There are several cases
+ 
+ case 1
+ if not moving -> start moving 
+ 
+ case 2 
+ if moving -> move in the opposite direction
+
+ so the anchor is either moving or not moving
+
+ its also about tracking the speed 
+ so if not moving the speed is 0, then the direction it moves depends on its height for case 1
+ for case 2 just * -1 
+ while moving the acceleration dampening coefficient depends on its height
+ once the anchor reaches the top or bottom it becomes stationary
+
+
+
+
+ 14 March
+ -> rotate the actual ship object
+ -> 

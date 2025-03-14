@@ -17,10 +17,15 @@
 #define CAMERA_MOUSE_MOVE_SENSITIVITY 0.003f
 
 
+// ship properties
+#define SHIP_TURN_SPEED 0.35f // to be updated maybe ?
+// sail properties
+#define LOWER_RAISE_SPEED 0.025f
+#define SAIL_TURN_SPEED 0.3f
 // anchor properties
-#define ANCHOR_DROP_SPEED 2.6f // how quick the anchor drops in seconds
+#define ANCHOR_DROP_SPEED 0.35f // how quick the anchor drops in seconds
 #define ANCHOR_STATIC_SPEED 0.0f
-#define ANCHOR_MAX_DEPTH 15.5f 
+#define ANCHOR_MAX_DEPTH 32.6f 
 #define ANCHOR_RAISED_FORCE {1.0f, 0.0f, 1.0f}
 #define ANCHOR_LOWERED_FORCE {0.0f, 0.0f, 0.0f}
 

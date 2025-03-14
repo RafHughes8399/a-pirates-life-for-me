@@ -2,18 +2,19 @@
 #include "config.h"
 #include "raymath.h"
 #include "rcamera.h"
+
 // player is updated after the objects so this should wok
 void Player::update(){
+	check_key_input();
 	auto ship_position = ship_->get_position();
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
-	
 	
 	move_camera(camera_mode_, target_difference);
 	//UpdateCamera(&camera_, CAMERA_THIRD_PERSON);
 }
 void Player::render() {
 
-	//ship_.render(); - the ship is rendered by the world
+	//this is where the hud will be drawn and other components
 }
 
 Camera3D Player::get_camera(){
@@ -51,4 +52,37 @@ Ship* Player::get_ship(){
 
 void Player::set_ship(Ship* ship){
 	ship_ = ship;
+}
+
+void Player::check_key_input(){
+	// iterate through both key maps
+
+
+	for (auto& input : key_down_inputs_) {
+		if (IsKeyDown(input.first)) {
+			input.second();
+		}
+	}
+	for (auto& input : key_pressed_inputs_) {
+		if (IsKeyPressed(input.first)) {
+			input.second();
+		}
+	}
+}
+
+void Player::set_default_key_map(){
+	// fill the control maps, figure out how to e
+
+	key_down_inputs_[KEY_A] = [this]() { ship_->steer_left(); };
+	key_down_inputs_[KEY_D] = [this]() { ship_->steer_right(); };
+
+
+	key_down_inputs_[KEY_W] = [this]() { ship_->raise_sail(); };
+	key_down_inputs_[KEY_S] = [this]() { ship_->lower_sail(); };
+
+	key_down_inputs_[KEY_Q] = [this]() { ship_->turn_sail_left(); };
+	key_down_inputs_[KEY_E] = [this]() { ship_->turn_sail_right(); };
+
+	key_pressed_inputs_[KEY_R] = [this]() { ship_->move_anchor(); }; // adjust the function call, it should not be raise/lower anchor but rather 
+	// something that changes the movement of the anchor . this is placeholder
 }
