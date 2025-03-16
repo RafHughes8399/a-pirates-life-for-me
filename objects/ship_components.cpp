@@ -7,6 +7,14 @@ float Sail::get_sail_length(){
 	return length_;
 }
 
+float Sail::get_width(){
+	return width_;
+}
+
+float Sail::sail_arc(){
+	return direction_ * width_;
+}
+
 void Sail::sail_left(){
 	// >= pi, lock it at pi, 
 	direction_ = std::min(std::numbers::pi_v<float>, direction_ + SAIL_TURN_SPEED);

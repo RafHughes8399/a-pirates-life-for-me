@@ -1,29 +1,31 @@
 #pragma once 
 #include <memory>
 #include <numbers>
+#include <utility>
+#include <cmath>
 #include "raylib.h"
 #include "raymath.h"
-#include <cmath>
-#include <numbers>
 #include "../game/config.h"
 
 class Sail {
 public:
 	~Sail() = default;
-	Sail(float direction)
+	Sail(float direction, float width)
 		: direction_(direction) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
-		: direction_(other.direction_), length_(other.length_) {
+		: direction_(other.direction_), length_(other.length_), width_(other.width_) {
 	};
 	Sail(const Sail&& other)
-		:direction_(std::move(other.direction_)), length_(other.length_) {
+		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)) {
 	};
 
 	float get_sail_direction();
 	float get_sail_length();
+	float get_width();
 
+	float sail_arc();
 	void sail_left();
 	void sail_right();
 
@@ -32,6 +34,8 @@ public:
 
 private:
 	float direction_; // angle in radians
+	float width_;
+	// the arc of the sail is r * direction_, r is the length of the sail ig
 	float length_;
 };
 
@@ -75,10 +79,10 @@ public:
 		else if (auto* lowered = dynamic_cast<MovingState*>(other.state_.get())) {
 			state_ = std::make_unique<MovingState>(*lowered);
 		}
-	}
+	};
 	Anchor(Anchor&& other)
 		: state_(std::move(other.state_)), depth_(other.depth_) {
-	}
+	};
 
 	void move();
 	void update();

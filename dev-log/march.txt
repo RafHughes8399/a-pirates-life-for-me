@@ -190,4 +190,35 @@ and then when updating the player you check if any of the mapped keys are presse
 
  14 March
  -> rotate the actual ship object
- -> 
+ how should the wind work?
+ the wind has speed and 
+the ship does not move 
+its like a percent match to the wind
+
+the sail has a width right, it forms an arc on the unit circle so first things first
+
+
+
+
+i also think you need to 
+
+
+15 March
+-> wind implementation
+-> sail arc
+
+
+-> the wind always moves the ship forward, it just chaanges based on how 
+well the sail matches the wind
+
+-> integraate movement coefficients (anchor, wind, sail, ship direction) into
+ship movement
+-> test ship movement
+
+
+
+-> the direction coefficient depends on the wind 
+-> the speed coefficient depoends on the match between the sail and the wind
+
+
+-> figure out delta and lerp maybe  

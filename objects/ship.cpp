@@ -75,18 +75,26 @@ void Ship::steer_left(){
 	// change ship direction to the left
 	// update direction, similar to the sail except the bounds are different, then rotate the model
 	// use modulus in terms of 2 * pi
+	auto prev_direction = direction_;
 	direction_ = std::fmod((direction_ + SHIP_TURN_SPEED), ( 2 * std::numbers::pi_v<float>));
 	
 	// rotate the model, yaw
-	//model_.transform();
+	float yaw = direction_ + prev_direction;
+	Vector3 rotate = { 0.0f, yaw, 0.0f };
+	model_.transform = MatrixRotateXYZ(rotate);
 }
 
 void Ship::steer_right(){
 	// change ship direction to the right
+
+	auto prev_direction = direction_;
 	direction_ = std::fmod((direction_ - SHIP_TURN_SPEED), ( 2 * std::numbers::pi_v<float>));
 	if (direction_ < 0) {
 		direction_ += 2 * std::numbers::pi_v<float>;
 	}
+	float yaw = direction_ + prev_direction;
+	Vector3 rotate = {  0.0f,  yaw,  0.0f };
+	model_.transform = MatrixRotateXYZ(rotate);
 }
 
 void Ship::raise_sail(){
