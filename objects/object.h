@@ -75,7 +75,7 @@ public:
 	Vector3 get_acceleration();
 	Vector3 get_velocity();
 	float get_direction();
-	
+	Vector3 get_direction_coefficient();
 	void adjust_acceleration(Vector3 acceleration);
 	
 

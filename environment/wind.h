@@ -24,8 +24,8 @@ public:
 		:direction_(std::move(other.direction_)), speed_(std::move(other.speed_)) {
 	};
 
-	float get_speed();
-	float get_direction();
+	float get_speed() const;
+	float get_direction() const;
 
 	void pick_speed();
 	void pick_direction();

@@ -2,29 +2,36 @@
 #include "raymath.h"
 #include "../game/config.h"
 void Ship::update(){
-
 	Object::update(); // update the bounding box
 
-	// update the ship position
 	auto delta_time = GetFrameTime();
-
-	// so the ship currently should just fall through world
-	// temporarily move the ship forward
-
 	// update the anchor
 	anchor_.update();
-	
 
-	// eventually TODO, get the anchor force coefficient
-
+	// apply gravity
 	acceleration_.y += GRAVITY;
 	acceleration_.y /= density_;
-	
-	// factor in buoyancy and wind, etc. 
 
-	// apply the ship directoin to the velocity, use sin and cos 
+	
+	// apply the sail movement coeffieicts
+	acceleration_ = Vector3Multiply(acceleration_, sail_.get_force());
+
+	// apply the anchor force coefficient 
+	acceleration_ = Vector3Multiply(acceleration_, anchor_.get_force());
+	
+	// apply acceleration to velocity
 	velocity_ = Vector3Scale(acceleration_, delta_time);
+
+
+
+
+	// apply the ship direction to the velocity, use sin and cos, other way around z is cos, sin is x
+	auto direction_coefficient = get_direction_coefficient();
+	velocity_ = Vector3Multiply(velocity_, direction_coefficient);
+	
+	// update pos
 	position_ = Vector3Add(position_, velocity_);
+	// reset accel
 	acceleration_ = { 0.0f, 0.0f, 0.0f };
 }
 
@@ -36,7 +43,8 @@ void Ship::interact(Object* other){
 	auto ocean = dynamic_cast<Ocean*>(other);
 	// cast to ocean
 	if (ocean != nullptr) {
-		//std::cout << "interact with ocean " << std::endl;
+		
+		// buoyancy
 		auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
 		auto submerged_height = std::abs(0.0f - position_.y);
 		auto p = ocean->get_density();
@@ -90,7 +98,7 @@ void Ship::steer_right(){
 	auto prev_direction = direction_;
 	direction_ = std::fmod((direction_ - SHIP_TURN_SPEED), ( 2 * std::numbers::pi_v<float>));
 	if (direction_ < 0) {
-		direction_ += 2 * std::numbers::pi_v<float>;
+		direction_ += PI2
 	}
 	float yaw = direction_ + prev_direction;
 	Vector3 rotate = {  0.0f,  yaw,  0.0f };

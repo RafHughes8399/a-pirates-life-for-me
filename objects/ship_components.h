@@ -6,24 +6,29 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "../game/config.h"
+#include "../environment/wind.h"
 
 class Sail {
 public:
 	~Sail() = default;
 	Sail(float direction, float width)
-		: direction_(direction) {
+		: direction_(direction), wind_(nullptr) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
-		: direction_(other.direction_), length_(other.length_), width_(other.width_) {
+		: direction_(other.direction_), length_(other.length_), width_(other.width_), wind_(other.wind_) {
 	};
 	Sail(const Sail&& other)
-		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)) {
+		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)),
+		wind_(std::move(other.wind_)){
 	};
 
 	float get_sail_direction();
 	float get_sail_length();
 	float get_width();
+	Vector3 get_force();
+	const Wind* get_wind();
+
 
 	float sail_arc();
 	void sail_left();
@@ -32,11 +37,17 @@ public:
 	void raise_sail(float length);
 	void lower_sail(float length);
 
+	void set_wind(const Wind* wind);
+
+
 private:
+	void calcualte_force();
 	float direction_; // angle in radians
 	float width_;
 	// the arc of the sail is r * direction_, r is the length of the sail ig
 	float length_;
+	const Wind* wind_;
+	Vector3 force_;
 };
 
 /**

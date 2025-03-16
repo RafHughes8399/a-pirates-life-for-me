@@ -222,3 +222,20 @@ ship movement
 
 
 -> figure out delta and lerp maybe  
+
+
+16 March
+Now it's time to make the ship move about 
+
+basic algorithm idea
+-> get the length of the sail (done)
+-> that acts as your bounds for "catching the wind"
+-> catching the wind applies a base speed coefficeint to the ship
+-> however the closer the sail direction aligns with the actual wind direction, the greater the coeff
+
+-> if the wind isn't caught then a base, weak coefficient is applied
+
+-> also get the direction coefficient and apply it to velocuty
+
+
+-> REFACTOR PI, RAYLIB GIVES IT TO YOU 

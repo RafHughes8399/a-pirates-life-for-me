@@ -11,6 +11,10 @@ float Sail::get_width(){
 	return width_;
 }
 
+const Wind* Sail::get_wind(){
+	return wind_;
+}
+
 float Sail::sail_arc(){
 	return direction_ * width_;
 }
@@ -36,6 +40,27 @@ void Sail::lower_sail(float length){
 
 }
 
+void Sail::set_wind(const Wind* wind){
+	wind_ = wind;
+}
+
+void Sail::calcualte_force(){
+	// get the upper and lower bounds of the sail
+	auto arc = length_ * direction_;
+	auto upper = std::fmod(direction_ + (arc /2), PI2);
+	auto lower = std::fmod(direction_ - (arc / 2), PI2);
+	if (lower < 0) {
+		direction_ += PI2;
+	}
+	// compare to wind 
+	if (lower <= wind_->get_direction() and wind_->get_direction() <= upper) {
+		force_ = { 2.5f, 0.0f, 2.5f }; // placeholder 
+	}
+	else {
+		force_ = { 1.25f, 0.0f, 1.25f }; // placeholder
+	}
+}
+
 void Anchor::move(){
 	state_->move(this);
 	// move the anchor, calculate the force coeff.
@@ -45,11 +70,12 @@ void Anchor::update() {
 	// update the depth 
 	if (get_speed() < 0) {
 		depth_ = std::max(0.0f, depth_ + get_speed());
+		calculate_force();
 	}
 	else if (get_speed() > 0) {
 		depth_ = std::min(ANCHOR_MAX_DEPTH, depth_ + get_speed());
+		calculate_force();
 	}
-	calculate_force();
 }
 
 Vector3 Anchor::get_force(){

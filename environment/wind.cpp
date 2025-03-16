@@ -1,10 +1,10 @@
 #include "wind.h"
 #include <iostream>
-float Wind::get_speed(){
+float Wind::get_speed() const{
 	return speed_;
 }
 
-float Wind::get_direction(){
+float Wind::get_direction() const{
 	return direction_;
 }
 
@@ -23,15 +23,13 @@ void Wind::update_time(double time){
 }
 
 void Wind::update(double time){
-	std::cout << time_randomised_ << " < " << time << std::endl;
-	if (std::fmod(time_randomised_, time) == 0) { // never actually bang on the second, rethink
-		std::cout << "update" << std::endl;
+	if (std::fmod(time, time_randomised_) <= 0.25) {
 		pick_direction();
 		pick_speed();
 	}
 }
 
 Vector3 Wind::get_direction_coefficient(){
-	// cos on the x, sin on the z 
-	return Vector3{cosf(direction_), 0.0f, sinf(direction_)};
+	// cos on the z, sin on the x 
+	return Vector3{sinf(direction_), 0.0f, sinf(direction_)};
 }

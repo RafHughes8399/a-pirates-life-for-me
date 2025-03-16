@@ -51,7 +51,7 @@ public:
 		
 		// init ship
 		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, std::numbers::pi_v<float> / 2)); // starts pointing north
-		
+		ship->get_sail().set_wind(&wind_);
 		// init player
 		player_.set_ship(ship.get());
 		world_objects_.push_back(std::move(ship));
