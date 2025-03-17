@@ -239,3 +239,29 @@ basic algorithm idea
 
 
 -> REFACTOR PI, RAYLIB GIVES IT TO YOU 
+
+
+
+-> refactor pi (ok done)
+-> im doing sail direction wrong, the numbers aren't doing anything 
+-> let the sail go between 0 and 2 pi
+-> the sail direction should update alongside the ship direction as it turns
+-> anchor force is going sicko mode, fix that (copy and move consturctor updat them)
+
+-> sail direction update when ship turns, 
+-> ship direction is fine 
+
+
+-> ship direction +-  pi / 2
+
+
+-> add a namespace to util
+
+
+
+-> that was a big detour now test movement what did oyu accomplish
+-> fixed anchor force coefficient error that sent the ship zooming
+-> the sail now turns as the ship turns
+-> the sail's indpendent movment is limited to ship_direction +- 2 pi
+-> changed ship and sail movement and rotation to be in units of pi so the rotation matches the 
+direction

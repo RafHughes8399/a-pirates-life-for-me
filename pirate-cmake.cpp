@@ -71,6 +71,12 @@ void debug(Camera3D& camera, World& world) {
 	DrawRectangleLines(400, 5, 195, 170, BLUE);
 	DrawText(TextFormat("Wind Direction %06.3f", wind.get_direction()), 410, 30, 10, BLACK);
 	DrawText(TextFormat("Wind Speed %06.3f", wind.get_speed()), 410, 45, 10, BLACK);
+	
+	DrawText(TextFormat("Sail Lower %06.3f", ship.get_direction() - (PI /2)), 410, 60, 10, BLACK);
+	DrawText(TextFormat("Sail Upper %06.3f", ship.get_direction() + (PI / 2)), 410, 75, 10, BLACK);
+	DrawText(TextFormat("Sail  %06.3f", ship.get_sail().get_sail_direction()), 410, 90, 10, BLACK);
+
+
 
 	// camera debug info
 	DrawRectangle(600, 5, 195, 100, Fade(SKYBLUE, 0.5f));

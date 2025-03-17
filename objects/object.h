@@ -93,7 +93,7 @@ class Ship : public MoveableObject {
 public:
 
 	Ship(Vector3 position, Vector3 size,  Model model, float density, float volume, Vector3 velocity, float direction, Wind* wind)
-		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction, size.z + 1.5f, wind)), anchor_(Anchor()){
+		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction, size.z + 1.5f, wind, &direction)), anchor_(Anchor()){
 	};
 
 	Ship(const Ship& other)

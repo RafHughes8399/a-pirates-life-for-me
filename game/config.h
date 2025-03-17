@@ -1,6 +1,6 @@
 #pragma once
-#include <numbers>
 // game properties
+#include <numbers>
 #define FPS 60
 
 // physics constants
@@ -22,17 +22,17 @@
 #define PI2 2 * std::numbers::pi_v<float>
 
 // wind properties
-#define WIND_SPEED_MIN 2.5f
-#define WIND_SPEED_MAX 12.5f
+#define WIND_SPEED_MIN 0.0025f
+#define WIND_SPEED_MAX 0.0125f
 #define WIND_CHANGE_TIME 5.0 // the wind randomised at thsi interval
 
 
 // ship properties
-#define SHIP_TURN_SPEED 0.007f // to be updated maybe ?
+#define SHIP_TURN_SPEED (2 * PI * 0.004)// to be updated maybe ?
 
 // sail properties
 #define LOWER_RAISE_SPEED 0.025f
-#define SAIL_TURN_SPEED 0.1f
+#define SAIL_TURN_SPEED (2* PI * 0.003)
 
 // anchor properties
 #define ANCHOR_DROP_SPEED 0.35f // how quick the anchor drops in seconds

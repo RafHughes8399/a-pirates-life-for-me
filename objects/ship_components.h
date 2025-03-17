@@ -11,16 +11,17 @@
 class Sail {
 public:
 	~Sail() = default;
-	Sail(float direction, float width, Wind* wind)
-		: direction_(direction), wind_(wind) {
+	Sail(float direction, float width, Wind* wind, float* ship_direction)
+		: direction_(direction), wind_(wind), ship_direction_(ship_direction) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
-		: direction_(other.direction_), length_(other.length_), width_(other.width_), wind_(other.wind_) {
+		: direction_(other.direction_), length_(other.length_), width_(other.width_), 
+		wind_(other.wind_), ship_direction_(other.ship_direction_) {
 	};
 	Sail(const Sail&& other)
 		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)),
-		wind_(std::move(other.wind_)){
+		wind_(std::move(other.wind_)), ship_direction_(std::move(other.ship_direction_)){
 	};
 
 	float get_sail_direction();
@@ -31,8 +32,14 @@ public:
 
 
 	float sail_arc();
+
+
+
 	void sail_left();
 	void sail_right();
+
+	void sail_left(float rad);
+	void sail_right(float rad);
 
 	void raise_sail(float length);
 	void lower_sail(float length);
@@ -48,6 +55,7 @@ private:
 	// the arc of the sail is r * direction_, r is the length of the sail ig
 	float length_;
 	const Wind* wind_;
+	const float* ship_direction_;
 	Vector3 force_;
 };
 
@@ -82,7 +90,7 @@ public:
 		:state_(std::make_unique<StationaryState>(StationaryState(0.0f))), depth_(0.0f), force_coefficient_(Vector3{ 1.0f, 0.0f, 1.0f }){
 	};
 	Anchor(const Anchor& other)
-		: state_(nullptr), depth_(other.depth_) {
+		: state_(nullptr), depth_(other.depth_), force_coefficient_(other.force_coefficient_) {
 
 		// Need to create a new state object based on the type of other.state_, temp implementation
 		if (auto* raised = dynamic_cast<StationaryState*>(other.state_.get())) {
@@ -93,7 +101,7 @@ public:
 		}
 	};
 	Anchor(Anchor&& other)
-		: state_(std::move(other.state_)), depth_(other.depth_) {
+		: state_(std::move(other.state_)), depth_(other.depth_), force_coefficient_(std::move(other.force_coefficient_)) {
 	};
 
 	void move();

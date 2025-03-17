@@ -54,7 +54,7 @@ public:
 		wind_.pick_speed();
 
 		// init ship
-		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, std::numbers::pi_v<float> / 2, &wind_)); // starts pointing north
+		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, PI / 2, &wind_)); // starts pointing north
 		// init player
 		player_.set_ship(ship.get());
 		world_objects_.push_back(std::move(ship));

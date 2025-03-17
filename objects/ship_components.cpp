@@ -1,4 +1,6 @@
-#include "../objects/ship_components.h"
+﻿#include "../objects/ship_components.h"
+#include "../game/utility_functions.h"
+#include <iostream>
 float Sail::get_sail_direction(){
 	return direction_;
 }
@@ -23,14 +25,61 @@ float Sail::sail_arc(){
 	return direction_ * width_;
 }
 
-void Sail::sail_left(){
-	// >= pi, lock it at pi, 
-	direction_ = std::min(std::numbers::pi_v<float>, direction_ + SAIL_TURN_SPEED);
 
+void Sail::sail_left() {
+	// Get the relative angle between sail and ship, normalized to [-π, π]
+	float relative_angle = direction_ - *ship_direction_;
+	relative_angle = std::fmod(relative_angle, PI2);
+	if (relative_angle > PI) relative_angle -= PI2;
+	if (relative_angle < -PI) relative_angle += PI2;
+
+	// Try to turn left
+	auto new_dir = direction_ + SAIL_TURN_SPEED;
+	new_dir = std::fmod(new_dir, PI2);
+	if (new_dir < 0) new_dir += PI2;
+
+	// Calculate new relative angle
+	float new_relative = new_dir - *ship_direction_;
+	new_relative = std::fmod(new_relative, PI2);
+	if (new_relative > PI) new_relative -= PI2;
+	if (new_relative < -PI) new_relative += PI2;
+
+	// Only update if within bounds
+	if (new_relative <= PI / 2) {
+		direction_ = new_dir;
+	}
 }
-void Sail::sail_right(){
-	// <= 0, lock it at zero
-	direction_ = std::max(0.0f, std::fmod(direction_ - SAIL_TURN_SPEED, std::numbers::pi_v<float>));
+
+void Sail::sail_right() {
+	// Get the relative angle between sail and ship, normalized to [-π, π]
+	float relative_angle = direction_ - *ship_direction_;
+	relative_angle = std::fmod(relative_angle, PI2);
+	if (relative_angle > PI) relative_angle -= PI2;
+	if (relative_angle < -PI) relative_angle += PI2;
+
+	// Try to turn right
+	auto new_dir = direction_ - SAIL_TURN_SPEED;
+	new_dir = std::fmod(new_dir, PI2);
+	if (new_dir < 0) new_dir += PI2;
+
+	// Calculate new relative angle
+	float new_relative = new_dir - *ship_direction_;
+	new_relative = std::fmod(new_relative, PI2);
+	if (new_relative > PI) new_relative -= PI2;
+	if (new_relative < -PI) new_relative += PI2;
+
+	// Only update if within bounds
+	if (new_relative >= -PI / 2) {
+		direction_ = new_dir;
+	}
+}
+
+// these are for when the sail is being moved along with the ship
+void Sail::sail_left(float rad){
+	direction_ = std::fmod(direction_ + rad, 2 *PI);
+}
+void Sail::sail_right(float rad) {
+	direction_ = std::fmod(direction_ - rad, 2 *PI);
 }
 
 void Sail::raise_sail(float length) {
@@ -119,7 +168,8 @@ void Anchor::calculate_force(){
 		// a function of the depth as the depth increases
 		// the force moves closer to 0
 		// the numbers might change
-		force_coefficient_ = Vector3{ 1.0f / depth_, 0.0f, 1.0f / depth_ };
+		auto depth_ratio = depth_ / ANCHOR_MAX_DEPTH;
+		force_coefficient_ = Vector3{ 1.0f * depth_ratio, 0.0f, 1.0f / depth_ratio };
 	}
 }
 

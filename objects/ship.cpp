@@ -19,15 +19,17 @@ void Ship::update(){
 	DrawRectangleLines(800, 5, 195, 170, BLUE);
 	DrawText(TextFormat("Acceleration after gravity and buoyancy: (%06.3f, %06.3f, %06.3f)", acceleration_.x, acceleration_.y, acceleration_.z), 810, 30, 10, BLACK);
 
-	acceleration_ = Vector3Add(acceleration_, sail_.get_force());
-	DrawText(TextFormat("Acceleration after Sail: (%06.3f, %06.3f, %06.3f)", acceleration_.x, acceleration_.y, acceleration_.z), 810, 45, 10, BLACK);
+	auto sail_force = sail_.get_force();
+	//acceleration_ = Vector3Add(acceleration_, sail_.get_force());
+	DrawText(TextFormat("Sail Force: (%06.3f, %06.3f, %06.3f)", sail_force.x, sail_force.y, sail_force.z), 810, 45, 10, BLACK);
 	
 	// apply the anchor force coefficient 
-	acceleration_ = Vector3Multiply(acceleration_, anchor_.get_force());
-	DrawText(TextFormat("Acceleration after Anchor: (%06.3f, %06.3f, %06.3f)", acceleration_.x, acceleration_.y, acceleration_.z), 810, 60, 10, BLACK);
+	auto anchor_force = anchor_.get_force();
+	//acceleration_ = Vector3Multiply(acceleration_, anchor_.get_force());
+	DrawText(TextFormat("Anchor Force: (%06.3f, %06.3f, %06.3f)", anchor_force.x, anchor_force.y, anchor_force.z), 810, 60, 10, BLACK);
 	
 	// apply acceleration to velocity
-	velocity_ = Vector3Scale(acceleration_, delta_time);
+	//velocity_ = Vector3Scale(acceleration_, delta_time);
 	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 75, 10, BLACK);
 
 
@@ -35,13 +37,16 @@ void Ship::update(){
 
 	// apply the ship direction to the velocity, use sin and cos, other way around z is cos, sin is x
 	auto direction_coefficient = get_direction_coefficient();
-	velocity_ = Vector3Multiply(velocity_, direction_coefficient);
-	DrawText(TextFormat("Velocity after direction: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 90, 10, BLACK);
+	//velocity_ = Vector3Multiply(velocity_, direction_coefficient);
+	DrawText(TextFormat("Direction Coefficient: (%06.3f, %06.3f, %06.3f)", direction_coefficient.x, direction_coefficient.y, direction_coefficient.z), 810, 90, 10, BLACK);
 	
 	// update pos
 	position_ = Vector3Add(position_, velocity_);
-	// reset accel
+	
+	// reset accel and vel
 	acceleration_ = { 0.0f, 0.0f, 0.0f };
+	velocity_ = { 0.0f, 0.0f, 0.0f };
+	
 
 	
 }
@@ -94,25 +99,30 @@ void Ship::steer_left(){
 	// change ship direction to the left
 	// update direction, similar to the sail except the bounds are different, then rotate the model
 	// use modulus in terms of 2 * pi
-	auto prev_direction = direction_;
-	direction_ = std::fmod((direction_ + SHIP_TURN_SPEED), ( 2 * std::numbers::pi_v<float>));
+
+	// hold on, that is not stupposed to be like that
+
+	// moving around the whole circle should go from 0 to 2pi but it does not
+	direction_ = std::fmod((direction_ + SHIP_TURN_SPEED), ( 2 * PI));
 	
 	// rotate the model, yaw
-	float yaw = direction_ + prev_direction;
-	Vector3 rotate = { 0.0f, yaw, 0.0f };
+	// TODO: update the sail direction too with the same offest
+	sail_.sail_left(SHIP_TURN_SPEED);
+
+	Vector3 rotate = { 0.0f, direction_, 0.0f };
 	model_.transform = MatrixRotateXYZ(rotate);
 }
 
 void Ship::steer_right(){
 	// change ship direction to the right
 
-	auto prev_direction = direction_;
-	direction_ = std::fmod((direction_ - SHIP_TURN_SPEED), ( 2 * std::numbers::pi_v<float>));
-	if (direction_ < 0) {
-		direction_ += PI2;
-	}
-	float yaw = direction_ + prev_direction;
-	Vector3 rotate = {  0.0f,  yaw,  0.0f };
+	direction_ = std::fmod((direction_ - SHIP_TURN_SPEED), ( 2 * PI));
+	if (direction_ < 0.0) { direction_ += 2 * PI; }
+
+	// TODO: update the sail direction too with the same offest, here direction is decreasing
+	sail_.sail_right(SHIP_TURN_SPEED);
+	
+	Vector3 rotate = {  0.0f,  direction_,  0.0f };
 	model_.transform = MatrixRotateXYZ(rotate);
 }
 
