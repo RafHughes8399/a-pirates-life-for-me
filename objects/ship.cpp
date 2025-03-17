@@ -7,20 +7,28 @@ void Ship::update(){
 	auto delta_time = GetFrameTime();
 	// update the anchor
 	anchor_.update();
-
+	sail_.update();
 	// apply gravity
 	acceleration_.y += GRAVITY;
 	acceleration_.y /= density_;
 
+
 	
 	// apply the sail movement coeffieicts
-	acceleration_ = Vector3Multiply(acceleration_, sail_.get_force());
+	DrawRectangle(800, 5, 195, 170, Fade(SKYBLUE, 0.5f));
+	DrawRectangleLines(800, 5, 195, 170, BLUE);
+	DrawText(TextFormat("Acceleration after gravity and buoyancy: (%06.3f, %06.3f, %06.3f)", acceleration_.x, acceleration_.y, acceleration_.z), 810, 30, 10, BLACK);
 
+	acceleration_ = Vector3Add(acceleration_, sail_.get_force());
+	DrawText(TextFormat("Acceleration after Sail: (%06.3f, %06.3f, %06.3f)", acceleration_.x, acceleration_.y, acceleration_.z), 810, 45, 10, BLACK);
+	
 	// apply the anchor force coefficient 
 	acceleration_ = Vector3Multiply(acceleration_, anchor_.get_force());
+	DrawText(TextFormat("Acceleration after Anchor: (%06.3f, %06.3f, %06.3f)", acceleration_.x, acceleration_.y, acceleration_.z), 810, 60, 10, BLACK);
 	
 	// apply acceleration to velocity
 	velocity_ = Vector3Scale(acceleration_, delta_time);
+	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 75, 10, BLACK);
 
 
 
@@ -28,11 +36,14 @@ void Ship::update(){
 	// apply the ship direction to the velocity, use sin and cos, other way around z is cos, sin is x
 	auto direction_coefficient = get_direction_coefficient();
 	velocity_ = Vector3Multiply(velocity_, direction_coefficient);
+	DrawText(TextFormat("Velocity after direction: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 90, 10, BLACK);
 	
 	// update pos
 	position_ = Vector3Add(position_, velocity_);
 	// reset accel
 	acceleration_ = { 0.0f, 0.0f, 0.0f };
+
+	
 }
 
 void Ship::render(){
@@ -98,7 +109,7 @@ void Ship::steer_right(){
 	auto prev_direction = direction_;
 	direction_ = std::fmod((direction_ - SHIP_TURN_SPEED), ( 2 * std::numbers::pi_v<float>));
 	if (direction_ < 0) {
-		direction_ += PI2
+		direction_ += PI2;
 	}
 	float yaw = direction_ + prev_direction;
 	Vector3 rotate = {  0.0f,  yaw,  0.0f };
@@ -119,4 +130,8 @@ void Ship::turn_sail_left(){
 
 void Ship::turn_sail_right(){
 	sail_.sail_right();
+}
+
+void Ship::set_wind(Wind* wind){
+	sail_.set_wind(wind);
 }

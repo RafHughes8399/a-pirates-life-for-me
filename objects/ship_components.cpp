@@ -11,6 +11,10 @@ float Sail::get_width(){
 	return width_;
 }
 
+Vector3 Sail::get_force(){
+	return force_;
+}
+
 const Wind* Sail::get_wind(){
 	return wind_;
 }
@@ -44,7 +48,14 @@ void Sail::set_wind(const Wind* wind){
 	wind_ = wind;
 }
 
-void Sail::calcualte_force(){
+void Sail::update(){
+	calculate_force();
+}
+
+void Sail::calculate_force(){
+
+	// sail direction
+
 	// get the upper and lower bounds of the sail
 	auto arc = length_ * direction_;
 	auto upper = std::fmod(direction_ + (arc /2), PI2);
@@ -52,13 +63,20 @@ void Sail::calcualte_force(){
 	if (lower < 0) {
 		direction_ += PI2;
 	}
-	// compare to wind 
+	// compare to wind, how close is it to the centre 
 	if (lower <= wind_->get_direction() and wind_->get_direction() <= upper) {
-		force_ = { 2.5f, 0.0f, 2.5f }; // placeholder 
+		auto distance = std::abs(wind_->get_direction() - direction_);
+		auto proportion = distance / (arc / 2);
+		force_ = Vector3 { wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
 	}
 	else {
-		force_ = { 1.25f, 0.0f, 1.25f }; // placeholder
+		force_ = Vector3{( WIND_SPEED_MIN / 2), 0.0, (WIND_SPEED_MIN / 2 )};
 	}
+
+	// sail length, the longer the sail, the greater the speed
+	force_ = Vector3Scale(force_, length_);
+	DrawText(TextFormat("Sail force: (%06.3f, %06.3f, %06.3f)", force_.x, force_.y, force_.z), 810, 120, 10, BLACK);
+
 }
 
 void Anchor::move(){

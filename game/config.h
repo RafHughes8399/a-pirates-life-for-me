@@ -22,7 +22,7 @@
 #define PI2 2 * std::numbers::pi_v<float>
 
 // wind properties
-#define WIND_SPEED_MIN 2.5f;
+#define WIND_SPEED_MIN 2.5f
 #define WIND_SPEED_MAX 12.5f
 #define WIND_CHANGE_TIME 5.0 // the wind randomised at thsi interval
 

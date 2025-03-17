@@ -49,18 +49,19 @@ public:
 		world_objects_.push_back(std::make_unique<Ocean>(Ocean(Vector3{ 0.0f, -12.5f,0.0f }, Vector3{1000.f, 25.0f, 1000.f},
 			LoadModelFromMesh(GenMeshCube(1000.f, 25.0f, 1000.f)), WATER_DENISTY, 1000.0 * 25.0 * 1000.0)));
 		
+		// init wind
+		wind_.pick_direction();
+		wind_.pick_speed();
+
 		// init ship
-		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, std::numbers::pi_v<float> / 2)); // starts pointing north
-		ship->get_sail().set_wind(&wind_);
+		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, std::numbers::pi_v<float> / 2, &wind_)); // starts pointing north
 		// init player
 		player_.set_ship(ship.get());
 		world_objects_.push_back(std::move(ship));
 		
 		cmp_.axis_ = 0; // default axis of most variance is the x axis
 		
-		// init wind
-		wind_.pick_direction();
-		wind_.pick_speed();
+
 	};
 	
 	World(const World& other)

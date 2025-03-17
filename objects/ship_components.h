@@ -11,8 +11,8 @@
 class Sail {
 public:
 	~Sail() = default;
-	Sail(float direction, float width)
-		: direction_(direction), wind_(nullptr) {
+	Sail(float direction, float width, Wind* wind)
+		: direction_(direction), wind_(wind) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
@@ -39,9 +39,10 @@ public:
 
 	void set_wind(const Wind* wind);
 
+	void update();
 
 private:
-	void calcualte_force();
+	void calculate_force();
 	float direction_; // angle in radians
 	float width_;
 	// the arc of the sail is r * direction_, r is the length of the sail ig

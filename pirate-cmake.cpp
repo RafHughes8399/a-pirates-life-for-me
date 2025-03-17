@@ -61,16 +61,16 @@ void debug(Camera3D& camera, World& world) {
 	DrawText(TextFormat("Sail Length: %06.3f", ship.get_sail().get_sail_length()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Anchor Depth: %06.3f", ship.get_anchor().get_depth()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Anchor Speed: %06.3f", ship.get_anchor().get_speed()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Acceleration"), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Velocity"), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Acceleration: (%06.3f, %06.3f, %06.3f)", ship.get_acceleration().x, ship.get_acceleration().y, ship.get_acceleration().z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", ship.get_velocity().x, ship.get_velocity().y, ship.get_velocity().z), 210, text_y += 17, 10, BLACK);
 
 	// world debug info
 	text_y = 15;
 	auto wind = world.get_wind();
 	DrawRectangle(400, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(400, 5, 195, 170, BLUE);
-	DrawText(TextFormat("Wind Direction %06.3f", wind.get_direction()), 410, text_y, 10, BLACK);
-	DrawText(TextFormat("Wind Speed %06.3f", wind.get_speed()), 410, text_y += 15, 10, BLACK);
+	DrawText(TextFormat("Wind Direction %06.3f", wind.get_direction()), 410, 30, 10, BLACK);
+	DrawText(TextFormat("Wind Speed %06.3f", wind.get_speed()), 410, 45, 10, BLACK);
 
 	// camera debug info
 	DrawRectangle(600, 5, 195, 100, Fade(SKYBLUE, 0.5f));
