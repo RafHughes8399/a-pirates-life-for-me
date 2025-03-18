@@ -299,4 +299,16 @@ ok improvements have been made but some things to change
 -> change the camera to face the direction of the ship initially
 -> hopefully that fixes the rotation bug 
 
--> there is still some funky issues with manual sail turning
+-> there is still some funky issues with manual sail turning, 
+
+
+
+
+then move to 
+-> render distances
+-> lighting (the sun )
+-> hitboxes 
+
+-> then a day / night cycle
+-> separate the testing and main environment
+-> terrain  and the islands (design and development)

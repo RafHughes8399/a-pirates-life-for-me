@@ -26,6 +26,12 @@ float Sail::sail_arc(){
 }
 
 
+
+/**
+ * these still don't work properly
+ * 
+ * chin scratch
+ */
 void Sail::sail_left() {
 	// Get the relative angle between sail and ship, normalized to [-π, π]
 	float relative_angle = direction_ - *ship_direction_;
