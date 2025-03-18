@@ -11,6 +11,7 @@ float Wind::get_direction() const{
 void Wind::pick_speed(){
 	auto mod = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
 	speed_ = mod * WIND_SPEED_MAX; // always a positive value
+	if (speed_ < WIND_SPEED_MIN) { speed_ = WIND_SPEED_MIN; }
 }
 
 void Wind::pick_direction(){

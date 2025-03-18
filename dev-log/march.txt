@@ -265,3 +265,38 @@ basic algorithm idea
 -> the sail's indpendent movment is limited to ship_direction +- 2 pi
 -> changed ship and sail movement and rotation to be in units of pi so the rotation matches the 
 direction
+
+
+18 March
+Testing ship movement, what does that entail
+
+first off anchor and sail height 
+
+-> ship cannot move while anchor is dropped
+-> ship cannot move while sail is raised
+
+
+-> ship movement changes based on anchor height (it slows down as the anchor is dropped)
+-> ship movement changes based on sail height
+
+
+then sail direction
+-> speed increases as sail is more aligned with wind
+-> if not aligned at all, a base speed coefficient is applied
+
+movement in general
+-> the ship moves in the direction it is facing
+
+
+notes:
+-> turning is too fast
+-> sail-wind direction check is not working
+-> i think i figured out the bug with the rotation, 
+
+
+ok improvements have been made but some things to change
+-> switch the x, z dimensions of the ship
+-> change the camera to face the direction of the ship initially
+-> hopefully that fixes the rotation bug 
+
+-> there is still some funky issues with manual sail turning

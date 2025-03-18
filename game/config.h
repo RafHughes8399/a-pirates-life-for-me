@@ -22,13 +22,14 @@
 #define PI2 2 * std::numbers::pi_v<float>
 
 // wind properties
-#define WIND_SPEED_MIN 0.0025f
-#define WIND_SPEED_MAX 0.0125f
-#define WIND_CHANGE_TIME 5.0 // the wind randomised at thsi interval
+#define NO_WIND 0.125F
+#define WIND_SPEED_MIN 0.5f
+#define WIND_SPEED_MAX 2.1f
+#define WIND_CHANGE_TIME 30.0f // the wind randomised at thsi interval
 
 
 // ship properties
-#define SHIP_TURN_SPEED (2 * PI * 0.004)// to be updated maybe ?
+#define SHIP_TURN_SPEED (2 * PI * 0.0004)// to be updated maybe ?
 
 // sail properties
 #define LOWER_RAISE_SPEED 0.025f
