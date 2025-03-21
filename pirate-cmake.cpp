@@ -75,6 +75,7 @@ void debug(Camera3D& camera, World& world) {
 	DrawText(TextFormat("Sail Lower %06.3f", ship.get_direction() - (PI /2)), 410, 60, 10, BLACK);
 	DrawText(TextFormat("Sail Upper %06.3f", ship.get_direction() + (PI / 2)), 410, 75, 10, BLACK);
 	DrawText(TextFormat("Sail  %06.3f", ship.get_sail().get_sail_direction()), 410, 90, 10, BLACK);
+	DrawText(TextFormat("Sail Width   %06.3f", ship.get_sail().get_width()), 410, 105, 10, BLACK);
 
 
 

@@ -103,35 +103,35 @@ void Sail::update(){
 
 void Sail::calculate_force(){
 
-	// sail direction
-
 	// get the upper and lower bounds of the sail
-	auto upper = std::fmod(direction_ + length_ / 2 , PI2);
-	auto lower = std::fmod(direction_ - length_ / 2, PI2);
+	auto left = std::fmod(direction_ + length_ / 2 , PI2);
+	if (left < 0.0) { left += PI2; }
+	auto right = std::fmod(direction_ - length_ / 2, PI2);
+	if (right  < 0.0) { right += PI2; }
 
-	// normalise to [0, 2pi]
-	if (upper < 0) { upper += PI * 2; }
-	if (lower < 0) { lower += PI * 2; }
+	// default force, sail doesn't catch the wind
+	force_ = Vector3{ (NO_WIND), 0.0, (NO_WIND) };
 
-	// compare to wind, how close is it to the centre, need to handle the wrap around 0 2pi case 
-	// lower > upper is the wrap around case
-	if ((lower <= wind_->get_direction() and wind_->get_direction() <= upper)
-		or (lower > upper ) and (lower <= wind_->get_direction() or wind_->get_direction() <= upper)) {
+	if (right < left) {
+		if (right <= wind_->get_direction() and wind_->get_direction() <= left) {
+			float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
+
+			auto proportion = 1.0f - (distance / (length_ / 2.0f));
+			force_ = Vector3{ wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
+
+		}
+	}
+	else if (left < right) {
+		if (not (left <=  wind_->get_direction() and wind_->get_direction() <= right)) {
+			float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
+			auto proportion = 1.0f - (distance / (length_ / 2.0f));
+			
+			force_ = Vector3{ wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
 		
-		// if it does then apply the wind speed as a proportion of the disnace
-		float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
-		if (distance > PI) distance = PI2 - distance; // Normalize distance to [0, π]
-
-		// Calculate the proportion of the wind speed to apply the distance between the wind and sail as a proportion 
-		// of the total it could be 
-		auto proportion = 1.0f - (distance / (length_ / 2));
-		force_ = Vector3 { wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
-	}
-	else {
-		force_ = Vector3{( NO_WIND / 2), 0.0, (NO_WIND / 2 )};
+		}
 	}
 
-	// sail length, the longer the sail, the greater the speed
+	// scale the force by th length of the sail
 	force_ = Vector3Scale(force_, length_);
 	DrawText(TextFormat("Sail force: (%06.3f, %06.3f, %06.3f)", force_.x, force_.y, force_.z), 810, 120, 10, BLACK);
 

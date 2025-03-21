@@ -12,7 +12,7 @@ class Sail {
 public:
 	~Sail() = default;
 	Sail(float direction, float width, Wind* wind)
-		: direction_(direction), wind_(wind) {
+		: direction_(direction), width_(width), wind_(wind) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
