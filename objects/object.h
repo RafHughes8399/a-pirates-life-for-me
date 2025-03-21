@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include "raymath.h"
 
+
 #include "ship_components.h"
 class Object {
 public:
@@ -151,5 +152,10 @@ public:
 		: Object(other){
 	};
 	void interact(Object* other) override;
+private:
+};
+
+class Sun : public Object{
+public:
 private:
 };

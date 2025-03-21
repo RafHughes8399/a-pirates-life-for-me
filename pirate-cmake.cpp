@@ -12,6 +12,7 @@ void debug(Camera3D& camera, World& world);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
+	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(width, height, "a pirate life for me");
 	// setup the camera
 
