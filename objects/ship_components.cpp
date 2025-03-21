@@ -101,6 +101,9 @@ void Sail::update(){
 	calculate_force();
 }
 
+
+
+/**  this needs some attention */
 void Sail::calculate_force(){
 
 	// get the upper and lower bounds of the sail
@@ -116,7 +119,7 @@ void Sail::calculate_force(){
 		if (right <= wind_->get_direction() and wind_->get_direction() <= left) {
 			float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
 
-			auto proportion = 1.0f - (distance / (length_ / 2.0f));
+			auto proportion = 1.0f - (distance / (length_));
 			force_ = Vector3{ wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
 
 		}
@@ -124,8 +127,9 @@ void Sail::calculate_force(){
 	else if (left < right) {
 		if (not (left <=  wind_->get_direction() and wind_->get_direction() <= right)) {
 			float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
-			auto proportion = 1.0f - (distance / (length_ / 2.0f));
+			auto proportion = 1.0f - (distance / length_);
 			
+			std::cout << distance << ", " << proportion << std::endl;
 			force_ = Vector3{ wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
 		
 		}
