@@ -93,11 +93,12 @@ class Ship : public MoveableObject {
 public:
 
 	Ship(Vector3 position, Vector3 size,  Model model, float density, float volume, Vector3 velocity, float direction, Wind* wind)
-		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction, size.z + 1.5f, wind, &direction)), anchor_(Anchor()){
+		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction, size.z + 2.8f, wind)), anchor_(Anchor()){
 	};
 
 	Ship(const Ship& other)
 		: MoveableObject(other), sail_(other.sail_), anchor_(other.anchor_){
+
 	};
 
 	Ship(Ship&& other)
@@ -105,7 +106,7 @@ public:
 	};
 
 	Ship& operator=(const Ship& ohter);
-	Ship& operator = (const Ship&& other);
+	Ship& operator= (const Ship&& other);
 
 	void update() override;
 	void render() override;

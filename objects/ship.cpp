@@ -101,7 +101,7 @@ void Ship::steer_left(){
 	
 	// rotate the model, yaw
 	// TODO: update the sail direction too with the same offest
-	sail_.sail_left(SHIP_TURN_SPEED);
+	sail_.move_sail_left(SHIP_TURN_SPEED);
 
 	Vector3 rotate = { 0.0f, direction_, 0.0f };
 	model_.transform = MatrixRotateXYZ(rotate);
@@ -114,7 +114,7 @@ void Ship::steer_right(){
 	if (direction_ < 0.0) { direction_ += 2 * PI; }
 
 	// TODO: update the sail direction too with the same offest, here direction is decreasing
-	sail_.sail_right(SHIP_TURN_SPEED);
+	sail_.move_sail_right(SHIP_TURN_SPEED);
 	
 	Vector3 rotate = {  0.0f,  direction_,  0.0f };
 	model_.transform = MatrixRotateXYZ(rotate);
@@ -129,11 +129,11 @@ void Ship::lower_sail(){
 }
 
 void Ship::turn_sail_left(){
-	sail_.sail_left();
+	sail_.sail_left(direction_);
 }
 
 void Ship::turn_sail_right(){
-	sail_.sail_right();
+	sail_.sail_right(direction_);
 }
 
 void Ship::set_wind(Wind* wind){

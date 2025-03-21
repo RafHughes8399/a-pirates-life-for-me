@@ -11,17 +11,17 @@
 class Sail {
 public:
 	~Sail() = default;
-	Sail(float direction, float width, Wind* wind, float* ship_direction)
-		: direction_(direction), wind_(wind), ship_direction_(ship_direction) {
+	Sail(float direction, float width, Wind* wind)
+		: direction_(direction), wind_(wind) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
 		: direction_(other.direction_), length_(other.length_), width_(other.width_), 
-		wind_(other.wind_), ship_direction_(other.ship_direction_) {
+		wind_(other.wind_) {
 	};
 	Sail(const Sail&& other)
 		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)),
-		wind_(std::move(other.wind_)), ship_direction_(std::move(other.ship_direction_)){
+		wind_(std::move(other.wind_)) {
 	};
 
 	float get_sail_direction();
@@ -31,21 +31,21 @@ public:
 	const Wind* get_wind();
 
 
+
 	float sail_arc();
 
 
 
-	void sail_left();
-	void sail_right();
+	void sail_left(float& ship_direction);
+	void sail_right(float& ship_direction);
 
-	void sail_left(float rad);
-	void sail_right(float rad);
+	void move_sail_left(float rad);
+	void move_sail_right(float rad);
 
 	void raise_sail(float length);
 	void lower_sail(float length);
 
 	void set_wind(const Wind* wind);
-
 	void update();
 
 private:
@@ -55,7 +55,6 @@ private:
 	// the arc of the sail is r * direction_, r is the length of the sail ig
 	float length_;
 	const Wind* wind_;
-	const float* ship_direction_;
 	Vector3 force_;
 };
 

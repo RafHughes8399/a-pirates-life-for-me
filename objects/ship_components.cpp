@@ -31,60 +31,54 @@ float Sail::sail_arc(){
  * these still don't work properly
  * 
  * chin scratch
+ * ok my thoughts are, let the sail move between 0 and pi, then add to 
  */
-void Sail::sail_left() {
-	// Get the relative angle between sail and ship, normalized to [-π, π]
-	float relative_angle = direction_ - *ship_direction_;
-	relative_angle = std::fmod(relative_angle, PI2);
-	if (relative_angle > PI) relative_angle -= PI2;
-	if (relative_angle < -PI) relative_angle += PI2;
-
-	// Try to turn left
+void Sail::sail_left(float& ship_direction) {
+	auto left_bound = ship_direction + (PI / 2);
+	auto right_bound = ship_direction - (PI / 2);
+	
 	auto new_dir = direction_ + SAIL_TURN_SPEED;
-	new_dir = std::fmod(new_dir, PI2);
-	if (new_dir < 0) new_dir += PI2;
-
-	// Calculate new relative angle
-	float new_relative = new_dir - *ship_direction_;
-	new_relative = std::fmod(new_relative, PI2);
-	if (new_relative > PI) new_relative -= PI2;
-	if (new_relative < -PI) new_relative += PI2;
-
-	// Only update if within bounds
-	if (new_relative <= PI / 2) {
-		direction_ = new_dir;
+	if (right_bound < left_bound) {
+		// business as usual, turn left
+		if (not (right_bound < new_dir and new_dir < left_bound)) {
+			new_dir = left_bound;
+		}
 	}
+	else if (left_bound < right_bound) {
+		if (left_bound < new_dir and new_dir < right_bound) {
+			new_dir = left_bound;
+		}
+
+	}
+	direction_ = new_dir;
 }
 
-void Sail::sail_right() {
-	// Get the relative angle between sail and ship, normalized to [-π, π]
-	float relative_angle = direction_ - *ship_direction_;
-	relative_angle = std::fmod(relative_angle, PI2);
-	if (relative_angle > PI) relative_angle -= PI2;
-	if (relative_angle < -PI) relative_angle += PI2;
+void Sail::sail_right(float& ship_direction) {
+	auto left_bound = ship_direction + (PI / 2);
+	auto right_bound = ship_direction - (PI / 2);
 
-	// Try to turn right
+
+
 	auto new_dir = direction_ - SAIL_TURN_SPEED;
-	new_dir = std::fmod(new_dir, PI2);
-	if (new_dir < 0) new_dir += PI2;
-
-	// Calculate new relative angle
-	float new_relative = new_dir - *ship_direction_;
-	new_relative = std::fmod(new_relative, PI2);
-	if (new_relative > PI) new_relative -= PI2;
-	if (new_relative < -PI) new_relative += PI2;
-
-	// Only update if within bounds
-	if (new_relative >= -PI / 2) {
-		direction_ = new_dir;
+	if (right_bound < left_bound) {
+		if (not (right_bound < new_dir and new_dir < left_bound)) {
+			new_dir = right_bound;
+		}
 	}
+	else if (left_bound < right_bound) {
+		if (left_bound < new_dir and new_dir < right_bound) {
+			new_dir = right_bound;
+		}
+
+	}
+	direction_ = new_dir;
 }
 
 // these are for when the sail is being moved along with the ship
-void Sail::sail_left(float rad){
+void Sail::move_sail_left(float rad){
 	direction_ = std::fmod(direction_ + rad, 2 *PI);
 }
-void Sail::sail_right(float rad) {
+void Sail::move_sail_right(float rad) {
 	direction_ = std::fmod(direction_ - rad, 2 *PI);
 }
 
@@ -112,10 +106,8 @@ void Sail::calculate_force(){
 	// sail direction
 
 	// get the upper and lower bounds of the sail
-	auto arc = length_ * direction_;
-	auto half_arc = arc / 2;
-	auto upper = std::fmod(direction_ + half_arc, PI2);
-	auto lower = std::fmod(direction_ - half_arc, PI2);
+	auto upper = std::fmod(direction_ + length_ / 2 , PI2);
+	auto lower = std::fmod(direction_ - length_ / 2, PI2);
 
 	// normalise to [0, 2pi]
 	if (upper < 0) { upper += PI * 2; }
@@ -132,7 +124,7 @@ void Sail::calculate_force(){
 
 		// Calculate the proportion of the wind speed to apply the distance between the wind and sail as a proportion 
 		// of the total it could be 
-		auto proportion = 1.0f - (distance / (half_arc));
+		auto proportion = 1.0f - (distance / (length_ / 2));
 		force_ = Vector3 { wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
 	}
 	else {
