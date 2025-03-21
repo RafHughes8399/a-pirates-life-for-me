@@ -2,9 +2,12 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <numbers>
 
 #include "raylib.h"
+
 #include "land.h"
+#include "wind.h"
 #include "../game/player.h"
 #include "../game/managers.h"
 #include "../objects/object.h"
@@ -41,14 +44,23 @@ class World {
 public:
 	// CONSTRUCTORS
 	World()
-		: player_(Player()){
+		: player_(Player()), wind_(Wind()){
 		// change this once the model manager is in play, and change the volume calculation
 		world_objects_.push_back(std::make_unique<Ocean>(Ocean(Vector3{ 0.0f, -12.5f,0.0f }, Vector3{1000.f, 25.0f, 1000.f},
 			LoadModelFromMesh(GenMeshCube(1000.f, 25.0f, 1000.f)), WATER_DENISTY, 1000.0 * 25.0 * 1000.0)));
-		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, Vector3{1.0,0.0,0.0 })); // starts pointing north
+		
+		// init wind
+		wind_.pick_direction();
+		wind_.pick_speed();
+
+		// init ship
+		auto ship = std::make_unique<Ship>(Ship(Vector3{ 0.0,0.0,0.0 }, Vector3{ 2.0f, 2.0f, 4.0f }, LoadModelFromMesh(GenMeshCube(2.0f, 3.0f, 4.0f)), 15.0f, (2.0f * 4.5f * 4.0f), Vector3{ 0.0,0.0,0.0 }, PI / 2, &wind_)); // starts pointing north
+		// init player
 		player_.set_ship(ship.get());
 		world_objects_.push_back(std::move(ship));
+		
 		cmp_.axis_ = 0; // default axis of most variance is the x axis
+		
 
 	};
 	
@@ -66,13 +78,14 @@ public:
 
 	void update();
 	void render();
-
+	
+	Wind get_wind();
 	Player get_player();
 private:
 	AABBComparator cmp_;
-
 	void sort_objects();
 	// currently ocean and player, to be expanded upon
 	Player player_;
 	std::vector<std::unique_ptr<Object>> world_objects_;
+	Wind wind_;
 };

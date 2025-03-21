@@ -1,35 +1,61 @@
 #pragma once 
 #include <memory>
+#include <numbers>
+#include <utility>
+#include <cmath>
 #include "raylib.h"
 #include "raymath.h"
-
 #include "../game/config.h"
+#include "../environment/wind.h"
 
 class Sail {
 public:
 	~Sail() = default;
-	Sail(Vector3 direction)
-		: direction_(direction) {
+	Sail(float direction, float width, Wind* wind)
+		: direction_(direction), width_(width), wind_(wind) {
 		length_ = 0.0f;
 	};
 	Sail(const Sail& other)
-		: direction_(other.direction_), length_(other.length_) {
+		: direction_(other.direction_), length_(other.length_), width_(other.width_), 
+		wind_(other.wind_) {
 	};
 	Sail(const Sail&& other)
-		:direction_(std::move(other.direction_)), length_(other.length_) {
+		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)),
+		wind_(std::move(other.wind_)) {
 	};
 
-	Vector3 get_sail_direction();
+	float get_sail_direction();
 	float get_sail_length();
+	float get_width();
+	Vector3 get_force();
+	const Wind* get_wind();
 
-	void move_sail(Vector3 offest);
+
+
+	float sail_arc();
+
+
+
+	void sail_left(float& ship_direction);
+	void sail_right(float& ship_direction);
+
+	void move_sail_left(float rad);
+	void move_sail_right(float rad);
 
 	void raise_sail(float length);
-	void drop_sail(float length);
+	void lower_sail(float length);
+
+	void set_wind(const Wind* wind);
+	void update();
 
 private:
-	Vector3 direction_;
+	void calculate_force();
+	float direction_; // angle in radians
+	float width_;
+	// the arc of the sail is r * direction_, r is the length of the sail ig
 	float length_;
+	const Wind* wind_;
+	Vector3 force_;
 };
 
 /**
@@ -60,92 +86,61 @@ public:
 
 	~Anchor() = default;
 	Anchor()
-		:state_(std::make_unique<RaisedState>(RaisedState(0.0f, Vector3{1.0f, 0.0f, 1.0f}))), depth_(0.0f) {
+		:state_(std::make_unique<StationaryState>(StationaryState(0.0f))), depth_(0.0f), force_coefficient_(Vector3{ 1.0f, 0.0f, 1.0f }){
 	};
 	Anchor(const Anchor& other)
-		: state_(nullptr), depth_(other.depth_) {
+		: state_(nullptr), depth_(other.depth_), force_coefficient_(other.force_coefficient_) {
 
 		// Need to create a new state object based on the type of other.state_, temp implementation
-		if (auto* raised = dynamic_cast<RaisedState*>(other.state_.get())) {
-			state_ = std::make_unique<RaisedState>(*raised);
+		if (auto* raised = dynamic_cast<StationaryState*>(other.state_.get())) {
+			state_ = std::make_unique<StationaryState>(*raised);
 		}
-		else if (auto* lowered = dynamic_cast<LoweredState*>(other.state_.get())) {
-			state_ = std::make_unique<LoweredState>(*lowered);
-		}
-		else if (auto* lowering = dynamic_cast<LoweringState*>(other.state_.get())) {
-			state_ = std::make_unique<LoweringState>(*lowering);
-		}
-		else if (auto* raising = dynamic_cast<RaisingState*>(other.state_.get())) {
-			state_ = std::make_unique<RaisingState>(*raising);
+		else if (auto* lowered = dynamic_cast<MovingState*>(other.state_.get())) {
+			state_ = std::make_unique<MovingState>(*lowered);
 		}
 	};
 	Anchor(Anchor&& other)
-		: state_(std::move(other.state_)), depth_(other.depth_) {
-	}
+		: state_(std::move(other.state_)), depth_(other.depth_), force_coefficient_(std::move(other.force_coefficient_)) {
+	};
 
-	void lower();
-	void raise();
+	void move();
 	void update();
 	Vector3 get_force(); // to apply to the ship
-
+	float get_depth();
+	float get_speed();
 private:
 
 	class AnchorState {
 	public:
 		virtual ~AnchorState() = default;
-		AnchorState(float speed, Vector3 force)
-			: speed_(speed), force_coefficient_(force) {
+		AnchorState(float speed)
+			: speed_(speed){
 		};
-
-		virtual void lower(Anchor* anchor) = 0;
-		virtual void raise(Anchor* anchor) = 0;
+		virtual void move(Anchor* anchor) = 0;
 		float get_speed();
-		Vector3 get_force();
 	protected:
 		float speed_; // changes with the state
-		Vector3 force_coefficient_; // that is currently applied to the ship, depends on state
 	};
-	class RaisedState : public AnchorState {
+	class StationaryState : public AnchorState {
 	public:
-		RaisedState(float speed, Vector3 force)
-			: AnchorState(speed, force) {};
-		void lower(Anchor* anchor) override;
-		void raise(Anchor* anchor) override;
+		StationaryState(float speed)
+			: AnchorState(speed) {};
+		virtual void move(Anchor* anchor) override;
 	private:
 
 	};
-	class LoweredState : public AnchorState {
+	class MovingState : public AnchorState {
 	public:
-		LoweredState(float speed, Vector3 force)
-			: AnchorState(speed, force) {
+		MovingState(float speed)
+			: AnchorState(speed) {
 		};
-		void lower(Anchor* anchor) override;
-		void raise(Anchor* anchor) override;
+		virtual void move(Anchor* anchor) override;
 	private:
 	
 	};
-	class LoweringState : public AnchorState {
-	public: 
-		LoweringState(float speed, Vector3 force)
-			: AnchorState(speed, force) {
-		};
-
-		void lower(Anchor* anchor) override;
-		void raise(Anchor* anchor) override;
-	private:
-
-	};
-	class RaisingState : public AnchorState {
-	public:
-		RaisingState(float speed, Vector3 force)
-			: AnchorState(speed, force) {
-		};
-
-		void lower(Anchor* anchor) override;
-		void raise(Anchor* anchor) override;
-	private:
-
-	};
+		
+	void calculate_force();
 	std::unique_ptr<AnchorState> state_;
 	float depth_;
+	Vector3 force_coefficient_; // that is currently applied to the ship, depends on state
 };

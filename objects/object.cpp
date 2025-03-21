@@ -71,6 +71,19 @@ Vector3 MoveableObject::get_acceleration(){
 	return acceleration_;
 }
 
+Vector3 MoveableObject::get_velocity(){
+	return velocity_;
+}
+
+float MoveableObject::get_direction(){
+	return direction_;
+}
+
+Vector3 MoveableObject::get_direction_coefficient(){
+	// cos on the z, sin on the x
+	return Vector3{sinf(direction_), 0.0f, cosf(direction_)};
+}
+
 void MoveableObject::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }

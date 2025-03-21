@@ -58,7 +58,7 @@ protected:
 
 class MoveableObject : public Object {
 public:
-	MoveableObject(Vector3 position, Vector3 size, Model model, float density, float volume, Vector3 velocity, Vector3 direction)
+	MoveableObject(Vector3 position, Vector3 size, Model model, float density, float volume, Vector3 velocity, float direction)
 		: Object(position, size, model, density, volume), velocity_(velocity), direction_(direction) {
 		acceleration_ = Vector3{ 0.0,0.0,0.0 };
 	};
@@ -73,12 +73,16 @@ public:
 	void render() override;
 
 	Vector3 get_acceleration();
+	Vector3 get_velocity();
+	float get_direction();
+	Vector3 get_direction_coefficient();
 	void adjust_acceleration(Vector3 acceleration);
+	
 
 protected:
 	Vector3 velocity_;
 	Vector3 acceleration_;
-	Vector3 direction_;
+	float direction_; // in radians
 };
 
 
@@ -88,12 +92,13 @@ protected:
 class Ship : public MoveableObject {
 public:
 
-	Ship(Vector3 position, Vector3 size,  Model model, float density, float volume, Vector3 velocity, Vector3 direction)
-		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction)), anchor_(Anchor()){
+	Ship(Vector3 position, Vector3 size,  Model model, float density, float volume, Vector3 velocity, float direction, Wind* wind)
+		: MoveableObject(position, size, model, density, volume, velocity, direction), sail_(Sail(direction, 4.2f, wind)), anchor_(Anchor()){
 	};
 
 	Ship(const Ship& other)
 		: MoveableObject(other), sail_(other.sail_), anchor_(other.anchor_){
+
 	};
 
 	Ship(Ship&& other)
@@ -101,16 +106,30 @@ public:
 	};
 
 	Ship& operator=(const Ship& ohter);
-	Ship& operator = (const Ship&& other);
+	Ship& operator= (const Ship&& other);
 
 	void update() override;
 	void render() override;
 	void interact(Object* other) override;
 	void set_position(Vector3 position);
-	Vector3 get_position();
 
+
+	Vector3 get_position();
+	Sail get_sail();
+	Anchor get_anchor();
+	void move_anchor();
 	void drop_anchor();
 	void raise_anchor();
+
+	void steer_left();
+	void steer_right();
+
+	void raise_sail();
+	void lower_sail();
+
+	void turn_sail_left();
+	void turn_sail_right();
+	void set_wind(Wind* wind);
 private:
 	Sail sail_;
 	Anchor anchor_;
