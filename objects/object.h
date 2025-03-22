@@ -6,8 +6,6 @@
 
 #include "raylib.h"
 #include "raymath.h"
-
-
 #include "ship_components.h"
 class Object {
 public:
@@ -18,11 +16,11 @@ public:
 	};
 
 	Object(const Object& other)
-		: position_(other.position_), size_(other.size_), model_(other.model_), bounding_box_(other.bounding_box_), density_(other.density_), volume_(other.volume_){
+		: position_(other.position_), size_(other.size_), model_(other.model_), texture_(other.texture_), bounding_box_(other.bounding_box_), density_(other.density_), volume_(other.volume_){
 	};
 
 	Object(Object&& other)
-		: position_(std::move(other.position_)), size_(std::move(other.size_)), model_(std::move(other.model_)), bounding_box_(std::move(other.bounding_box_)), density_(std::move(other.density_)),
+		: position_(std::move(other.position_)), size_(std::move(other.size_)), model_(std::move(other.model_)), texture_(std::move(other.texture_)), bounding_box_(std::move(other.bounding_box_)), density_(std::move(other.density_)),
 		volume_(std::move(other.volume_)) {
 	};
 
@@ -42,15 +40,18 @@ public:
 	Vector3 get_size();
 	BoundingBox get_bounding_box();
 	void update_bounding_box();
+
+	void assign_shader(Shader shader);
 	// operator overloads
 protected:
 
 	// all objects have a model and position, and a hitbox
 	Model model_;
+	Texture texture_;
 	Vector3 position_;
+	//Hitbox hitbox_;
 	Vector3 size_;
 	BoundingBox bounding_box_;
-	//Hitbox hitbox_;
 
 	// objects also have 
 	float density_;
@@ -155,7 +156,39 @@ public:
 private:
 };
 
-class Sun : public Object{
+class Terrain : public Object {
 public:
+	Terrain(Vector3 position, Vector3 size, Model model, Texture texture, float density, float volume)
+		: Object(position, size, model, density, volume) {
+		model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+	};
+	Terrain(const Terrain& other)
+		: Object(other) {
+	};
+	Terrain(Terrain&& other)
+		: Object(other) {
+	};
+	
+
+	void render() override;
+	void interact(Object* other) override;
 private:
 };
+/**class Sun_Moon : public MoveableObject {
+public:
+	Sun_Moon(Vector3 position, Vector3 size, Model model, float density, float volume, Vector3 velocity, float direction, Shader& shader)
+		: MoveableObject(position, size, model, density, volume, velocity, direction), light_(CreateLight(LIGHT_POINT, position, Vector3Zero(), YELLOW, shader)),
+		shader_(shader){
+	};
+	Sun_Moon(const Sun_Moon& other)
+		: MoveableObject(other), light_(other.light_), shader_(other.shader_) {
+	};
+	void update() override;
+	void render() override;	
+
+private:
+	Light light_;
+	Shader& shader_;
+};
+
+*/

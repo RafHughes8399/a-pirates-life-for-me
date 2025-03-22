@@ -25,14 +25,6 @@ float Sail::sail_arc(){
 	return direction_ * width_;
 }
 
-
-
-/**
- * these still don't work properly
- * 
- * chin scratch
- * ok my thoughts are, let the sail move between 0 and pi, then add to 
- */
 void Sail::sail_left(float& ship_direction) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);

@@ -2,7 +2,7 @@
 // game properties
 #include <numbers>
 #define FPS 60
-
+#define GLSL 330
 // physics constants
 #define GRAVITY -9.8f //  units per second
 #define WATER_DENISTY 1.026f
@@ -42,3 +42,14 @@
 #define ANCHOR_RAISED_FORCE {1.0f, 0.0f, 1.0f}
 #define ANCHOR_LOWERED_FORCE {0.0f, 0.0f, 0.0f}
 
+
+// shader paths 
+#define LIGHTING_VS "resources/shaders/glsl330/lighting.vs"
+#define LIGHTING_FS "resources/shaders/glsl330/lighting.fs"
+
+// terrain image path
+#define PATH_PREFIX "../../../"
+
+#define TERRAIN_IMAGE "images/heightmap.png"
+#define NEW_TERRAIN_IMAGE_COLOUR "images/new_heightmap_colour.png"
+#define NEW_TERRAIN_IMAGE_GREY "images/new_heightmap_grey.png"

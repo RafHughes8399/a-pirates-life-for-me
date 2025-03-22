@@ -71,7 +71,7 @@ void World::sort_objects() {
 void World::update(){
 	// check for interactions 
 	auto time = GetTime();
-	sort_objects();
+		sort_objects();
 	// then update objects - changing positions, states, etc .
 	// for each object check if it intersects 
 	for (auto& o : world_objects_) {
@@ -84,7 +84,7 @@ void World::update(){
 }
 
 void World::render() {
-	DrawGrid(1000, 1);
+	DrawGrid(50, 1);
 	for (auto& o : world_objects_) {
 		o->render();
 	}

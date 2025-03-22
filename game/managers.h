@@ -1,5 +1,7 @@
 #pragma once
-#include "../environment/world.h"
+
+#include <map>
+#include <string>
 #include "../objects/object.h"
 #include "../game/config.h"
  /**
@@ -36,4 +38,24 @@ class Model_Manager {
 /**  manages sounds within the game */
 class Sound_Manager {
 
+};
+
+
+class ShaderManager {
+public:
+	~ShaderManager() = default;
+	ShaderManager() = default;
+	ShaderManager(const ShaderManager& other)
+		: loaded_shaders_(other.loaded_shaders_){
+	}
+	ShaderManager(ShaderManager&& other)
+		: loaded_shaders_(std::move(other.loaded_shaders_)){
+	};
+	void load_shader(std::pair<const char*, const char*> path);
+	void unload_shader(std::pair<const char*, const char*> path);
+
+	Shader get_shader(std::pair<const char*, const char*> path);
+
+private:
+	std::map<std::pair<const char*, const char*>, Shader> loaded_shaders_;
 };

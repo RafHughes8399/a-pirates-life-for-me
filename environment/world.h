@@ -46,9 +46,19 @@ public:
 	World()
 		: player_(Player()), wind_(Wind()){
 		// change this once the model manager is in play, and change the volume calculation
-		world_objects_.push_back(std::make_unique<Ocean>(Ocean(Vector3{ 0.0f, -12.5f,0.0f }, Vector3{1000.f, 25.0f, 1000.f},
-			LoadModelFromMesh(GenMeshCube(1000.f, 25.0f, 1000.f)), WATER_DENISTY, 1000.0 * 25.0 * 1000.0)));
 		
+
+		world_objects_.push_back(std::make_unique<Ocean>(Ocean(Vector3{ 0.0f, -12.5f,0.0f }, Vector3{100.0f, 25.0f, 100.0f},
+			LoadModelFromMesh(GenMeshCube(100.0f, 25.0f, 100.f)), WATER_DENISTY, 100.0 * 25.0 * 100.0)));
+		// init terrain
+		/**
+		 Image terrain_image = LoadImage(TERRAIN_IMAGE);
+		Texture2D texture = LoadTextureFromImage(terrain_image);
+		world_objects_.push_back(std::make_unique<Terrain>(Terrain(Vector3{10, 0, 10}, Vector3{1.0f, 1.0f, 1.0f}, 
+			LoadModelFromMesh(GenMeshHeightmap(terrain_image, Vector3{5, 4, 5})), texture, 10, 100.0f * 100.0f * 40)));
+
+		UnloadImage(terrain_image);
+		*/
 		// init wind
 		wind_.pick_direction();
 		wind_.pick_speed();
@@ -60,12 +70,13 @@ public:
 		world_objects_.push_back(std::move(ship));
 		
 		cmp_.axis_ = 0; // default axis of most variance is the x axis
+
 		
 
 	};
 	
 	World(const World& other)
-		: player_(other.player_) {
+		: player_(other.player_), wind_(other.wind_) {
 		for (auto& o : world_objects_) {
 			world_objects_.push_back(std::move(o));
 		}
@@ -81,6 +92,7 @@ public:
 	
 	Wind get_wind();
 	Player get_player();
+
 private:
 	AABBComparator cmp_;
 	void sort_objects();
@@ -88,4 +100,7 @@ private:
 	Player player_;
 	std::vector<std::unique_ptr<Object>> world_objects_;
 	Wind wind_;
+
+	// managers
+	//ShaderManager shaders_;
 };

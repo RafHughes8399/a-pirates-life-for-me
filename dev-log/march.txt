@@ -312,3 +312,19 @@ then move to
 -> then a day / night cycle
 -> separate the testing and main environment
 -> terrain  and the islands (design and development)
+
+
+
+let's figure out what to do next 
+-> world design (overall map)
+-> hitboxes and models  (for the ship and the ocean)
+-> ocean texturing 
+-> terrian (via a height map)
+
+-> object builder pattern for creating everything
+-> compass and map HUD
+
+
+-> land collision (ship)
+
+

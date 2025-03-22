@@ -58,6 +58,10 @@ void Object::update_bounding_box(){
 								position_.x + (size_.x / 2), position_.y + (size_.y / 2), position_.z + (size_.z / 2) };
 }
 
+void Object::assign_shader(Shader shader){
+	model_.materials[0].shader = shader;
+}
+
 void MoveableObject::update(){
 	return;
 }
@@ -88,7 +92,11 @@ void MoveableObject::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }
 
+void Terrain::render(){
+	std::cout << " draw terrain " << std::endl;
+	DrawModel(model_, position_, 1.0f, RED);
+}
 
-
-
-
+void Terrain::interact(Object* other){
+	return;
+}

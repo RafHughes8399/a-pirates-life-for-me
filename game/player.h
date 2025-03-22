@@ -1,10 +1,7 @@
 #pragma once
 #include <map>
 #include <functional>
-
 #include "raylib.h"
-
-
 #include "../objects/object.h"
 #include "config.h"
 class Player {

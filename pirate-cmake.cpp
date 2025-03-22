@@ -1,13 +1,16 @@
 ﻿// pirate-cmake.cpp : Defines the entry point for the application.
 //
 
+#include <iostream>
+#include <filesystem>
+
 #include "pirate-cmake.h"
 #include "environment/world.h"
 #include "raylib.h"
 #include "game/config.h"
 
 void tick(World& world);
-void render(World& world);
+void render(World& world, Model& model);
 void debug(Camera3D& camera, World& world);
 int main(){
 	auto width = GetScreenWidth();
@@ -15,13 +18,26 @@ int main(){
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(width, height, "a pirate life for me");
 	// setup the camera
-
+	
 	World world = World();
 	DisableCursor();
 	SetTargetFPS(FPS);
+	// adjust the current working directory
+	std::filesystem::current_path("../../../");
+
+
+
+	Image image = LoadImage(NEW_TERRAIN_IMAGE_COLOUR);
+	Texture2D texture = LoadTextureFromImage(image);
+
+	Mesh mesh = GenMeshHeightmap(image, Vector3{ 250, 32, 250});
+	Model model = LoadModelFromMesh(mesh);
+
+	model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+
 	while (!WindowShouldClose()) {
 		tick(world);
-		render(world);
+		render(world, model);
 	}
 	CloseWindow();
 }
@@ -30,12 +46,13 @@ void tick(World& world) {
 	world.update();
 }
 
-void render(World& world) {
+void render(World& world, Model& model) {
 	BeginDrawing();
 	ClearBackground(WHITE);
 	auto camera = world.get_player().get_camera();
 	BeginMode3D(camera);
-	
+
+	DrawModel(model, Vector3{-125, -24, -125 }, 1.0f, RED);
 	world.render();
 
 	EndMode3D();

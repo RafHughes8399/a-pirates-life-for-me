@@ -14,3 +14,32 @@ void Interaction_Manager::interact(Ship& ship, Ocean& ocean) {
 void Interaction_Manager::interact(Ocean& ocean, Ship& ship){
 	return;
 }
+
+void ShaderManager::load_shader(std::pair<const char*, const char*> path) {
+	
+	// increase the instances of the shader loaded if it exists
+	if (loaded_shaders_.contains(path)) {
+		Shader shader = loaded_shaders_[path];
+	}
+	// if it does not exist load it
+	else {
+		loaded_shaders_[path] = LoadShader(path.first, path.second);
+	}
+}
+
+void ShaderManager::unload_shader(std::pair<const char*, const char*> path){
+	auto shader = loaded_shaders_.find(path);
+	
+	// remove from instances loaded
+
+	// unload the shader
+	UnloadShader(shader->second);
+	
+	// remove from loaded_shaders
+	loaded_shaders_.erase(path);
+
+}
+
+Shader ShaderManager::get_shader(std::pair<const char*, const char*> path){
+	return loaded_shaders_[path];
+}
