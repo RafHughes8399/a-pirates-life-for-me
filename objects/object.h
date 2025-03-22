@@ -173,6 +173,7 @@ public:
 	void render() override;
 	void interact(Object* other) override;
 private:
+
 };
 /**class Sun_Moon : public MoveableObject {
 public:
