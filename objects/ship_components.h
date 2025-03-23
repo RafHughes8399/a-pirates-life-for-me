@@ -8,6 +8,11 @@
 #include "../game/config.h"
 #include "../environment/wind.h"
 
+// setup observer pattern with the ship,
+// the ship components observe the ship for any changes and 
+// calculate the force after
+
+// should reduce the number of calculations being made
 class Sail {
 public:
 	~Sail() = default;
