@@ -7,8 +7,8 @@ void Ship::update(){
 	auto delta_time = GetFrameTime();
 	// update the anchor
 	anchor_.update();
-	sail_.update();
 	// apply gravity
+	
 	acceleration_.y += GRAVITY;
 	acceleration_.y /= density_;
 
@@ -90,13 +90,6 @@ void Ship::move_anchor(){
 }
 
 void Ship::steer_left(){
-	// change ship direction to the left
-	// update direction, similar to the sail except the bounds are different, then rotate the model
-	// use modulus in terms of 2 * pi
-
-	// hold on, that is not stupposed to be like that
-
-	// moving around the whole circle should go from 0 to 2pi but it does not
 	direction_ = std::fmod((direction_ + SHIP_TURN_SPEED), ( 2 * PI));
 	
 	// rotate the model, yaw

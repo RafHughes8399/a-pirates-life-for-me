@@ -120,8 +120,6 @@ public:
 	Sail get_sail();
 	Anchor get_anchor();
 	void move_anchor();
-	void drop_anchor();
-	void raise_anchor();
 
 	void steer_left();
 	void steer_right();

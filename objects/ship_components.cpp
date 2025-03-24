@@ -21,10 +21,6 @@ const Wind* Sail::get_wind(){
 	return wind_;
 }
 
-float Sail::sail_arc(){
-	return direction_ * width_;
-}
-
 void Sail::sail_left(float& ship_direction) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
@@ -43,13 +39,12 @@ void Sail::sail_left(float& ship_direction) {
 
 	}
 	direction_ = new_dir;
+	calculate_force();
 }
 
 void Sail::sail_right(float& ship_direction) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
-
-
 
 	auto new_dir = direction_ - SAIL_TURN_SPEED;
 	if (right_bound < left_bound) {
@@ -64,36 +59,35 @@ void Sail::sail_right(float& ship_direction) {
 
 	}
 	direction_ = new_dir;
+	calculate_force();
 }
 
 // these are for when the sail is being moved along with the ship
 void Sail::move_sail_left(float rad){
 	direction_ = std::fmod(direction_ + rad, 2 *PI);
+	calculate_force();
 }
 void Sail::move_sail_right(float rad) {
 	direction_ = std::fmod(direction_ - rad, 2 *PI);
+	calculate_force();
 }
 
 void Sail::raise_sail(float length) {
 	// 0 <=
 	length_ = std::max(0.0f, (length_ - length));
+	calculate_force();
 }
 
 void Sail::lower_sail(float length){
 	// <= 1
 	length_ = std::min(1.0f, (length_ + length));
+	calculate_force();
 
 }
 
 void Sail::set_wind(const Wind* wind){
 	wind_ = wind;
 }
-
-void Sail::update(){
-	calculate_force();
-}
-
-
 
 /**  this needs some attention */
 void Sail::calculate_force(){

@@ -12,16 +12,18 @@ class Sail {
 public:
 	~Sail() = default;
 	Sail(float direction, float width, Wind* wind)
-		: direction_(direction), width_(width), wind_(wind) {
-		length_ = 0.0f;
+		: direction_(direction), width_(width), wind_(wind), length_(0.0f), force_(Vector3{1.0f, 1.0f, 1.0f}) {
+		calculate_force();
 	};
 	Sail(const Sail& other)
 		: direction_(other.direction_), length_(other.length_), width_(other.width_), 
-		wind_(other.wind_) {
+		wind_(other.wind_), force_(other.force_) {
+		calculate_force();
 	};
 	Sail(const Sail&& other)
 		:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)),
 		wind_(std::move(other.wind_)) {
+		calculate_force();
 	};
 
 	float get_sail_direction();
@@ -29,12 +31,6 @@ public:
 	float get_width();
 	Vector3 get_force();
 	const Wind* get_wind();
-
-
-
-	float sail_arc();
-
-
 
 	void sail_left(float& ship_direction);
 	void sail_right(float& ship_direction);
@@ -46,7 +42,7 @@ public:
 	void lower_sail(float length);
 
 	void set_wind(const Wind* wind);
-	void update();
+
 
 private:
 	void calculate_force();
