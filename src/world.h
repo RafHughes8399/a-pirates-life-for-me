@@ -90,7 +90,8 @@ public:
 	std::vector<std::unique_ptr<Object>>& get_objects();
 private:
 	void sort_objects();
-	
+	void generate_chunks();
+
 	Vector3 world_size = Vector3{ WORLD_X, WORLD_Y, WORLD_Z };
 	AABBComparator cmp_;
 

@@ -12,6 +12,9 @@ public:
 	}
 	Chunk(const Chunk& other)
 		: chunk_bounds_(other.chunk_bounds_) {
+		for (const auto& o : other.objects_) {
+			objects_.push_back(o->clone());
+		}
 	}
 	Chunk(Chunk&& other) noexcept
 		: chunk_bounds_(std::move(other.chunk_bounds_)) {
@@ -20,6 +23,9 @@ public:
 	Chunk& operator=(const Chunk& other) {
 		if (this != &other) {
 			chunk_bounds_ = other.chunk_bounds_;
+			for (const auto& o : other.objects_) {
+				objects_.push_back(o->clone());
+			}
 		}
 		return *this;
 	}
@@ -30,6 +36,9 @@ public:
 		}
 		return *this;
 	}
+
+	void render_chunk();
+	void update_chunk();
 private:
 	std::vector<std::unique_ptr<Object>> objects_;
 	BoundingBox chunk_bounds_;

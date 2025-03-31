@@ -68,6 +68,16 @@ void World::sort_objects() {
 	
 }
 
+void World::generate_chunks() {
+	for (auto i = 0; i < NUM_CHUNKS; ++i) {
+		auto chunk_row = std::vector<Chunk>{};
+		// top-down, left-right
+		for (auto j = 0 j < NUM_CHUNKS; ++j) {
+			/
+		}
+	}
+}
+
 void World::update(){
 	// based on player position, update based on simulation distance
 	// check for interactions 
