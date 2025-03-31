@@ -1,0 +1,67 @@
+#pragma once
+
+// game models and textures
+#define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown  .glb"
+#define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
+
+// game textures 
+#define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"
+#define WATER_TEXTURE "../../../textures/environment-textures/Core/WaterNormals_01.png"
+
+// game properties
+
+
+#include <numbers>
+#define FPS 60
+
+// physics constants
+#define GRAVITY -9.8f //  units per second
+#define WATER_DENISTY 1.026f
+#define LAND_DENSITY 9.8f
+
+// camera properties
+#define CAMERA_MOVE_SPEED 5.4f       // Units per second
+#define CAMERA_ROTATION_SPEED 0.03f
+#define CAMERA_PAN_SPEED 0.2f
+#define CAMERA_ORBITAL_SPEED 0.5f       // Radians per second
+
+#define CAMERA_MOUSE_MOVE_SENSITIVITY 0.003f
+
+
+// angle
+#define ZERO 0.0f // in radians
+#define PI2 2 * std::numbers::pi_v<float>
+
+// world properties
+#define WORLD_X 1024.0f
+#define WORLD_Y 128.0f
+#define WORLD_Z 1024.0f
+
+
+// wind properties
+#define NO_WIND 1.2f
+#define WIND_SPEED_MIN 3.2f
+#define WIND_SPEED_MAX 7.4f
+#define WIND_CHANGE_TIME 30.0f // the wind randomised at thsi interval
+
+
+// ship properties
+#define SHIP_DENSITY 5.3f
+#define SHIP_TURN_SPEED (2 * PI * 0.0004)// to be updated maybe ?
+
+// sail properties
+#define LOWER_RAISE_SPEED 0.025f
+#define SAIL_TURN_SPEED (2* PI * 0.003)
+
+// anchor properties
+#define ANCHOR_DROP_SPEED 0.35f // how quick the anchor drops in seconds
+#define ANCHOR_STATIC_SPEED 0.0f
+#define ANCHOR_MAX_DEPTH 32.6f 
+#define ANCHOR_RAISED_FORCE {1.0f, 0.0f, 1.0f}
+#define ANCHOR_LOWERED_FORCE {0.0f, 0.0f, 0.0f}
+
+
+
+
+// terrain image path
+#define TERRAIN_IMAGE "../../../images/heightmap.png"

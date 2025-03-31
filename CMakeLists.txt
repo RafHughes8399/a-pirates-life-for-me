@@ -27,7 +27,15 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   endif()
 endif()
 # Add source to this project's executable.
-add_executable (pirate-cmake "pirate-cmake.cpp" "pirate-cmake.h" "environment/World.h" "environment/Ocean.h" "environment/land.h" "game/Player.h" "game/player.cpp" "objects/ship.cpp" "environment/world.cpp" "environment/ocean.cpp" "game/config.h"  "objects/object.h" "game/managers.h" "objects/object.cpp" "game/managers.cpp"  "objects/ship_components.cpp" "environment/wind.h" "environment/wind.cpp" "game/utility_functions.h" "game/utility_functions.cpp" "resources/shaders/rlights.h" "resources/shaders/rlights.cpp" "game/hitbox.h")
+add_executable (pirate-cmake 
+"src/pirate-cmake.cpp"
+"src/world.h" "src/player.h" "src/player.cpp" 
+"src/ship.cpp" "src/world.cpp" "src/ocean.cpp" 
+"src/config.h"  "src/object.h"  "src/object.cpp" 
+"src/ship_components.cpp" "src/wind.h" "src/wind.cpp" 
+"src/utility_functions.h" "src/utility_functions.cpp" "src/hitbox.h" 
+
+"src/singleton_flyweight.h" "src/singleton_flyweight.cpp" "src/object_factory.h" "src/object_factory.cpp")
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
@@ -48,3 +56,18 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 endif()
 # TODO: Add tests and install targets if needed.
+# Include all files in textures, images, and models folders
+file(GLOB TEXTURE_FILES "${CMAKE_SOURCE_DIR}/textures/*")
+file(GLOB IMAGE_FILES "${CMAKE_SOURCE_DIR}/images/*")
+file(GLOB MODEL_FILES "${CMAKE_SOURCE_DIR}/models/*")
+
+# Add the resource files to the target
+add_custom_target(resources ALL SOURCES ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES})
+
+# Ensure the resource files are copied to the build directory
+add_custom_command(TARGET resources POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} $<TARGET_FILE_DIR:pirate-cmake>
+)
+
+set_property(TARGET pirate-cmake PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")

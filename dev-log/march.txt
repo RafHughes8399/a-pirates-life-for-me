@@ -328,5 +328,46 @@ let's figure out what to do next
 -> land collision (ship)
 
 
-24th of March
--> 
+25th of March
+-> terrain sizing and class 
+-> flyweight and singleton pattern for object creation 
+-> hitboxes 
+-> models and textures for ship, ocean and trerrain
+
+
+
+
+the flywieght has the model and the texture
+the object needs a pointer to the flyweight to draw 
+
+the factory stores the flyweight to add to the object
+
+each mesh in a model has a material
+
+
+
+26th of March
+-> i need to refocus a bit, been kinda lost and confused
+-> it seems the heightmap is too demanding, not sure
+-> so maybe best to sculpt and model the islands and put them in individually?
+
+-> ok ok okokokokkookokokokokokokokokokokokokkookokokokkookokokko, refocus you know what you need to do know i think 
+-> change up how things are rendered and drawn on the screen, its goin got get too muchn very quickly otherwise
+	-> like minecraft have a simulation and render difference
+	-> split the map up into chunks
+	-> 
+	-> simulate x chunks around the player 
+	-> draw x chunks around the player
+
+
+-> fix bugs: the ship inital ship rotation jump and the camera going under the water
+-> use the heightmap to sculpt the islands base 
+
+-> structual refactor, make a game class, run the game through that class not the world 
+-> go off time since last frame logic instead of per frame that way the game speed is not so tied to frame 
+performance as it fluctuates throughout play ? 
+-> add an event system, dispatch and handler for game events
+
+-> basic wind, compass and map hud elements t
+
+-> leave this for now, any ideas or work you do it in the book, crank the uni for a bit ok
