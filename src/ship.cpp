@@ -49,6 +49,11 @@ void Ship::render(){
 	DrawModel(object_type_.get_model(), position_, 0.15f, WHITE);
 }
 
+std::unique_ptr<Object> Ship::clone()
+{
+	return std::make_unique<Ship>(*this);
+}
+
 void Ship::interact(Object* other){
 	auto ocean = dynamic_cast<Ocean*>(other);
 	// cast to ocean

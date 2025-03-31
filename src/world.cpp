@@ -69,6 +69,7 @@ void World::sort_objects() {
 }
 
 void World::update(){
+	// based on player position, update based on simulation distance
 	// check for interactions 
 	auto time = GetTime();
 		sort_objects();
@@ -77,24 +78,24 @@ void World::update(){
 	for (auto& o : world_objects_) {
 		o->update();
 	}
-	player_.update();
 
 	// randomise the wind every 90 seconds ? 
 	wind_->update(time);
 }
 
 void World::render() {
-	DrawGrid(50, 1);
+	// based on the player position, render based on render distnace
+	DrawGrid(NUM_CHUNKS, CHUNK_SIZE);
 	for (auto& o : world_objects_) {
 		o->render();
 	}
-	player_.render();
 }
 
 Wind* World::get_wind(){
 	return wind_;
 }
 
-Player World::get_player(){
-	return player_;
+std::vector<std::unique_ptr<Object>>& World::get_objects(){
+	// TODO: insert return statement here
+	return world_objects_;
 }

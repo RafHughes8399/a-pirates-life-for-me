@@ -9,7 +9,7 @@
 #include "wind.h"
 #include "player.h"
 #include "object.h"
-
+#include "chunk.h"
 
 
 
@@ -41,8 +41,8 @@ public:
 class World {
 public:
 	// CONSTRUCTORS
-	World()
-		: player_(Player()), wind_(new Wind()){
+	World(Player& player)
+		: wind_(new Wind()){
 		// change this once the model manager is in play, and change the volume calculation
 		
 		// init ocean
@@ -51,10 +51,7 @@ public:
 			Vector3{WORLD_X, WORLD_Y *0.5, WORLD_Z},
 			WATER_DENISTY
 			)));
-		
-		
-		// init wind
-		
+
 		wind_->pick_direction();
 		wind_->pick_speed();
 
@@ -68,16 +65,17 @@ public:
 			wind_
 			));
 		// init player
-		player_.set_ship(ship.get());
+		player.set_ship(ship.get());
 		world_objects_.push_back(std::move(ship));
 		
 		cmp_.axis_ = 0; // default axis of most variance is the x axis
 	};
 	World(const World& other)
-		: player_(other.player_), wind_(other.wind_){
-		for (auto& o : world_objects_) {
-			world_objects_.push_back(std::move(o));
+		: wind_(other.wind_){
+		for (const auto& o : other.world_objects_) {
+			world_objects_.push_back(o->clone());
 		}
+		cmp_.axis_ = other.cmp_.axis_;
 	};
 
 	World(const World&& other);
@@ -89,16 +87,15 @@ public:
 	void render();
 	
 	Wind* get_wind();
-	Player get_player();
-
+	std::vector<std::unique_ptr<Object>>& get_objects();
 private:
 	void sort_objects();
 	
 	Vector3 world_size = Vector3{ WORLD_X, WORLD_Y, WORLD_Z };
 	AABBComparator cmp_;
 
-	Player player_;
 	Wind* wind_;
+	std::vector<std::vector<Chunk>> chunks_;
 	std::vector<std::unique_ptr<Object>> world_objects_;
 
 	// temp, will move to a factory or whatever else

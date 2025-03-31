@@ -5,53 +5,60 @@
 #include <filesystem>
 
 #include "pirate-cmake.h"
+#include "game.h"
+#include "player.h"
 #include "world.h"
 #include "raylib.h"
 #include "config.h"
 
-void tick(World& world);
-void render(World& world);
-void debug(Camera3D& camera, World& world);
+void tick(Game& world);
+void render(Game& world);
+void debug(Camera3D& camera, Game& game);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(width, height, "a pirate life for me");
 	// setup the camera
-	
-	World world = World();
+
+	// temp - will setup some obj factory
+	Player player = Player();
+	World world = World(player);
+
+	Game game = Game(world, player);
 	DisableCursor();
 	SetTargetFPS(FPS);
 	// adjust the current working directory
 	while (!WindowShouldClose()) {
-		tick(world);
-		render(world);
+	std::cout << game.get_world().get_objects().size() << std::endl;
+		tick(game);
+		render(game);
 	}
 	CloseWindow();
 }
 
-void tick(World& world) {
-	world.update();
+void tick(Game& game) {
+	game.update();
 }
 
-void render(World& world) {
+void render(Game& game) {
 	BeginDrawing();
 	ClearBackground(WHITE);
-	auto camera = world.get_player().get_camera();
+	auto camera = game.get_player().get_camera();
 	BeginMode3D(camera);
 
-	world.render();
+	game.render();
 
 	EndMode3D();
 
-	debug(camera, world);
+	debug(camera, game);
 
 	EndDrawing();
 }
 
-void debug(Camera3D& camera, World& world) {
+void debug(Camera3D& camera, Game& game) {
 
-	auto ship = *world.get_player().get_ship();
+	auto ship = game.get_player().get_ship();
 	// FPS Counter
 	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
 
@@ -60,30 +67,31 @@ void debug(Camera3D& camera, World& world) {
 	DrawRectangle(200, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(200, 5, 195, 170, BLUE);
 	DrawText("Ship status: ", 210, text_y, 10, BLACK);
-	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", ship.get_position().x, ship.get_position().y, ship.get_position().z), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Direction: %06.3f", ship.get_direction()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Sail Angle: %06.3f", ship.get_sail().get_sail_direction()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Sail Length: %06.3f", ship.get_sail().get_sail_length()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Anchor Depth: %06.3f", ship.get_anchor().get_depth()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Anchor Speed: %06.3f", ship.get_anchor().get_speed()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Acceleration: (%06.3f, %06.3f, %06.3f)", ship.get_acceleration().x, ship.get_acceleration().y, ship.get_acceleration().z), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", ship.get_velocity().x, ship.get_velocity().y, ship.get_velocity().z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", ship->get_position().x, ship->get_position().y, ship->get_position().z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Direction: %06.3f", ship->get_direction()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Sail Angle: %06.3f", ship->get_sail().get_sail_direction()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Sail Length: %06.3f", ship->get_sail().get_sail_length()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Anchor Depth: %06.3f", ship->get_anchor().get_depth()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Anchor Speed: %06.3f", ship->get_anchor().get_speed()), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Acceleration: (%06.3f, %06.3f, %06.3f)", ship->get_acceleration().x, ship->get_acceleration().y, ship->get_acceleration().z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", ship->get_velocity().x, ship->get_velocity().y, ship->get_velocity().z), 210, text_y += 17, 10, BLACK);
 
 	// world debug info
 	text_y = 15;
+	auto world = game.get_world();
 	auto wind = world.get_wind();
 	DrawRectangle(400, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(400, 5, 195, 170, BLUE);
 	DrawText(TextFormat("Wind Direction %06.3f", wind->get_direction()), 410, 30, 10, BLACK);
 	DrawText(TextFormat("Wind Speed %06.3f", wind->get_speed()), 410, 45, 10, BLACK);
 	
-	DrawText(TextFormat("Sail Lower %06.3f", ship.get_direction() - (PI /2)), 410, 60, 10, BLACK);
-	DrawText(TextFormat("Sail Upper %06.3f", ship.get_direction() + (PI / 2)), 410, 75, 10, BLACK);
-	DrawText(TextFormat("Sail  %06.3f", ship.get_sail().get_sail_direction()), 410, 90, 10, BLACK);
-	DrawText(TextFormat("Sail Width   %06.3f", ship.get_sail().get_width()), 410, 105, 10, BLACK);
+	DrawText(TextFormat("Sail Lower %06.3f", ship->get_direction() - (PI /2)), 410, 60, 10, BLACK);
+	DrawText(TextFormat("Sail Upper %06.3f", ship->get_direction() + (PI / 2)), 410, 75, 10, BLACK);
+	DrawText(TextFormat("Sail  %06.3f", ship->get_sail().get_sail_direction()), 410, 90, 10, BLACK);
+	DrawText(TextFormat("Sail Width   %06.3f", ship->get_sail().get_width()), 410, 105, 10, BLACK);
 
-	DrawText(TextFormat("Sail Wind Lower %06.3f", ship.get_sail().get_sail_direction() - ship.get_sail().get_width() / 2), 410, 120, 10, BLACK);
-	DrawText(TextFormat("Sail Wind Upper %06.3f", ship.get_sail().get_sail_direction() + ship.get_sail().get_width() / 2), 410, 135, 10, BLACK);
+	DrawText(TextFormat("Sail Wind Lower %06.3f", ship->get_sail().get_sail_direction() - ship->get_sail().get_width() / 2), 410, 120, 10, BLACK);
+	DrawText(TextFormat("Sail Wind Upper %06.3f", ship->get_sail().get_sail_direction() + ship->get_sail().get_width() / 2), 410, 135, 10, BLACK);
 
 
 

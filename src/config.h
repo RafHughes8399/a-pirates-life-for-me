@@ -1,18 +1,21 @@
 #pragma once
+#include <numbers>
 
 // game models and textures
-#define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown  .glb"
+#define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown.glb"
 #define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
 
 // game textures 
 #define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"
 #define WATER_TEXTURE "../../../textures/environment-textures/Core/WaterNormals_01.png"
 
+
+
 // game properties
-
-
-#include <numbers>
 #define FPS 60
+#define RENDER_DISTANCE 2 // chunk radius
+#define SIMULATION_DISTANCE 4 // chunk radius
+
 
 // physics constants
 #define GRAVITY -9.8f //  units per second
@@ -24,11 +27,11 @@
 #define CAMERA_ROTATION_SPEED 0.03f
 #define CAMERA_PAN_SPEED 0.2f
 #define CAMERA_ORBITAL_SPEED 0.5f       // Radians per second
-
+#define CAMERA_MIN_LEVEL 0.25f
 #define CAMERA_MOUSE_MOVE_SENSITIVITY 0.003f
 
 
-// angle
+// angles
 #define ZERO 0.0f // in radians
 #define PI2 2 * std::numbers::pi_v<float>
 
@@ -37,6 +40,8 @@
 #define WORLD_Y 128.0f
 #define WORLD_Z 1024.0f
 
+#define NUM_CHUNKS 50
+#define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
 // wind properties
 #define NO_WIND 1.2f

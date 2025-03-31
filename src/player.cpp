@@ -40,6 +40,9 @@ void Player::move_camera(int mode, Vector3& difference){
 	// move the camera to the new position
 	camera_.position = Vector3Add(camera_.position, difference);
 	camera_.target = Vector3Add(camera_.target, difference);
+
+	// stop the camera from moving below the water level
+	camera_.position.y = std::max(camera_.position.y, CAMERA_MIN_LEVEL);
 	// then allow for camera rotation
 	CameraYaw(&camera_, -delta_mouse.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotate_around_target);
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);

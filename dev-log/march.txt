@@ -371,3 +371,41 @@ performance as it fluctuates throughout play ?
 -> basic wind, compass and map hud elements t
 
 -> leave this for now, any ideas or work you do it in the book, crank the uni for a bit ok
+
+
+31st of March
+-> game class
+-> camera movement limit
+-> chunks
+-> weather
+-> events and event handler
+-> hitbox
+-> compass and map
+
+
+
+
+ok, so events require the following:
+-> an event - the thing that happens, generic over a type, has a type, name, and is_handeld field
+-> a dispatcher - the thing that contains the listeners for the event. it maps event types to the listerns of the event
+ map event type, std ::function void (const Event <T> &)
+
+ can add listeners and send events, send events finds the event type and iterate through listeners,calling until the event
+ is handledf
+
+ then you define events
+ enum class for the overall type, then instances for specific events
+
+ -> the event handler is a singleton and knows about all types of events, it has a dispatcher for all types of events 
+
+ adding an event involves adding a listener to the dispatcher for that event typef
+ events can also be sent invoking the dispatch send
+
+ events are made, then sent to the handler or rather the listeners in the dispatcher
+
+ event listeners are added to the dispatcher when an object is created, specifying the event type and the function
+
+ use the video
+
+ ok so the eent handler sort of manages itself, you include it and call the methods 
+ to add and remove listeners and send events

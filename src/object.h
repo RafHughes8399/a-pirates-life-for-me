@@ -31,6 +31,7 @@ public:
 	virtual void update();
 	virtual void render();
 	virtual void interact(Object* other);
+	virtual std::unique_ptr<Object> clone();
 	float get_height();
 	float get_width();
 	float get_length();
@@ -73,7 +74,7 @@ public:
 	}
 	void update() override;
 	void render() override;
-
+	std::unique_ptr<Object> clone() override;
 	Vector3 get_acceleration();
 	Vector3 get_velocity();
 	float get_direction();
@@ -113,6 +114,7 @@ public:
 
 	void update() override;
 	void render() override;
+	std::unique_ptr<Object> clone() override;
 	void interact(Object* other) override;
 	void set_position(Vector3 position);
 
@@ -153,6 +155,7 @@ public:
 	};
 	void interact(Object* other) override;
 	void render() override;
+	std::unique_ptr<Object> clone() override;
 private:
 };
 
