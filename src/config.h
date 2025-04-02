@@ -40,7 +40,7 @@
 #define WORLD_Y 128.0f
 #define WORLD_Z 1024.0f
 
-#define NUM_CHUNKS 50
+#define NUM_CHUNKS 25
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
 // wind properties

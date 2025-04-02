@@ -13,37 +13,16 @@
 
 
 
-// a functor is a class with an overloaded () operator that means the class can be called like a function
-class AABBComparator {
-public:
-	bool operator()( const std::unique_ptr<Object>& a, const std::unique_ptr<Object>& b) {
-		// based on the axis
-		auto a_bb = GetModelBoundingBox(a->get_model());
-		auto b_bb = GetModelBoundingBox(b->get_model());
-		switch (axis_) {
-		case 0:
-			return a_bb.max.x <= b_bb.min.x;
-			break;
-		case 1:
-			return a_bb.max.y <= b_bb.min.y;
-			break;
-		case 2:
-			return a_bb.max.z <= b_bb.min.y;
-			break;
-		default:
-			return true;
-			break;
-		}
-	}
-	int axis_;
-
-};
 class World {
 public:
 	// CONSTRUCTORS
 	World(Player& player)
 		: wind_(new Wind()){
 		// change this once the model manager is in play, and change the volume calculation
+		wind_->pick_direction();
+		wind_->pick_speed();
+		
+		generate_chunks();
 		
 		// init ocean
 		world_objects_.push_back(std::make_unique<Ocean>(Ocean(ocean_type, 
@@ -51,9 +30,6 @@ public:
 			Vector3{WORLD_X, WORLD_Y *0.5, WORLD_Z},
 			WATER_DENISTY
 			)));
-
-		wind_->pick_direction();
-		wind_->pick_speed();
 
 		// init ship
 		auto ship = std::make_unique<Ship>(Ship(ship_type,
@@ -83,8 +59,8 @@ public:
 	World& operator=(const World& ohter);
 	World& operator = (const World && other);
 
-	void update();
-	void render();
+	void update(Vector2& chunk);
+	void render(Vector2& chunk);
 	
 	Wind* get_wind();
 	std::vector<std::unique_ptr<Object>>& get_objects();

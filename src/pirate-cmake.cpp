@@ -30,7 +30,6 @@ int main(){
 	SetTargetFPS(FPS);
 	// adjust the current working directory
 	while (!WindowShouldClose()) {
-	std::cout << game.get_world().get_objects().size() << std::endl;
 		tick(game);
 		render(game);
 	}

@@ -1,25 +1,13 @@
 #include "world.h"
 #include "raymath.h"
+#include "utility_functions.h"
 #include <algorithm>
 
-float get_maximal_variance_axis(Vector3 bb, int axis) {
-	switch (axis) {
-		case 0: 
-			return bb.x;
-			break;
-		case 1:
-			return bb.y;
-			break;
-		case 2:
-			return bb.z;
-			break;
-	}
-}
 
 void World::sort_objects() {
 	std::sort(world_objects_.begin(), world_objects_.end(), cmp_); // add the comparator, if this does not work, just define < for Object, default axis is x
-	auto centre_sum = Vector3{0.0f, 0.0f, 0.0f};
-	auto centre_square_sum = Vector3{0.0f, 0.0f, 0.0f };
+	auto centre_sum = Vector3{ 0.0f, 0.0f, 0.0f };
+	auto centre_square_sum = Vector3{ 0.0f, 0.0f, 0.0f };
 
 	for (auto i = 0; i < world_objects_.size() - 1; ++i) {
 		// get the centre of the bounding box 
@@ -33,9 +21,9 @@ void World::sort_objects() {
 			auto other_bounding_box = world_objects_[j]->get_bounding_box();
 			// compare if other_bb is in the interval of current_bb, on the axis of max variance
 			// so if current. max < other.min, then intersection
-			auto current_max = get_maximal_variance_axis(current_bounding_box.max, cmp_.axis_);
-			auto other_min = get_maximal_variance_axis(other_bounding_box.min, cmp_.axis_);
-			if (other_min < current_max){
+			auto current_max = utility::get_maximal_variance_axis(current_bounding_box.max, cmp_.axis_);
+			auto other_min = utility::get_maximal_variance_axis(other_bounding_box.min, cmp_.axis_);
+			if (other_min < current_max) {
 				// check for a more accurate intersection between the two objects
 
 				// for now a simple shape collision
@@ -65,40 +53,97 @@ void World::sort_objects() {
 		maximal_axis = variance.z;
 		cmp_.axis_ = 2;
 	}
-	
-}
 
+}
 void World::generate_chunks() {
 	for (auto i = 0; i < NUM_CHUNKS; ++i) {
 		auto chunk_row = std::vector<Chunk>{};
-		// top-down, left-right
-		for (auto j = 0 j < NUM_CHUNKS; ++j) {
-			/
+		auto min = Vector3{WORLD_X * -0.5, WORLD_Y * -0.5, float((WORLD_Z * 0.5) - (CHUNK_SIZE * (i + 1)))};
+		auto max = Vector3{float(WORLD_X * -0.5), WORLD_Y * 0.5, float(WORLD_Z * 0.5) - (CHUNK_SIZE * i)};
+		auto row = std::vector<Chunk>{};
+		for (auto j = 0; j < NUM_CHUNKS; ++j) {
+			min.x += CHUNK_SIZE;
+			max.x += (min.x + CHUNK_SIZE);
+			std::cout << "generate chunk " << i << " " << j
+				<< "with bounds " << min.x << " , " << min.y << ", " << min.z
+				<< " and " << max.x << " , " << max.y << ", " << max.z << std::endl;
+			row.push_back(Chunk(min, max));
 		}
+		chunks_.push_back(row);
 	}
 }
 
-void World::update(){
+void World::update(Vector2& chunk){
 	// based on player position, update based on simulation distance
 	// check for interactions 
+	World::sort_objects();
+	//std::cout << "player chunk " << chunk.x << ", " << chunk.y << std::endl;	
 	auto time = GetTime();
-		sort_objects();
-	// then update objects - changing positions, states, etc .
-	// for each object check if it intersects 
+	/*
+	for (auto i = 0; i < SIMULATION_DISTANCE; ++i) {
+		for (auto j = 0; j < SIMULATION_DISTANCE; ++j) {
+			// there are some cases you aren't considering
+			auto row = chunk.x + i;
+			auto col = chunk.y + j;
+			if (i != 0 and j != 0) {
+			if(not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or 
+				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
+				continue;
+			}
+			std::cout << "simulate chunk " << row << ", " << col << std::endl;
+			chunks_[row][col].update_chunk();
+			}
+
+			row = chunk.x - i;
+			col = chunk.y - j;
+			if (not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or
+				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
+				continue;
+			}
+			chunks_[row][col].update_chunk();
+		}	
+	}
+	*/
 	for (auto& o : world_objects_) {
 		o->update();
 	}
-
 	// randomise the wind every 90 seconds ? 
 	wind_->update(time);
 }
 
-void World::render() {
+void World::render(Vector2& chunk) {
 	// based on the player position, render based on render distnace
 	DrawGrid(NUM_CHUNKS, CHUNK_SIZE);
+
+	// TODO for debug, draw the chunk bounding boxes
 	for (auto& o : world_objects_) {
 		o->render();
 	}
+	/*
+	for (auto i = 0; i < RENDER_DISTANCE; ++i) {
+		for (auto j = 0; j < RENDER_DISTANCE; ++j) {
+			// there are some cases you aren't considering
+			auto row = chunk.x + i;
+			auto col = chunk.y + j;
+			if (i != 0 and j != 0) {
+			if(not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or
+				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
+				continue;
+			}
+			std::cout << "simulate chunk " << row << ", " << col << std::endl;
+			chunks_[row][col].render_chunk();
+			}
+
+			row = chunk.x - i;
+			col = chunk.y - j;
+			if (not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or
+				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
+				continue;
+			}
+			chunks_[row][col].render_chunk();
+		}
+	}
+	*/
 }
 
 Wind* World::get_wind(){

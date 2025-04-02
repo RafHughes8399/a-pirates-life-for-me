@@ -1,0 +1,18 @@
+1st of April
+-> chunks generation
+-> chunk rendering and simulation
+-> moving objects between chunks
+
+-> chunk debug 
+
+
+2nd of April
+-> chunk gen
+-> chunk render debug
+
+-> draw and update based on render and simulation
+
+-> add oceans to the chunks
+-> add the player to a chunk
+
+-> move player between chunks as it moves (pending event system)

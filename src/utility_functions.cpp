@@ -1,7 +1,6 @@
 #include "utility_functions.h"
 #include <cmath>
 #include <algorithm>
-#include "config.h"
 
 float shortest_distance_unit_circle(float a, float b){
 	// try going left, assumes b  >= a
@@ -26,5 +25,25 @@ int get_quadrant(float rad){
 	}
 	else {
 		return 4;
+	}
+}
+
+Vector2 utility::position_to_chunk(Vector3& pos){
+	float  x = std::floor((pos.x - (WORLD_X * -0.5)) / CHUNK_SIZE);
+	float z = std::floor(((WORLD_Z * 0.5) - pos.z) / CHUNK_SIZE);
+	return Vector2{ x,z };
+}
+
+float utility::get_maximal_variance_axis(Vector3 bb, int axis) {
+	switch (axis) {
+	case 0:
+		return bb.x;
+		break;
+	case 1:
+		return bb.y;
+		break;
+	case 2:
+		return bb.z;
+		break;
 	}
 }
