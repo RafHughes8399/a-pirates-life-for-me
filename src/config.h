@@ -13,8 +13,8 @@
 
 // game properties
 #define FPS 60
-#define RENDER_DISTANCE 2 // chunk radius
-#define SIMULATION_DISTANCE 4 // chunk radius
+#define RENDER_DISTANCE 1 // chunk radius
+#define SIMULATION_DISTANCE 2 // chunk radius
 
 
 // physics constants

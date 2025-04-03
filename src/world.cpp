@@ -64,9 +64,12 @@ void World::generate_chunks() {
 		for (auto j = 0; j < NUM_CHUNKS; ++j) {
 			min.x += CHUNK_SIZE;
 			max.x = (min.x + CHUNK_SIZE);
+			/*
 			std::cout << "generate chunk " << i << " " << j
 				<< "with bounds " << min.x << " , " << min.y << ", " << min.z
 				<< " and " << max.x << " , " << max.y << ", " << max.z << std::endl;
+			*/
+			
 			row.push_back(Chunk(min, max));
 		}
 		chunks_.push_back(row);
@@ -77,33 +80,23 @@ void World::update(std::pair<int, int> player_chunk){
 	// based on player position, update based on simulation distance
 	// check for interactions 
 	World::sort_objects();
-	//std::cout << "player chunk " << chunk.x << ", " << chunk.y << std::endl;	
 	auto time = GetTime();
-	/*
-	for (auto i = 0; i < SIMULATION_DISTANCE; ++i) {
-		for (auto j = 0; j < SIMULATION_DISTANCE; ++j) {
-			// there are some cases you aren't considering
-			auto row = chunk.x + i;
-			auto col = chunk.y + j;
-			if (i != 0 and j != 0) {
-			if(not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or 
-				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
-				continue;
-			}
-			std::cout << "simulate chunk " << row << ", " << col << std::endl;
-			chunks_[row][col].update_chunk();
-			}
+	auto num_sim = 0;
+	auto row = player_chunk.first - SIMULATION_DISTANCE;
+	auto col = player_chunk.second - SIMULATION_DISTANCE;
+	for (auto i = 0; i < SIMULATION_DISTANCE * 2 + 1; ++i) {
+		for (auto j = 0; j < SIMULATION_DISTANCE * 2 + 1; ++j) {
+			if (utility::in_bounds<int>(row, 0, NUM_CHUNKS - 1) and
+				utility::in_bounds<int>(col, 0, NUM_CHUNKS - 1)) {
 
-			row = chunk.x - i;
-			col = chunk.y - j;
-			if (not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or
-				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
-				continue;
+				num_sim++;
+				std::cout << "sim " << row + i << ", " << col + j << std::endl;
+				chunks_[row + i][col + j].render_chunk();
 			}
-			chunks_[row][col].update_chunk();
-		}	
+		}
 	}
-	*/
+	std::cout << "simulate " << num_sim << " chunks" << std::endl;
+	
 	for (auto& o : world_objects_) {
 		o->update();
 	}
@@ -119,31 +112,21 @@ void World::render(std::pair<int, int> player_chunk) {
 	for (auto& o : world_objects_) {
 		o->render();
 	}
-	/*
-	for (auto i = 0; i < RENDER_DISTANCE; ++i) {
-		for (auto j = 0; j < RENDER_DISTANCE; ++j) {
-			// there are some cases you aren't considering
-			auto row = chunk.x + i;
-			auto col = chunk.y + j;
-			if (i != 0 and j != 0) {
-			if(not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or
-				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
-				continue;
+	int num_ren = 0;
+	auto row = player_chunk.first - RENDER_DISTANCE;
+	auto col = player_chunk.second - RENDER_DISTANCE;
+	for (auto i = 0; i < RENDER_DISTANCE * 2 + 1; ++i) {
+		for (auto j = 0; j < RENDER_DISTANCE * 2 + 1; ++j) {
+			if (utility::in_bounds<int>(row, 0, NUM_CHUNKS - 1) and
+				utility::in_bounds<int>(col, 0, NUM_CHUNKS - 1)) {
+				
+				num_ren++;
+				std::cout << "ren " << row + i << ", " << col + j<< std::endl;
+				chunks_[row + i][col + j].render_chunk();
 			}
-			std::cout << "simulate chunk " << row << ", " << col << std::endl;
-			chunks_[row][col].render_chunk();
-			}
-
-			row = chunk.x - i;
-			col = chunk.y - j;
-			if (not utility::in_bounds<int>(row, 0, NUM_CHUNKS) or
-				not utility::in_bounds<int>(col, 0, NUM_CHUNKS)) {
-				continue;
-			}
-			chunks_[row][col].render_chunk();
 		}
 	}
-	*/
+	std::cout << "render " << num_ren << " chunks" << std::endl;
 }
 
 Wind* World::get_wind(){

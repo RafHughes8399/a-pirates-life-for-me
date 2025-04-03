@@ -12,7 +12,7 @@ void Chunk::render_chunk() const{
 }
 
 void Chunk::update_chunk() {
-	sort_objects();
+	//sort_objects();
 	for (const auto& o : objects_) {
 		o->update();
 	}
