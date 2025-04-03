@@ -63,7 +63,7 @@ void World::generate_chunks() {
 		auto row = std::vector<Chunk>{};
 		for (auto j = 0; j < NUM_CHUNKS; ++j) {
 			min.x += CHUNK_SIZE;
-			max.x += (min.x + CHUNK_SIZE);
+			max.x = (min.x + CHUNK_SIZE);
 			std::cout << "generate chunk " << i << " " << j
 				<< "with bounds " << min.x << " , " << min.y << ", " << min.z
 				<< " and " << max.x << " , " << max.y << ", " << max.z << std::endl;
@@ -73,7 +73,7 @@ void World::generate_chunks() {
 	}
 }
 
-void World::update(Vector2& chunk){
+void World::update(std::pair<int, int> player_chunk){
 	// based on player position, update based on simulation distance
 	// check for interactions 
 	World::sort_objects();
@@ -111,7 +111,7 @@ void World::update(Vector2& chunk){
 	wind_->update(time);
 }
 
-void World::render(Vector2& chunk) {
+void World::render(std::pair<int, int> player_chunk) {
 	// based on the player position, render based on render distnace
 	DrawGrid(NUM_CHUNKS, CHUNK_SIZE);
 

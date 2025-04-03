@@ -10,7 +10,7 @@
 #include "world.h"
 #include "raylib.h"
 #include "config.h"
-
+#include "utility_functions.h"
 void tick(Game& world);
 void render(Game& world);
 void debug(Camera3D& camera, Game& game);
@@ -74,6 +74,10 @@ void debug(Camera3D& camera, Game& game) {
 	DrawText(TextFormat("Anchor Speed: %06.3f", ship->get_anchor().get_speed()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Acceleration: (%06.3f, %06.3f, %06.3f)", ship->get_acceleration().x, ship->get_acceleration().y, ship->get_acceleration().z), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", ship->get_velocity().x, ship->get_velocity().y, ship->get_velocity().z), 210, text_y += 17, 10, BLACK);
+
+	auto ship_position = ship->get_position();
+	auto chunk = utility::position_to_chunk(ship_position);
+	DrawText(TextFormat("Chunk: [%d, %d]",chunk.first, chunk.second), 210, text_y += 17, 10, BLACK);
 
 	// world debug info
 	text_y = 15;

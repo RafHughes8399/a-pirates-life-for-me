@@ -59,8 +59,8 @@ public:
 	World& operator=(const World& ohter);
 	World& operator = (const World && other);
 
-	void update(Vector2& chunk);
-	void render(Vector2& chunk);
+	void update(std::pair<int, int> player_chunk);
+	void render(std::pair<int, int> player_chunk);
 	
 	Wind* get_wind();
 	std::vector<std::unique_ptr<Object>>& get_objects();

@@ -1,6 +1,7 @@
 #pragma once
 #include "config.h"
 #include "raylib.h"
+#include <utility>
 namespace utility {
 	float shortest_distance_unit_circle(float a, float b);
 	
@@ -8,7 +9,7 @@ namespace utility {
 	
 	float get_maximal_variance_axis(Vector3 bb, int axis);
 
-	Vector2 position_to_chunk(Vector3& pos);
+	std::pair<int, int> position_to_chunk(Vector3& pos);
 	template <typename N>
 	bool in_bounds(N target, N lower, N upper);
 	

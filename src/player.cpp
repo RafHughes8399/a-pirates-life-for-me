@@ -11,8 +11,8 @@ void Player::update(){
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
 	
 	move_camera(camera_mode_, target_difference);
-	
 	chunk_ = utility::position_to_chunk(ship_position);
+	
 }
 void Player::render() {
 	//this is where the hud will be drawn and other components
@@ -21,7 +21,8 @@ void Player::render() {
 Camera3D Player::get_camera(){
 	return camera_;
 }
-Vector2& Player::get_chunk() {
+
+std::pair<int, int>& Player::get_chunk(){
 	return chunk_;
 }
 

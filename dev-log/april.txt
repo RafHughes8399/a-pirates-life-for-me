@@ -16,3 +16,7 @@
 -> add the player to a chunk
 
 -> move player between chunks as it moves (pending event system)
+
+3rd April
+-> get player chunk
+-> chunk simulate and render based on player chunk
