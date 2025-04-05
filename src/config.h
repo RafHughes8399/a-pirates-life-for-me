@@ -13,8 +13,8 @@
 
 // game properties
 #define FPS 60
-#define RENDER_DISTANCE 2 // chunk radius
-#define SIMULATION_DISTANCE 4 // chunk radius
+#define RENDER_DISTANCE 1 // chunk radius
+#define SIMULATION_DISTANCE 2 // chunk radius
 
 
 // physics constants
@@ -40,7 +40,7 @@
 #define WORLD_Y 128.0f
 #define WORLD_Z 1024.0f
 
-#define NUM_CHUNKS 50
+#define NUM_CHUNKS 25
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
 // wind properties

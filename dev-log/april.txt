@@ -1,6 +1,14 @@
+1st of April
+-> chunks generation
+-> chunk rendering and simulation
+-> moving objects between chunks
+
+-> chunk debug 
 
 
-
+2nd of April
+-> chunk gen
+-> chunk render debug
 5th of April
 i feel like im back to square one i don't understand
 bit disheartening but we truck on
@@ -9,9 +17,11 @@ step one, should be easy enough
 
 make wind ship a observer-listener pattern
 
-try chunks again, but with shared pointers ? 
-maybe chunks is easier with shared pointers ? 
+
+-> add oceans to the chunks
+-> add the player to a chunk
 
 
-then split the ocean up
-
+3rd April
+-> get player chunk
+-> chunk simulate and render based on player chunk

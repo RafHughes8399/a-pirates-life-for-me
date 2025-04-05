@@ -1,5 +1,6 @@
 #include "player.h"
 #include "config.h"
+#include "utility_functions.h"
 #include "raymath.h"
 #include "rcamera.h"
 
@@ -10,7 +11,8 @@ void Player::update(){
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
 	
 	move_camera(camera_mode_, target_difference);
-	//UpdateCamera(&camera_, CAMERA_THIRD_PERSON);
+	chunk_ = utility::position_to_chunk(ship_position);
+	
 }
 void Player::render() {
 	//this is where the hud will be drawn and other components
@@ -18,6 +20,10 @@ void Player::render() {
 
 Camera3D Player::get_camera(){
 	return camera_;
+}
+
+std::pair<int, int>& Player::get_chunk(){
+	return chunk_;
 }
 
 void Player::move_camera(int mode, Vector3& difference){

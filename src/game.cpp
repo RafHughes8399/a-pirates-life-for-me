@@ -3,13 +3,14 @@
 void Game::update(){
 	player_.update();
 	// pass in player pos
-	world_.update();
+	world_.update(player_.get_chunk());
 }
 
 void Game::render(){
 	// render the player 
 	player_.render();
-	world_.render();
+	// render the world based on the player chunk 
+	world_.render(player_.get_chunk());
 }
 
 World& Game::get_world(){

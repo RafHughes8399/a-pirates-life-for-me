@@ -44,6 +44,10 @@ public:
 	World(Player& player)
 		: wind_(Wind()){
 		// change this once the model manager is in play, and change the volume calculation
+		wind_->pick_direction();
+		wind_->pick_speed();
+		
+		generate_chunks();
 		
 		// init ocean
 		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
@@ -86,8 +90,8 @@ public:
 	World& operator=(const World& ohter);
 	World& operator= (const World && other);
 
-	void update();
-	void render();
+	void update(std::pair<int, int> player_chunk);
+	void render(std::pair<int, int> player_chunk);
 	
 	std::vector<std::shared_ptr<Object>>& get_objects();
 private:

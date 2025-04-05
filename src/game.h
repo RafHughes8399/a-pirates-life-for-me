@@ -17,7 +17,7 @@ public:
 		: world_(other.world_), player_(other.player_) {
 	}
 	Game(Game&& other) noexcept
-		: world_(std::move(other.world_)), player_(std::move(other.player_)) {
+		: world_(other.world_), player_(other.player_) {
 	}
 
 	Game& operator=(const Game& other) {
@@ -42,8 +42,8 @@ public:
 
 	Player& get_player();
 private:
-	World world_;
-	Player player_;
+	World& world_;
+	Player& player_;
 	// Hud hud_;
 
 };
