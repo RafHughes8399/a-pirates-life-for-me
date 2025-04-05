@@ -6,13 +6,12 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "config.h"
-#include "wind.h"
 
 class Sail {
 public:
 	~Sail() = default;
-	Sail(float direction, float width, Wind* wind)
-		: direction_(direction), width_(width), wind_(wind), length_(0.0f), force_(Vector3{1.0f, 1.0f, 1.0f}) {
+	Sail(float direction, float width)
+		: direction_(direction), width_(width), wind_(Vector2Zero()), length_(0.0f), force_(Vector3{1.0f, 1.0f, 1.0f}) {
 		calculate_force();
 	};
 	Sail(const Sail& other)
@@ -30,7 +29,6 @@ public:
 	float get_sail_length();
 	float get_width();
 	Vector3 get_force();
-	const Wind* get_wind();
 
 	void sail_left(float& ship_direction);
 	void sail_right(float& ship_direction);
@@ -41,8 +39,8 @@ public:
 	void raise_sail(float length);
 	void lower_sail(float length);
 
-	void set_wind(const Wind* wind);
-
+	void set_wind(float direction, float speed);
+	Vector2& get_wind();
 
 private:
 	void calculate_force();
@@ -50,7 +48,7 @@ private:
 	float width_;
 	// the arc of the sail is r * direction_, r is the length of the sail ig
 	float length_;
-	const Wind* wind_;
+	Vector2 wind_;
 	Vector3 force_;
 };
 
@@ -59,17 +57,17 @@ public:
 
 	~Anchor() = default;
 	Anchor()
-		:state_(std::make_unique<StationaryState>(StationaryState(0.0f))), depth_(0.0f), force_coefficient_(Vector3{ 1.0f, 1.0f, 1.0f }){
+		:state_(std::make_shared<StationaryState>(StationaryState(0.0f))), depth_(0.0f), force_coefficient_(Vector3{ 1.0f, 1.0f, 1.0f }){
 	};
 	Anchor(const Anchor& other)
 		: state_(nullptr), depth_(other.depth_), force_coefficient_(other.force_coefficient_) {
 
 		// Need to create a new state object based on the type of other.state_, temp implementation
 		if (auto* raised = dynamic_cast<StationaryState*>(other.state_.get())) {
-			state_ = std::make_unique<StationaryState>(*raised);
+			state_ = std::make_shared<StationaryState>(*raised);
 		}
 		else if (auto* lowered = dynamic_cast<MovingState*>(other.state_.get())) {
-			state_ = std::make_unique<MovingState>(*lowered);
+			state_ = std::make_shared<MovingState>(*lowered);
 		}
 	};
 	Anchor(Anchor&& other)
@@ -113,7 +111,7 @@ private:
 	};
 		
 	void calculate_force();
-	std::unique_ptr<AnchorState> state_;
+	std::shared_ptr<AnchorState> state_;
 	float depth_;
 	Vector3 force_coefficient_; // that is currently applied to the ship, depends on state
 };

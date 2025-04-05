@@ -10,7 +10,7 @@
 class Game {
 public:
 	~Game() = default;
-	Game(World world, Player player)
+	Game(World& world, Player& player)
 		: world_(world), player_(player) {
 	}
 	Game(const Game& other)

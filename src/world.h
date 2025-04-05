@@ -16,7 +16,7 @@
 // a functor is a class with an overloaded () operator that means the class can be called like a function
 class AABBComparator {
 public:
-	bool operator()( const std::unique_ptr<Object>& a, const std::unique_ptr<Object>& b) {
+	bool operator()( const std::shared_ptr<Object>& a, const std::shared_ptr<Object>& b) {
 		// based on the axis
 		auto a_bb = GetModelBoundingBox(a->get_model());
 		auto b_bb = GetModelBoundingBox(b->get_model());
@@ -42,38 +42,41 @@ class World {
 public:
 	// CONSTRUCTORS
 	World(Player& player)
-		: wind_(new Wind()){
+		: wind_(Wind()){
 		// change this once the model manager is in play, and change the volume calculation
 		
 		// init ocean
-		world_objects_.push_back(std::make_unique<Ocean>(Ocean(ocean_type, 
+		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
 			Vector3{0, WORLD_Y * -0.25, 0},
 			Vector3{WORLD_X, WORLD_Y *0.5, WORLD_Z},
 			WATER_DENISTY
 			)));
 
-		wind_->pick_direction();
-		wind_->pick_speed();
+		wind_.pick_direction();
+		wind_.pick_speed();
 
 		// init ship
-		auto ship = std::make_unique<Ship>(Ship(ship_type,
+		auto ship = std::make_shared<Ship>(Ship(ship_type,
 			Vector3Zero(),
 			Vector3{4.0f, 2.0f, 2.0f},
 			SHIP_DENSITY,
 			Vector3Zero(),
-			PI / 2,
-			wind_
-			));
+			PI / 2));
+
+		std::weak_ptr<Ship> ship_weak = ship;	
+		wind_.add_ship_subscriber(ship_weak);
+		wind_.notify_ship(0);	
+
 		// init player
 		player.set_ship(ship.get());
-		world_objects_.push_back(std::move(ship));
+		world_objects_.push_back(ship);
 		
 		cmp_.axis_ = 0; // default axis of most variance is the x axis
 	};
 	World(const World& other)
 		: wind_(other.wind_){
-		for (const auto& o : other.world_objects_) {
-			world_objects_.push_back(o->clone());
+		for (auto& o : other.world_objects_) {
+			world_objects_.push_back(o);
 		}
 		cmp_.axis_ = other.cmp_.axis_;
 	};
@@ -81,13 +84,12 @@ public:
 	World(const World&& other);
 
 	World& operator=(const World& ohter);
-	World& operator = (const World && other);
+	World& operator= (const World && other);
 
 	void update();
 	void render();
 	
-	Wind* get_wind();
-	std::vector<std::unique_ptr<Object>>& get_objects();
+	std::vector<std::shared_ptr<Object>>& get_objects();
 private:
 	void sort_objects();
 	void generate_chunks();
@@ -95,9 +97,9 @@ private:
 	Vector3 world_size = Vector3{ WORLD_X, WORLD_Y, WORLD_Z };
 	AABBComparator cmp_;
 
-	Wind* wind_;
+	Wind wind_;
 	std::vector<std::vector<Chunk>> chunks_;
-	std::vector<std::unique_ptr<Object>> world_objects_;
+	std::vector<std::shared_ptr<Object>> world_objects_;
 
 	// temp, will move to a factory or whatever else
 	ShipType& ship_type = ShipType::get_instance();

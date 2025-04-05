@@ -8,7 +8,6 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "ship_components.h"
-#include "wind.h"
 class Object {
 public:
 	Object(ObjectType& object_type, Vector3 position, Vector3 size, float density)
@@ -31,7 +30,6 @@ public:
 	virtual void update();
 	virtual void render();
 	virtual void interact(Object* other);
-	virtual std::unique_ptr<Object> clone();
 	float get_height();
 	float get_width();
 	float get_length();
@@ -74,7 +72,6 @@ public:
 	}
 	void update() override;
 	void render() override;
-	std::unique_ptr<Object> clone() override;
 	Vector3 get_acceleration();
 	Vector3 get_velocity();
 	float get_direction();
@@ -89,14 +86,11 @@ protected:
 };
 
 
-
-
-
 class Ship : public MoveableObject {
 public:
 
-	Ship(ShipType& ship_type, Vector3 position, Vector3 size, float density, Vector3 velocity, float direction, Wind* wind)
-		: MoveableObject(ship_type, position, size, density, velocity, direction), sail_(Sail(direction, 4.2f, wind)), anchor_(Anchor()){
+	Ship(ShipType& ship_type, Vector3 position, Vector3 size, float density, Vector3 velocity, float direction)
+		: MoveableObject(ship_type, position, size, density, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
 
 	};
 
@@ -114,7 +108,6 @@ public:
 
 	void update() override;
 	void render() override;
-	std::unique_ptr<Object> clone() override;
 	void interact(Object* other) override;
 	void set_position(Vector3 position);
 
@@ -132,7 +125,7 @@ public:
 
 	void turn_sail_left();
 	void turn_sail_right();
-	void set_wind(Wind* wind);
+	void update_sail_wind(float direction, float speed);
 private:
 	Sail sail_;
 	Anchor anchor_;
@@ -155,7 +148,6 @@ public:
 	};
 	void interact(Object* other) override;
 	void render() override;
-	std::unique_ptr<Object> clone() override;
 private:
 };
 

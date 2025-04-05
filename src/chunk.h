@@ -13,7 +13,7 @@ public:
 	Chunk(const Chunk& other)
 		: chunk_bounds_(other.chunk_bounds_) {
 		for (const auto& o : other.objects_) {
-			objects_.push_back(o->clone());
+			objects_.push_back(o);
 		}
 	}
 	Chunk(Chunk&& other) noexcept
@@ -24,7 +24,7 @@ public:
 		if (this != &other) {
 			chunk_bounds_ = other.chunk_bounds_;
 			for (const auto& o : other.objects_) {
-				objects_.push_back(o->clone());
+				objects_.push_back(o);
 			}
 		}
 		return *this;
@@ -40,6 +40,6 @@ public:
 	void render_chunk();
 	void update_chunk();
 private:
-	std::vector<std::unique_ptr<Object>> objects_;
+	std::vector<std::shared_ptr<Object>> objects_;
 	BoundingBox chunk_bounds_;
 };

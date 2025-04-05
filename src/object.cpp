@@ -18,10 +18,6 @@ void Object::interact(Object* other){
 	return;
 }
 
-std::unique_ptr<Object> Object::clone(){
-	return std::make_unique<Object>(*this);
-}
-
 float Object::get_height(){
 	auto bounding_box =  GetModelBoundingBox(object_type_.get_model());
 	return std::abs(bounding_box.max.y - bounding_box.min.y);
@@ -69,11 +65,6 @@ void MoveableObject::update(){
 void MoveableObject::render(){
 	// do nothing i think maybe not 
 	return;
-}
-
-std::unique_ptr<Object> MoveableObject::clone()
-{
-	return std::make_unique<MoveableObject>(*this);
 }
 
 Vector3 MoveableObject::get_acceleration(){

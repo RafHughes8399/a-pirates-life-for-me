@@ -30,7 +30,6 @@ int main(){
 	SetTargetFPS(FPS);
 	// adjust the current working directory
 	while (!WindowShouldClose()) {
-	std::cout << game.get_world().get_objects().size() << std::endl;
 		tick(game);
 		render(game);
 	}
@@ -79,11 +78,11 @@ void debug(Camera3D& camera, Game& game) {
 	// world debug info
 	text_y = 15;
 	auto world = game.get_world();
-	auto wind = world.get_wind();
+	auto wind = ship->get_sail().get_wind();
 	DrawRectangle(400, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(400, 5, 195, 170, BLUE);
-	DrawText(TextFormat("Wind Direction %06.3f", wind->get_direction()), 410, 30, 10, BLACK);
-	DrawText(TextFormat("Wind Speed %06.3f", wind->get_speed()), 410, 45, 10, BLACK);
+	DrawText(TextFormat("Wind Direction %06.3f", wind.x), 410, 30, 10, BLACK);
+	DrawText(TextFormat("Wind Speed %06.3f", wind.y), 410, 45, 10, BLACK);
 	
 	DrawText(TextFormat("Sail Lower %06.3f", ship->get_direction() - (PI /2)), 410, 60, 10, BLACK);
 	DrawText(TextFormat("Sail Upper %06.3f", ship->get_direction() + (PI / 2)), 410, 75, 10, BLACK);

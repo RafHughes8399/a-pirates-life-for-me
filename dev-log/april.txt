@@ -1,0 +1,17 @@
+
+
+
+5th of April
+i feel like im back to square one i don't understand
+bit disheartening but we truck on
+
+step one, should be easy enough 
+
+make wind ship a observer-listener pattern
+
+try chunks again, but with shared pointers ? 
+maybe chunks is easier with shared pointers ? 
+
+
+then split the ocean up
+

@@ -49,10 +49,6 @@ void Ship::render(){
 	DrawModel(object_type_.get_model(), position_, 0.15f, WHITE);
 }
 
-std::unique_ptr<Object> Ship::clone()
-{
-	return std::make_unique<Ship>(*this);
-}
 
 void Ship::interact(Object* other){
 	auto ocean = dynamic_cast<Ocean*>(other);
@@ -134,6 +130,9 @@ void Ship::turn_sail_right(){
 	sail_.sail_right(direction_);
 }
 
-void Ship::set_wind(Wind* wind){
-	sail_.set_wind(wind);
+void Ship::update_sail_wind(float direction, float speed){
+
+	sail_.set_wind(direction, speed);
+
 }
+

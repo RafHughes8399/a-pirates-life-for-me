@@ -18,7 +18,3 @@ void Ocean::interact(Object* other) {
 void Ocean::render() {
 	DrawModel(object_type_.get_model(), position_, 1.0f, Fade(BLUE, 0.75));
 }
-
-std::unique_ptr<Object> Ocean::clone(){
-	return std::make_unique<Ocean>(*this);
-}

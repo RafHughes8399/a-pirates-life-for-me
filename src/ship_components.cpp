@@ -17,9 +17,6 @@ Vector3 Sail::get_force(){
 	return force_;
 }
 
-const Wind* Sail::get_wind(){
-	return wind_;
-}
 
 void Sail::sail_left(float& ship_direction) {
 	auto left_bound = ship_direction + (PI / 2);
@@ -85,9 +82,16 @@ void Sail::lower_sail(float length){
 
 }
 
-void Sail::set_wind(const Wind* wind){
-	wind_ = wind;
+void Sail::set_wind(float direction, float speed){
+	wind_.x = direction;
+	wind_.y = speed;
 }
+
+Vector2& Sail::get_wind(){
+	// TODO: insert return statement here
+	return wind_;
+}
+
 
 /**  this needs some attention */
 void Sail::calculate_force(){
@@ -102,20 +106,20 @@ void Sail::calculate_force(){
 	force_ = Vector3{ (NO_WIND), 0.0, (NO_WIND) };
 
 	if (right < left) {
-		if (right <= wind_->get_direction() and wind_->get_direction() <= left) {
-			float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
+		if (right <= wind_.x and wind_.x<= left) {
+			float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
 
 			auto proportion = 1.0f - (distance / (length_));
-			force_ = Vector3{ wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
+			force_ = Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion };
 
 		}
 	}
 	else if (left < right) {
-		if (not (left <=  wind_->get_direction() and wind_->get_direction() <= right)) {
-			float distance = std::fmod(std::abs(wind_->get_direction() - direction_), PI2);
+		if (not (left <=  wind_.x and wind_.x <= right)) {
+			float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
 			auto proportion = 1.0f - (distance / length_);
 			
-			force_ = Vector3{ wind_->get_speed() * proportion, 0.0f, wind_->get_speed() * proportion };
+			force_ = Vector3{ wind_.y * proportion, 0.0f, wind_.x * proportion };
 		
 		}
 	}
