@@ -9,7 +9,6 @@
 #include "wind.h"
 #include "player.h"
 #include "object.h"
-#include "chunk.h"
 
 
 
@@ -44,10 +43,6 @@ public:
 	World(Player& player)
 		: wind_(Wind()){
 		// change this once the model manager is in play, and change the volume calculation
-		wind_->pick_direction();
-		wind_->pick_speed();
-		
-		generate_chunks();
 		
 		// init ocean
 		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
@@ -90,19 +85,17 @@ public:
 	World& operator=(const World& ohter);
 	World& operator= (const World && other);
 
-	void update(std::pair<int, int> player_chunk);
-	void render(std::pair<int, int> player_chunk);
+	void update();
+	void render();
 	
 	std::vector<std::shared_ptr<Object>>& get_objects();
 private:
 	void sort_objects();
-	void generate_chunks();
 
 	Vector3 world_size = Vector3{ WORLD_X, WORLD_Y, WORLD_Z };
 	AABBComparator cmp_;
 
 	Wind wind_;
-	std::vector<std::vector<Chunk>> chunks_;
 	std::vector<std::shared_ptr<Object>> world_objects_;
 
 	// temp, will move to a factory or whatever else

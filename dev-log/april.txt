@@ -25,3 +25,24 @@ make wind ship a observer-listener pattern
 3rd April
 -> get player chunk
 -> chunk simulate and render based on player chunk
+
+
+5th April
+-> take another stab at chunks 
+-> generate chunks maybe not 25 by 25 but 15 by 15
+-> generate and fill with ocean
+-> hopefully the shared pointers help
+-> then add the player to the chunk
+
+-> then moving objects between chunks
+-> then islands
+
+
+
+9th of April
+-> event system 
+
+make the event, and then send the event
+
+the game has the listeners, and defines what happens when the event occurs
+when you want something to happen you send the event

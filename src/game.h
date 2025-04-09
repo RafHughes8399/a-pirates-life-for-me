@@ -12,6 +12,9 @@ public:
 	~Game() = default;
 	Game(World& world, Player& player)
 		: world_(world), player_(player) {
+
+
+		// here in the game, add event listeners basewd on what you want to listen to
 	}
 	Game(const Game& other)
 		: world_(other.world_), player_(other.player_) {
@@ -41,6 +44,11 @@ public:
 	World& get_world();
 
 	Player& get_player();
+
+
+
+	// and define what happens on those events
+
 private:
 	World& world_;
 	Player& player_;

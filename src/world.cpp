@@ -60,31 +60,15 @@ void World::update(){
 	// based on player position, update based on simulation distance
 	// check for interactions 
 	World::sort_objects();
-	auto time = GetTime();
-	auto num_sim = 0;
-	auto row = player_chunk.first - SIMULATION_DISTANCE;
-	auto col = player_chunk.second - SIMULATION_DISTANCE;
-	for (auto i = 0; i < SIMULATION_DISTANCE * 2 + 1; ++i) {
-		for (auto j = 0; j < SIMULATION_DISTANCE * 2 + 1; ++j) {
-			if (utility::in_bounds<int>(row, 0, NUM_CHUNKS - 1) and
-				utility::in_bounds<int>(col, 0, NUM_CHUNKS - 1)) {
-
-				num_sim++;
-				std::cout << "sim " << row + i << ", " << col + j << std::endl;
-				chunks_[row + i][col + j].render_chunk();
-			}
-		}
-	}
-	std::cout << "simulate " << num_sim << " chunks" << std::endl;
 	
 	for (auto& o : world_objects_) {
 		o->update();
 	}
 	// randomise the wind every 90 seconds ? 
-	wind_.update(time);
+	wind_.update(GetTime());
 }
 
-void World::render(std::pair<int, int> player_chunk) {
+void World::render() {
 	// based on the player position, render based on render distnace
 	DrawGrid(NUM_CHUNKS, CHUNK_SIZE);
 
