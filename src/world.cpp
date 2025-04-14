@@ -56,6 +56,19 @@ void World::sort_objects() {
 
 }
 
+void World::generate_islands(){
+	// for now, just generate the underlying terrain for all the islands in the game 
+
+	// starting with the hub island
+	auto hub = std::make_shared<Terrain>(Terrain(
+		HubType::get_instance(),
+		Vector3{300, 0, 300},
+		Vector3{100, 10, 100},
+		100
+	));
+	world_objects_.push_back(hub);
+}
+
 void World::update(){
 	// based on player position, update based on simulation distance
 	// check for interactions 

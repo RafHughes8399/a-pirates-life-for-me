@@ -153,7 +153,7 @@ private:
 
 class Terrain : public Object {
 public:
-	Terrain(TerrainType& terrain_type, Vector3 position, Vector3 size, float density)
+	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 size, float density)
 		: Object(terrain_type, position, size, density) {
 		position_ = Vector3{size_.x * -0.5f, size_.y * -0.75f, size_.z * -0.5f};
 		terrain_type.get_model().materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = terrain_type.get_texture();

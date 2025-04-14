@@ -46,3 +46,14 @@ make the event, and then send the event
 
 the game has the listeners, and defines what happens when the event occurs
 when you want something to happen you send the event
+
+
+
+15th of AApril
+-> ok that kind of works, make the islands much smaller
+-> make the rest of the islands, design them first, make them smaller, much smaller, main on the x and y, the height is fine for now
+-> position them around the map
+-> figure out how to size them, maybe draw bounding boxes around them ?
+-> texture them 
+
+-> collisions

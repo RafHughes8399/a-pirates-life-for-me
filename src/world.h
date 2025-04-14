@@ -42,8 +42,8 @@ public:
 	// CONSTRUCTORS
 	World(Player& player)
 		: wind_(Wind()){
-		// change this once the model manager is in play, and change the volume calculation
 		
+		generate_islands();
 		// init ocean
 		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
 			Vector3{0, WORLD_Y * -0.25, 0},
@@ -91,7 +91,7 @@ public:
 	std::vector<std::shared_ptr<Object>>& get_objects();
 private:
 	void sort_objects();
-
+	void generate_islands();
 	Vector3 world_size = Vector3{ WORLD_X, WORLD_Y, WORLD_Z };
 	AABBComparator cmp_;
 

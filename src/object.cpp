@@ -89,7 +89,7 @@ void MoveableObject::adjust_acceleration(Vector3 acceleration){
 }
 
 void Terrain::render(){
-	DrawModel(object_type_.get_model(), position_, 1.0f, RED);
+	DrawModel(object_type_.get_model(), position_, 0.8, RED);
 }
 
 void Terrain::interact(Object* other){

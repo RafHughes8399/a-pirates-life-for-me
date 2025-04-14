@@ -5,10 +5,14 @@
 #define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown.glb"
 #define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
 
+
+#define HUB_TERRAIAN_MODEL "../../../models/hub_terrain.glb"
+
+
 // game textures 
 #define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"
 #define WATER_TEXTURE "../../../textures/environment-textures/Core/WaterNormals_01.png"
-
+#define SAND_TEXTURE "../../../textures/environment-textures/Core/Sand_Texture_01.png"
 
 
 // game properties

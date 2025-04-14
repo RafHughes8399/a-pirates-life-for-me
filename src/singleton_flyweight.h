@@ -89,3 +89,26 @@ private:
         // Additional initialization if needed
     }
 };
+
+
+class HubType : public ObjectType {
+public:
+    HubType(const HubType& other) = delete;
+    HubType(HubType&& other) = delete;
+    HubType& operator=(const HubType& other) = delete;
+    HubType& operator=(HubType&& other) = delete;
+
+    // Singleton getter
+    static HubType& get_instance() {
+        static HubType instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    HubType()
+        : ObjectType(LoadModel(HUB_TERRAIAN_MODEL), LoadTexture(SAND_TEXTURE)) {
+        model_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_;            // Set map diffuse texture
+
+    }
+};
