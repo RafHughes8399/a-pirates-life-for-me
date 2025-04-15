@@ -43,7 +43,6 @@ public:
 	World(Player& player)
 		: wind_(Wind()){
 		
-		generate_islands();
 		// init ocean
 		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
 			Vector3{0, WORLD_Y * -0.25, 0},
@@ -51,6 +50,7 @@ public:
 			WATER_DENISTY
 			)));
 
+		generate_islands();
 		wind_.pick_direction();
 		wind_.pick_speed();
 

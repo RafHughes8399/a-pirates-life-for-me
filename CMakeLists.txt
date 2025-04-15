@@ -35,7 +35,7 @@ add_executable (pirate-cmake
 "src/ship_components.cpp" "src/wind.h" "src/wind.cpp" 
 "src/utility_functions.h" "src/utility_functions.cpp" "src/hitbox.h" 
 
-"src/singleton_flyweight.h" "src/singleton_flyweight.cpp" "src/object_factory.h" "src/object_factory.cpp" "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp")
+"src/singleton_flyweight.h" "src/singleton_flyweight.cpp" "src/object_factory.h" "src/object_factory.cpp" "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp" "src/terrain.cpp")
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
@@ -62,7 +62,7 @@ file(GLOB IMAGE_FILES "${CMAKE_SOURCE_DIR}/images/*")
 file(GLOB MODEL_FILES "${CMAKE_SOURCE_DIR}/models/*")
 
 # Add the resource files to the target
-add_custom_target(resources ALL SOURCES ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp")
+add_custom_target(resources ALL SOURCES ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp" "src/terrain.cpp")
 
 # Ensure the resource files are copied to the build directory
 add_custom_command(TARGET resources POST_BUILD

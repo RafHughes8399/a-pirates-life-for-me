@@ -87,11 +87,3 @@ Vector3 MoveableObject::get_direction_coefficient(){
 void MoveableObject::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }
-
-void Terrain::render(){
-	DrawModel(object_type_.get_model(), position_, 0.8, RED);
-}
-
-void Terrain::interact(Object* other){
-	return;
-}

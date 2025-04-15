@@ -110,7 +110,7 @@ void Sail::calculate_force(){
 			float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
 
 			auto proportion = 1.0f - (distance / (length_));
-			force_ = Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion };
+			force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion }, force_);
 
 		}
 	}
@@ -119,7 +119,7 @@ void Sail::calculate_force(){
 			float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
 			auto proportion = 1.0f - (distance / length_);
 			
-			force_ = Vector3{ wind_.y * proportion, 0.0f, wind_.x * proportion };
+			force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.x * proportion }, force_);
 		
 		}
 	}
