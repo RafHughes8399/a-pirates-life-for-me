@@ -112,3 +112,24 @@ private:
 
     }
 };
+class CoveType : public ObjectType {
+public:
+    CoveType(const CoveType& other) = delete;
+    CoveType(CoveType&& other) = delete;
+    CoveType& operator=(const CoveType& other) = delete;
+    CoveType& operator=(CoveType&& other) = delete;
+
+    // Singleton getter
+    static CoveType& get_instance() {
+        static CoveType instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    CoveType()
+        : ObjectType(LoadModel(COVE_TERRAIN_MODEL), LoadTexture(SAND_TEXTURE)) {
+        model_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_;            // Set map diffuse texture
+
+    }
+};

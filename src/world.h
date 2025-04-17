@@ -43,7 +43,7 @@ public:
 	World(Player& player)
 		: wind_(Wind()){
 		
-		// init ocean
+		// init oceant
 		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
 			Vector3{0, WORLD_Y * -0.25, 0},
 			Vector3{WORLD_X, WORLD_Y *0.5, WORLD_Z},

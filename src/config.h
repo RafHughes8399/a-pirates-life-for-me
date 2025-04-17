@@ -7,7 +7,7 @@
 
 
 #define HUB_TERRAIAN_MODEL "../../../models/hub_terrain.glb"
-
+#define COVE_TERRAIN_MODEL "../../../models/cove_terrain.glb"
 
 // game textures 
 #define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"
