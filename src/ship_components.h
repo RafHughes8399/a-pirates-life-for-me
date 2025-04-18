@@ -30,8 +30,8 @@ public:
 	float get_width();
 	Vector3 get_force();
 
-	void sail_left(float& ship_direction);
-	void sail_right(float& ship_direction);
+	void sail_left(float& ship_direction, float delta);
+	void sail_right(float& ship_direction, float delta);
 
 	void move_sail_left(float rad);
 	void move_sail_right(float rad);

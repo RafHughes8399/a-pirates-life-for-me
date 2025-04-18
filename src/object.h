@@ -27,7 +27,7 @@ public:
 
 
 	// a default update and render, the default update does nothing, render just draws the 
-	virtual void update();
+	virtual void update(float delta);
 	virtual void render();
 	virtual void interact(Object* other);
 	float get_height();
@@ -70,7 +70,7 @@ public:
 	MoveableObject(MoveableObject&& other)
 		: Object(other), velocity_(std::move(other.velocity_)), acceleration_(std::move(other.acceleration_)), direction_(std::move(other.direction_)) {
 	}
-	void update() override;
+	void update(float delta) override;
 	void render() override;
 	Vector3 get_acceleration();
 	Vector3 get_velocity();
@@ -106,7 +106,7 @@ public:
 	Ship& operator=(const Ship& ohter);
 	Ship& operator= (const Ship&& other);
 
-	void update() override;
+	void update(float delta) override;
 	void render() override;
 	void interact(Object* other) override;
 	void set_position(Vector3 position);
@@ -117,14 +117,14 @@ public:
 	Anchor get_anchor();
 	void move_anchor();
 
-	void steer_left();
-	void steer_right();
+	void steer_left(float delta);
+	void steer_right(float delta);
 
-	void raise_sail();
-	void lower_sail();
+	void raise_sail(float delta);
+	void lower_sail(float delta);
 
-	void turn_sail_left();
-	void turn_sail_right();
+	void turn_sail_left(float delta);
+	void turn_sail_right(float delta);
 	void update_sail_wind(float direction, float speed);
 private:
 	Sail sail_;
@@ -155,8 +155,6 @@ class Terrain : public Object {
 public:
 	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 size, float density)
 		: Object(terrain_type, position, size, density) {
-		position_ = Vector3{size_.x * -0.5f, size_.y * -0.75f, size_.z * -0.5f};
-		terrain_type.get_model().materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = terrain_type.get_texture();
 	};
 	Terrain(const Terrain& other)
 		: Object(other) {

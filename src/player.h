@@ -43,7 +43,7 @@ public:
 	}
 	Player& operator= (const Player&& other);
 
-	void update();
+	void update(float delta);
 	void render();
 
 	Camera3D get_camera();
@@ -53,7 +53,7 @@ public:
 	void set_ship(Ship* ship);
 private:
 
-	void check_key_input();
+	void check_key_input(float delta);
 	void set_default_key_map();
 
 	Camera3D camera_;
@@ -63,6 +63,6 @@ private:
 	Ship* ship_;
 
 
-	std::map<int, std::function<void()>> key_down_inputs_;
+	std::map<int, std::function<void(float)>> key_down_inputs_;
 	std::map<int, std::function<void()>> key_pressed_inputs_;
 };

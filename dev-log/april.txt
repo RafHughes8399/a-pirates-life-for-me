@@ -57,3 +57,11 @@ when you want something to happen you send the event
 -> texture them 
 
 -> collisions
+
+
+
+18 April
+-> add obj id 
+-> debug positions
+-> sort out sizing and texturing 
+-> 

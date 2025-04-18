@@ -48,22 +48,22 @@
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
 // wind properties
-#define NO_WIND 1.2f
-#define WIND_SPEED_MIN 3.2f
-#define WIND_SPEED_MAX 7.4f
+#define NO_WIND 6.2f
+#define WIND_SPEED_MIN	10.3f
+#define WIND_SPEED_MAX 15.4f
 #define WIND_CHANGE_TIME 30.0f // the wind randomised at thsi interval
 
 
 // ship properties
 #define SHIP_DENSITY 5.3f
-#define SHIP_TURN_SPEED (2 * PI * 0.0004)// to be updated maybe ?
+#define SHIP_TURN_SPEED (2 * PI * 0.065)// to be updated maybe ?
 
 // sail properties
-#define LOWER_RAISE_SPEED 0.025f
-#define SAIL_TURN_SPEED (2* PI * 0.003)
+#define LOWER_RAISE_SPEED 0.6f
+#define SAIL_TURN_SPEED (2* PI * 0.15)
 
 // anchor properties
-#define ANCHOR_DROP_SPEED 0.35f // how quick the anchor drops in seconds
+#define ANCHOR_DROP_SPEED 0.75f // how quick the anchor drops in seconds
 #define ANCHOR_STATIC_SPEED 0.0f
 #define ANCHOR_MAX_DEPTH 32.6f 
 #define ANCHOR_RAISED_FORCE {1.0f, 0.0f, 1.0f}

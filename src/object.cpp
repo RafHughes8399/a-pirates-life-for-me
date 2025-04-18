@@ -1,8 +1,7 @@
 #include "object.h"
 
-void Object::update(){
+void Object::update(float delta) {
 	// default does nothing
-	update_bounding_box();
 	return;
 }
 
@@ -58,7 +57,8 @@ void Object::update_bounding_box(){
 								position_.x + (size_.x / 2), position_.y + (size_.y / 2), position_.z + (size_.z / 2) };
 }
 
-void MoveableObject::update(){
+void MoveableObject::update(float delta) {
+	update_bounding_box();
 	return;
 }
 

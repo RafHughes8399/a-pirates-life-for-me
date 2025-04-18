@@ -1,7 +1,8 @@
 #include "game.h"
 
 void Game::update(){
-	player_.update();
+	auto delta = GetFrameTime();
+	player_.update(delta);
 	// pass in player pos
 	world_.update();
 }

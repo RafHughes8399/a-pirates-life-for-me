@@ -1,10 +1,8 @@
 #include "object.h"
 #include "raymath.h"
 #include "config.h"
-void Ship::update(){
-	Object::update(); // update the bounding box
-
-	auto delta_time = GetFrameTime();
+void Ship::update(float delta){
+	MoveableObject::update(delta);
 	// update the anchor
 	anchor_.update();
 	// apply gravity
@@ -12,8 +10,7 @@ void Ship::update(){
 	acceleration_.y += GRAVITY;
 	acceleration_.y /= density_;
 
-
-	
+	// this calculates the veloctuty for a given frame
 	// apply the sail movement coeffieicts
 	DrawRectangle(800, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(800, 5, 195, 170, BLUE);
@@ -29,20 +26,22 @@ void Ship::update(){
 	DrawText(TextFormat("Anchor Force: (%06.3f, %06.3f, %06.3f)", anchor_force.x, anchor_force.y, anchor_force.z), 810, 60, 10, BLACK);
 	
 	// apply acceleration to velocity
-	velocity_ = Vector3Scale(acceleration_, delta_time);
-	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 75, 10, BLACK);
+	velocity_ = acceleration_;
+	DrawText(TextFormat("Velocity Post Delta: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 90, 10, BLACK);
 
 
 	// apply the ship direction to the velocity, use sin and cos, other way around z is cos, sin is x
 	auto direction_coefficient = get_direction_coefficient();
 	velocity_ = Vector3Multiply(velocity_, direction_coefficient);
-	DrawText(TextFormat("Direction Coefficient: (%06.3f, %06.3f, %06.3f)", direction_coefficient.x, direction_coefficient.y, direction_coefficient.z), 810, 90, 10, BLACK);
+	DrawText(TextFormat("Direction Coefficient: (%06.3f, %06.3f, %06.3f)", direction_coefficient.x, direction_coefficient.y, direction_coefficient.z), 810, 105, 10, BLACK);
+	DrawText(TextFormat("Velocity Post Direction: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 130, 10, BLACK);
 	
 	// update pos
+	velocity_ = Vector3Scale(velocity_, delta);
 	position_ = Vector3Add(position_, velocity_);
 	
-	// reset accel and vel
-	acceleration_ = { 0.0f, 0.0f, 0.0f };	
+	// reset accel 
+	acceleration_ = Vector3Zero();
 }
 
 void Ship::render(){
@@ -90,44 +89,46 @@ void Ship::move_anchor(){
 	anchor_.move();
 }
 
-void Ship::steer_left(){
-	direction_ = std::fmod((direction_ + SHIP_TURN_SPEED), ( 2 * PI));
+void Ship::steer_left(float delta){
+	auto turn = SHIP_TURN_SPEED * delta;
+	direction_ = std::fmod((direction_ + turn), ( 2 * PI));
 	
 	// rotate the model, yaw
 	// TODO: update the sail direction too with the same offest
-	sail_.move_sail_left(SHIP_TURN_SPEED);
+	sail_.move_sail_left(turn);
 
 	Vector3 rotate = { 0.0f, direction_, 0.0f };
 	object_type_.get_model().transform = MatrixRotateXYZ(rotate);
 }
 
-void Ship::steer_right(){
+void Ship::steer_right(float delta){
 	// change ship direction to the right
-
-	direction_ = std::fmod((direction_ - SHIP_TURN_SPEED), ( 2 * PI));
+	auto turn = SHIP_TURN_SPEED * delta;
+	direction_ = std::fmod((direction_ - turn), ( 2 * PI));
 	if (direction_ < 0.0) { direction_ += 2 * PI; }
 
 	// TODO: update the sail direction too with the same offest, here direction is decreasing
-	sail_.move_sail_right(SHIP_TURN_SPEED);
+	sail_.move_sail_right(turn);
 	
 	Vector3 rotate = {  0.0f,  direction_,  0.0f };
 	object_type_.get_model().transform = MatrixRotateXYZ(rotate);
 }
 
-void Ship::raise_sail(){
+void Ship::raise_sail(float delta){
 	sail_.raise_sail(LOWER_RAISE_SPEED);
 }
 
-void Ship::lower_sail(){
-	sail_.lower_sail(LOWER_RAISE_SPEED);
+void Ship::lower_sail(float delta){
+	auto lower = LOWER_RAISE_SPEED * delta;
+	sail_.lower_sail(lower);
 }
 
-void Ship::turn_sail_left(){
-	sail_.sail_left(direction_);
+void Ship::turn_sail_left(float delta){
+	sail_.sail_left(direction_, delta);
 }
 
-void Ship::turn_sail_right(){
-	sail_.sail_right(direction_);
+void Ship::turn_sail_right(float delta) {
+	sail_.sail_right(direction_, delta);
 }
 
 void Ship::update_sail_wind(float direction, float speed){

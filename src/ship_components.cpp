@@ -18,11 +18,12 @@ Vector3 Sail::get_force(){
 }
 
 
-void Sail::sail_left(float& ship_direction) {
+void Sail::sail_left(float& ship_direction, float delta) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
 	
-	auto new_dir = direction_ + SAIL_TURN_SPEED;
+	auto turn = SAIL_TURN_SPEED * delta;
+	auto new_dir = direction_ + turn;
 	if (right_bound < left_bound) {
 		// business as usual, turn left
 		if (not (right_bound < new_dir and new_dir < left_bound)) {
@@ -39,11 +40,12 @@ void Sail::sail_left(float& ship_direction) {
 	calculate_force();
 }
 
-void Sail::sail_right(float& ship_direction) {
+void Sail::sail_right(float& ship_direction, float delta) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
 
-	auto new_dir = direction_ - SAIL_TURN_SPEED;
+	auto turn = SAIL_TURN_SPEED * delta;
+	auto new_dir = direction_ - turn;
 	if (right_bound < left_bound) {
 		if (not (right_bound < new_dir and new_dir < left_bound)) {
 			new_dir = right_bound;

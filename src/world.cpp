@@ -60,29 +60,30 @@ void World::generate_islands(){
 	// for now, just generate the underlying terrain for all the islands in the game 
 
 	// starting with the hub island
+
 	auto hub = std::make_shared<Terrain>(Terrain(
 		HubType::get_instance(),
-		Vector3{200.0f, 2.0f, 200.0f},
+		Vector3{100, 5, 100},
 		Vector3{100, 10, 100},
 		100			
 	));
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
-		Vector3{-50.0f, 15.0f, -300.0f},
+		Vector3{-100, 0, -100},
 		Vector3{100, 10, 100},
 		100
 	));
 	world_objects_.push_back(hub);
-	world_objects_.push_back(cove);
+	//world_objects_.push_back(cove);
 }
 
 void World::update(){
 	// based on player position, update based on simulation distance
 	// check for interactions 
 	World::sort_objects();
-	
+	auto delta = GetFrameTime();
 	for (auto& o : world_objects_) {
-		o->update();
+		o->update(delta);
 	}
 	// randomise the wind every 90 seconds ? 
 	wind_.update(GetTime());
