@@ -115,7 +115,8 @@ void Ship::steer_right(float delta){
 }
 
 void Ship::raise_sail(float delta){
-	sail_.raise_sail(LOWER_RAISE_SPEED);
+	auto raise = LOWER_RAISE_SPEED * delta;
+	sail_.raise_sail(raise);
 }
 
 void Ship::lower_sail(float delta){

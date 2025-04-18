@@ -63,18 +63,18 @@ void World::generate_islands(){
 
 	auto hub = std::make_shared<Terrain>(Terrain(
 		HubType::get_instance(),
-		Vector3{100, 5, 100},
+		Vector3{100, -4.8, 100},
 		Vector3{100, 10, 100},
 		100			
 	));
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
-		Vector3{-100, 0, -100},
+		Vector3{400, -4.8, 400    },
 		Vector3{100, 10, 100},
 		100
 	));
 	world_objects_.push_back(hub);
-	//world_objects_.push_back(cove);
+	world_objects_.push_back(cove);
 }
 
 void World::update(){

@@ -2,7 +2,7 @@
 
 
 void Terrain::render() {
-	DrawModel(object_type_.get_model(), position_, 0.45, WHITE);
+	DrawModel(object_type_.get_model(), position_, 0.7, WHITE);
 }
 
 void Terrain::interact(Object* other) {

@@ -48,9 +48,9 @@
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
 // wind properties
-#define NO_WIND 6.2f
-#define WIND_SPEED_MIN	10.3f
-#define WIND_SPEED_MAX 15.4f
+#define NO_WIND 4.2f
+#define WIND_SPEED_MIN	8.3f - NO_WIND
+#define WIND_SPEED_MAX 12.4f - NO_WIND
 #define WIND_CHANGE_TIME 30.0f // the wind randomised at thsi interval
 
 

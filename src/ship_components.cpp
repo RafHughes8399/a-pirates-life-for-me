@@ -106,26 +106,10 @@ void Sail::calculate_force(){
 
 	// default force, sail doesn't catch the wind
 	force_ = Vector3{ (NO_WIND), 0.0, (NO_WIND) };
-
-	if (right < left) {
-		if (right <= wind_.x and wind_.x<= left) {
-			float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
-
-			auto proportion = 1.0f - (distance / (length_));
-			force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion }, force_);
-
-		}
-	}
-	else if (left < right) {
-		if (not (left <=  wind_.x and wind_.x <= right)) {
-			float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
-			auto proportion = 1.0f - (distance / length_);
-			
-			force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.x * proportion }, force_);
-		
-		}
-	}
-
+	float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
+	float max_distance = PI2;
+	float proportion = 1 - (distance / max_distance);
+	force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion }, force_);
 	// scale the force by th length of the sail
 	force_ = Vector3Scale(force_, length_);
 	DrawText(TextFormat("Sail force: (%06.3f, %06.3f, %06.3f)", force_.x, force_.y, force_.z), 810, 120, 10, BLACK);
