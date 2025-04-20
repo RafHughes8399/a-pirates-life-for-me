@@ -8,6 +8,10 @@
 
 #define HUB_TERRAIAN_MODEL "../../../models/hub_terrain.glb"
 #define COVE_TERRAIN_MODEL "../../../models/cove_terrain.glb"
+#define LAGOON_TERRAIN_MODEL "../../../models/lagoon_terrain.glb"
+#define BAY_TERRAIN_MODEL "../../../models/bay_terrain.glb"
+#define ISLE_TERRAIN_MODEL "../../../models/isle_terrain.glb"
+#define REEF_TERRAIN_MODEL "../../../models/reef_terrain.glb"
 
 // game textures 
 #define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"

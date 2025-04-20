@@ -58,8 +58,9 @@ void World::sort_objects() {
 
 void World::generate_islands(){
 	// for now, just generate the underlying terrain for all the islands in the game 
-
-	// starting with the hub island
+	// TODO: position them
+	// TODO: calculate their bounding boxes
+	// TODO: texture them
 
 	auto hub = std::make_shared<Terrain>(Terrain(
 		HubType::get_instance(),
@@ -69,12 +70,47 @@ void World::generate_islands(){
 	));
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
-		Vector3{400, -4.8, 400    },
+		Vector3{-100, -4.8, 50},
 		Vector3{100, 10, 100},
+		100
+	));
+
+	// make the isle
+	auto isle = std::make_shared<Terrain>(Terrain(
+		IsleType::get_instance(),
+		Vector3{200, -4.8, 200},
+		Vector3{100, 10, 100},
+		100
+	));
+	// make the lagoon - rename too
+	auto lagoon = std::make_shared<Terrain>(Terrain(
+		LagoonType::get_instance(),
+		Vector3{ 500, -4.8, 500}, 
+		Vector3{ 100, 10, 100 },
+		100
+	));
+
+	// make the bay
+	auto bay = std::make_shared<Terrain>(Terrain(
+		BayType::get_instance(),
+		Vector3{ -400, -4.8, -250},
+		Vector3{ 100, 10, 100 },
+		100
+	));
+	// make the reef
+	auto reef = std::make_shared<Terrain>(Terrain(
+		ReefType::get_instance(),
+		Vector3{ -300, -4.8, -150},
+		Vector3{ 100, 10, 100 },
 		100
 	));
 	world_objects_.push_back(hub);
 	world_objects_.push_back(cove);
+	world_objects_.push_back(isle);
+	world_objects_.push_back(lagoon);
+	world_objects_.push_back(bay);
+	world_objects_.push_back(reef);
+
 }
 
 void World::update(){
