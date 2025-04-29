@@ -64,10 +64,19 @@ void World::generate_islands(){
 
 	auto hub = std::make_shared<Terrain>(Terrain(
 		HubType::get_instance(),
-		Vector3{100, -4.8, 100},
-		Vector3{100, 10, 100},
+		Vector3{50, -4.8, 50},
+		Vector3{100, 25, 135},
 		100			
 	));
+	// make the lagoon - rename too
+	auto lagoon = std::make_shared<Terrain>(Terrain(
+		LagoonType::get_instance(),
+		Vector3{ -150, -4.8, 325}, 
+		Vector3{ 125, 25, 125 },
+		100
+	));
+	/**
+	*/
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
 		Vector3{-100, -4.8, 50},
@@ -82,13 +91,6 @@ void World::generate_islands(){
 		Vector3{100, 10, 100},
 		100
 	));
-	// make the lagoon - rename too
-	auto lagoon = std::make_shared<Terrain>(Terrain(
-		LagoonType::get_instance(),
-		Vector3{ 500, -4.8, 500}, 
-		Vector3{ 100, 10, 100 },
-		100
-	));
 
 	// make the bay
 	auto bay = std::make_shared<Terrain>(Terrain(
@@ -101,15 +103,17 @@ void World::generate_islands(){
 	auto reef = std::make_shared<Terrain>(Terrain(
 		ReefType::get_instance(),
 		Vector3{ -300, -4.8, -150},
-		Vector3{ 100, 10, 100 },
+		Vector3{ 100, 100, 100 },
 		100
 	));
-	world_objects_.push_back(hub);
+	//world_objects_.push_back(hub);
+	world_objects_.push_back(lagoon);
+	/**
 	world_objects_.push_back(cove);
 	world_objects_.push_back(isle);
-	world_objects_.push_back(lagoon);
 	world_objects_.push_back(bay);
 	world_objects_.push_back(reef);
+	*/
 
 }
 

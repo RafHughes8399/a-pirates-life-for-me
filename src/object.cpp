@@ -81,7 +81,7 @@ float MoveableObject::get_direction(){
 
 Vector3 MoveableObject::get_direction_coefficient(){
 	// cos on the z, sin on the x
-	return Vector3{sinf(direction_), 0.0f, cosf(direction_)};
+	return Vector3{sinf(direction_), 1.0f, cosf(direction_)};
 }
 
 void MoveableObject::adjust_acceleration(Vector3 acceleration){

@@ -57,7 +57,9 @@ public:
 		// init ship
 		auto ship = std::make_shared<Ship>(Ship(ship_type,
 			Vector3Zero(),
-			Vector3{4.0f, 2.0f, 2.0f},
+			Vector3{ 0.75f, 0.5f, 1.2 },
+			Vector3{-1.0 ,0.0, -1.0},
+			Vector3{1.6, 2.8, 1.6},
 			SHIP_DENSITY,
 			Vector3Zero(),
 			PI / 2));

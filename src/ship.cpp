@@ -2,13 +2,12 @@
 #include "raymath.h"
 #include "config.h"
 void Ship::update(float delta){
-	MoveableObject::update(delta);
+	//MoveableObject::update(delta);
 	// update the anchor
 	anchor_.update();
 	// apply gravity
 	
 	acceleration_.y += GRAVITY;
-	acceleration_.y /= density_;
 
 	// this calculates the veloctuty for a given frame
 	// apply the sail movement coeffieicts
@@ -39,13 +38,18 @@ void Ship::update(float delta){
 	// update pos
 	velocity_ = Vector3Scale(velocity_, delta);
 	position_ = Vector3Add(position_, velocity_);
+
 	
 	// reset accel 
 	acceleration_ = Vector3Zero();
+
+	bounding_box_.min = Vector3Add(bounding_box_.min, velocity_);
+	bounding_box_.max = Vector3Add(bounding_box_.max, velocity_);
 }
 
 void Ship::render(){
 	DrawModel(object_type_.get_model(), position_, 0.15f, WHITE);
+	DrawBoundingBox(bounding_box_, RED);
 }
 
 
@@ -55,13 +59,12 @@ void Ship::interact(Object* other){
 	if (ocean != nullptr) {
 		
 		// buoyancy
-		auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
-		auto submerged_height = std::abs(0.0f - position_.y);
+		auto buoynacy = Vector3{ 0.0f,-0.2f,0.0f };
+		auto submerged_height = 0.2f;
 		auto p = ocean->get_density();
 		auto g = GRAVITY;
 		auto v = get_width() * get_length() * submerged_height;
-		buoynacy.y = p * g * v * -1;
-
+		buoynacy.y += p * g * v * -1; // make it a better deeper
 		adjust_acceleration(buoynacy);
 	}
 

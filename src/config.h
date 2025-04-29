@@ -26,7 +26,7 @@
 
 
 // physics constants
-#define GRAVITY -9.8f //  units per second
+#define GRAVITY -0.98f //  units per second
 #define WATER_DENISTY 1.026f
 #define LAND_DENSITY 9.8f
 

@@ -14,6 +14,9 @@ public:
 		: object_type_(object_type),position_(position), size_(size), density_(density), volume_(size.x * size.y * size.z){
 		// generate the bounding box, min and max
 		update_bounding_box();
+	};	Object(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
+		: object_type_(object_type),position_(position), size_(size), bounding_box_(BoundingBox{min, max}), density_(density), volume_(size.x * size.y * size.z){
+		// generate the bounding box, min and max
 	};
 
 	Object(const Object& other)
@@ -62,6 +65,10 @@ public:
 	MoveableObject(ObjectType& object_type, Vector3 position, Vector3 size, float density,  Vector3 velocity, float direction)
 		: Object(object_type, position, size, density), velocity_(velocity), direction_(direction) {
 		acceleration_ = Vector3{ 0.0,0.0,0.0 };
+	};	
+	MoveableObject(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density,  Vector3 velocity, float direction)
+		: Object(object_type, position, size, min, max,  density), velocity_(velocity), direction_(direction) {
+		acceleration_ = Vector3{ 0.0,0.0,0.0 };
 	};
 	MoveableObject(const MoveableObject& other)
 		: Object(other), velocity_(other.velocity_), acceleration_(other.acceleration_), direction_(other.direction_){
@@ -91,6 +98,10 @@ public:
 
 	Ship(ShipType& ship_type, Vector3 position, Vector3 size, float density, Vector3 velocity, float direction)
 		: MoveableObject(ship_type, position, size, density, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
+
+	};	
+	Ship(ShipType& ship_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density, Vector3 velocity, float direction)
+		: MoveableObject(ship_type, position, size, min, max,  density, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
 
 	};
 

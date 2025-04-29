@@ -65,3 +65,13 @@ when you want something to happen you send the event
 -> debug positions
 -> sort out sizing and texturing 
 -> 
+
+
+29 April
+-> change bounding box to be a min max deal not based on size
+-> hitboxes (a list of sub bounding boxes), for most objects, no more than two or three boxes
+-> render optimisation 
+-> slight issue with sail turning, make sure it laps correctly
+
+
+-> hitbox will need to turn as does the entity, keep that in mind
