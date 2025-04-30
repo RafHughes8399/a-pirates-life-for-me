@@ -166,6 +166,9 @@ class Terrain : public Object {
 public:
 	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 size, float density)
 		: Object(terrain_type, position, size, density) {
+	};	
+	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
+		: Object(terrain_type, position, size, min, max, density) {
 	};
 	Terrain(const Terrain& other)
 		: Object(other) {

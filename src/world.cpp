@@ -62,21 +62,47 @@ void World::generate_islands(){
 	// TODO: calculate their bounding boxes
 	// TODO: texture them
 
+	// the object constructor is 
+	// obj type,
+	// position
+	// size
+	// min
+	// max
+	// density.
+	
+	auto hub_position = Vector3{ 50.0f, -4.8f, 50.0f};
+
 	auto hub = std::make_shared<Terrain>(Terrain(
 		HubType::get_instance(),
-		Vector3{50, -4.8, 50},
+		hub_position,
 		Vector3{100, 25, 135},
+		Vector3{hub_position.x - 70.0f, hub_position.y + 1.6f, hub_position.z  - 75.0f},
+		Vector3{hub_position.x + 75.0f, hub_position.y + 14, hub_position.z + 25.0f},
 		100			
 	));
-	// make the lagoon - rename too
+	auto lagoon_position = Vector3{ -150.0f, -4.8f, 325.0f };
 	auto lagoon = std::make_shared<Terrain>(Terrain(
 		LagoonType::get_instance(),
-		Vector3{ -150, -4.8, 325}, 
+		lagoon_position,
 		Vector3{ 125, 25, 125 },
+		Vector3{lagoon_position.x - 80.0f, lagoon_position.y - 0.2f, lagoon_position.z - 75.0f},
+		Vector3{lagoon_position.x + 80.0f, lagoon_position.y + 14.2f, lagoon_position.z + 70.0f},
 		100
 	));
-	/**
-	*/
+
+	// make the reef
+	auto min = Vector3{20, -2, 418};
+	auto max = Vector3{116, -2, 600};
+	auto reef_position = Vector3{75.0f, -0.5f, 500};
+	auto reef = std::make_shared<Terrain>(Terrain(
+		ReefType::get_instance(),
+		reef_position,
+		Vector3{ 100, 100, 100 },
+		Vector3{reef_position.x - 40.0f, reef_position.y - 1.5f, reef_position.z - 90.0f},
+		Vector3{reef_position.x + 39.0f, reef_position.y + 4.5f, reef_position.z + 100.0f},
+		100
+	));
+
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
 		Vector3{-100, -4.8, 50},
@@ -99,20 +125,13 @@ void World::generate_islands(){
 		Vector3{ 100, 10, 100 },
 		100
 	));
-	// make the reef
-	auto reef = std::make_shared<Terrain>(Terrain(
-		ReefType::get_instance(),
-		Vector3{ -300, -4.8, -150},
-		Vector3{ 100, 100, 100 },
-		100
-	));
-	//world_objects_.push_back(hub);
+	world_objects_.push_back(hub);
 	world_objects_.push_back(lagoon);
+	world_objects_.push_back(reef);
 	/**
 	world_objects_.push_back(cove);
 	world_objects_.push_back(isle);
 	world_objects_.push_back(bay);
-	world_objects_.push_back(reef);
 	*/
 
 }

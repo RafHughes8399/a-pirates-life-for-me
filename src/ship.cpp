@@ -43,6 +43,7 @@ void Ship::update(float delta){
 	// reset accel 
 	acceleration_ = Vector3Zero();
 
+	// update the bounding box 
 	bounding_box_.min = Vector3Add(bounding_box_.min, velocity_);
 	bounding_box_.max = Vector3Add(bounding_box_.max, velocity_);
 }

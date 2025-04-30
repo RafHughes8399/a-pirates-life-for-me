@@ -44,9 +44,9 @@
 #define PI2 2 * std::numbers::pi_v<float>
 
 // world properties
-#define WORLD_X 1024.0f
+#define WORLD_X 1524.0f
 #define WORLD_Y 128.0f
-#define WORLD_Z 1024.0f
+#define WORLD_Z 1524.0f
 
 #define NUM_CHUNKS 25
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS

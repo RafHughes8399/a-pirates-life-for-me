@@ -75,3 +75,9 @@ when you want something to happen you send the event
 
 
 -> hitbox will need to turn as does the entity, keep that in mind
+
+30 April
+-> redesign lagoon
+-> fix reef design
+-> reposition the other islands 
+-> hitboxes 
