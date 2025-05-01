@@ -91,9 +91,7 @@ void World::generate_islands(){
 	));
 
 	// make the reef
-	auto min = Vector3{20, -2, 418};
-	auto max = Vector3{116, -2, 600};
-	auto reef_position = Vector3{75.0f, -0.5f, 500};
+	auto reef_position = Vector3{75.0f, -1.2f, 500};
 	auto reef = std::make_shared<Terrain>(Terrain(
 		ReefType::get_instance(),
 		reef_position,
@@ -102,36 +100,44 @@ void World::generate_islands(){
 		Vector3{reef_position.x + 39.0f, reef_position.y + 4.5f, reef_position.z + 100.0f},
 		100
 	));
-
+	auto bay_position = Vector3{300, -1.0f, 400};
+	auto bay = std::make_shared<Terrain>(Terrain(
+		BayType::get_instance(),
+		bay_position,
+		Vector3{ 100, 10, 100 },
+		Vector3{bay_position.x - 94.9f, bay_position.y -1.0f, bay_position.z - 63.0f},
+		Vector3{bay_position.x + 101.5f, bay_position.y + 11.2f, bay_position.z + 66.2f},
+		100
+	));
+	auto cove_position = Vector3{300, -4.8f, 400};
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
-		Vector3{-100, -4.8, 50},
+		cove_position,
 		Vector3{100, 10, 100},
+		Vector3{cove_position.x, cove_position.y, cove_position.z},
+		Vector3{cove_position.x, cove_position.y, cove_position.z},
 		100
 	));
 
 	// make the isle
+	auto isle_position = Vector3{};
 	auto isle = std::make_shared<Terrain>(Terrain(
 		IsleType::get_instance(),
 		Vector3{200, -4.8, 200},
 		Vector3{100, 10, 100},
+		Vector3{isle_position.x, isle_position.y, isle_position.z},
+		Vector3{isle_position.x, isle_position.y   , isle_position.z},
 		100
 	));
 
 	// make the bay
-	auto bay = std::make_shared<Terrain>(Terrain(
-		BayType::get_instance(),
-		Vector3{ -400, -4.8, -250},
-		Vector3{ 100, 10, 100 },
-		100
-	));
 	world_objects_.push_back(hub);
 	world_objects_.push_back(lagoon);
 	world_objects_.push_back(reef);
+	world_objects_.push_back(bay);
 	/**
 	world_objects_.push_back(cove);
 	world_objects_.push_back(isle);
-	world_objects_.push_back(bay);
 	*/
 
 }

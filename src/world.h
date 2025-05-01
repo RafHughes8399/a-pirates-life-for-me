@@ -55,7 +55,7 @@ public:
 		wind_.pick_speed();
 
 		// init ship
-		auto ship_position = Vector3{-80, 0.0, 300 };
+		auto ship_position = Vector3{200, 0.0, 300 };
 		auto ship = std::make_shared<Ship>(Ship(ship_type,
 			ship_position,
 			Vector3{ 0.75f, 0.5f, 1.2 },
