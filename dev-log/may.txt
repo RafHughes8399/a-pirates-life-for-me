@@ -1,0 +1,5 @@
+2nd May
+-> position and bounding boxes for the remaining islands
+-> render based on distance and direction from the camera
+-> hitboxes
+-> terrain collision using the event system 
