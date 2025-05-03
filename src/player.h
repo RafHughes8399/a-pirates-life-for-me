@@ -46,7 +46,7 @@ public:
 	void update(float delta);
 	void render();
 
-	Camera3D get_camera();
+	Camera3D& get_camera();
 	std::pair<int, int>& get_chunk();
 	void move_camera(int mode, Vector3& new_position);
 	Ship* get_ship();

@@ -89,7 +89,7 @@ public:
 	World& operator= (const World && other);
 
 	void update();
-	void render();
+	void render(BoundingBox& camera_view_box);
 	
 	std::vector<std::shared_ptr<Object>>& get_objects();
 private:

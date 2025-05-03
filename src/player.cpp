@@ -18,7 +18,7 @@ void Player::render() {
 	//this is where the hud will be drawn and other components
 }
 
-Camera3D Player::get_camera(){
+Camera3D& Player::get_camera(){
 	return camera_;
 }
 

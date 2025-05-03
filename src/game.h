@@ -1,6 +1,7 @@
 #pragma once
 #include "world.h"
 #include "player.h"
+#include "config.h"
 // #include "hud.h"
 
 // currently world, player and hud
@@ -15,6 +16,8 @@ public:
 
 
 		// here in the game, add event listeners basewd on what you want to listen to
+		camera_height_ = 2.0 * RENDER_DISTANCE * tanf(player_.get_camera().fovy * DEG2RAD / 2.0);
+		camera_width_ = camera_height_ / (GetScreenWidth() / GetScreenHeight());
 	}
 	Game(const Game& other)
 		: world_(other.world_), player_(other.player_) {
@@ -54,4 +57,7 @@ private:
 	Player& player_;
 	// Hud hud_;
 
+
+	float camera_height_;
+	float camera_width_;
 };

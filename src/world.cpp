@@ -111,13 +111,15 @@ void World::generate_islands(){
 	));
 
 
-	auto cove_position = Vector3{315, -2.2f, -350};
+	auto min = Vector3{191, -1, -432};
+	auto max = Vector3{420, 9.2, -256};
+	auto cove_position = Vector3{315, -1.4f, -350};
 	auto cove = std::make_shared<Terrain>(Terrain(
 		CoveType::get_instance(),
 		cove_position,
 		Vector3{100, 10, 100},
-		Vector3{cove_position.x, cove_position.y, cove_position.z},
-		Vector3{cove_position.x, cove_position.y, cove_position.z},
+		Vector3{cove_position.x - 114 , cove_position.y -1.2f, cove_position.z - 82},
+		Vector3{cove_position.x + 125, cove_position.y + 11.2f, cove_position.z + 94},
 		100
 	));
 
@@ -156,13 +158,24 @@ void World::update(){
 	wind_.update(GetTime());
 }
 
-void World::render() {
+void World::render(BoundingBox& camera_view_box) {
 	// based on the player position, render based on render distnace
 	DrawGrid(NUM_CHUNKS, CHUNK_SIZE);
 
 	// TODO for debug, draw the chunk bounding boxes
+
+	// make sure you update before render, so that its sorted when you render
+
+	// ok it is sorted
+	auto num_rendered = 0;
 	for (auto& o : world_objects_) {
-		o->render();
+		// check the distance and the direction from the camera
+		if (CheckCollisionBoxes(camera_view_box, o->get_bounding_box())) {
+			o->render();
+			num_rendered++;
+		
+		}
+
 	}
 }
 
