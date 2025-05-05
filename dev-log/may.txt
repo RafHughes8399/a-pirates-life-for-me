@@ -1,0 +1,17 @@
+2nd May
+-> position and bounding boxes for the remaining islands
+-> render based on distance and direction from the camera
+-> hitboxes
+-> terrain collision using the event system 
+
+
+
+
+3rd May
+-> establish a bounding box for the camera, 
+-> if the bounding box of an object intersects with the camera, draw it
+
+
+-> todo adjust ship jitters 
+-> todo ensure consist render of camera target
+-> todo add simulation distance cutoff too 

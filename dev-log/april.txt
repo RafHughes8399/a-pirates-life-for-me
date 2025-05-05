@@ -1,0 +1,83 @@
+1st of April
+-> chunks generation
+-> chunk rendering and simulation
+-> moving objects between chunks
+
+-> chunk debug 
+
+
+2nd of April
+-> chunk gen
+-> chunk render debug
+5th of April
+i feel like im back to square one i don't understand
+bit disheartening but we truck on
+
+step one, should be easy enough 
+
+make wind ship a observer-listener pattern
+
+
+-> add oceans to the chunks
+-> add the player to a chunk
+
+
+3rd April
+-> get player chunk
+-> chunk simulate and render based on player chunk
+
+
+5th April
+-> take another stab at chunks 
+-> generate chunks maybe not 25 by 25 but 15 by 15
+-> generate and fill with ocean
+-> hopefully the shared pointers help
+-> then add the player to the chunk
+
+-> then moving objects between chunks
+-> then islands
+
+
+
+9th of April
+-> event system 
+
+make the event, and then send the event
+
+the game has the listeners, and defines what happens when the event occurs
+when you want something to happen you send the event
+
+
+
+15th of AApril
+-> ok that kind of works, make the islands much smaller
+-> make the rest of the islands, design them first, make them smaller, much smaller, main on the x and y, the height is fine for now
+-> position them around the map
+-> figure out how to size them, maybe draw bounding boxes around them ?
+-> texture them 
+
+-> collisions
+
+
+
+18 April
+-> add obj id 
+-> debug positions
+-> sort out sizing and texturing 
+-> 
+
+
+29 April
+-> change bounding box to be a min max deal not based on size
+-> hitboxes (a list of sub bounding boxes), for most objects, no more than two or three boxes
+-> render optimisation 
+-> slight issue with sail turning, make sure it laps correctly
+
+
+-> hitbox will need to turn as does the entity, keep that in mind
+
+30 April
+-> redesign lagoon
+-> fix reef design
+-> reposition the other islands 
+-> hitboxes 
