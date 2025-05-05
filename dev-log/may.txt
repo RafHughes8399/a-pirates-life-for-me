@@ -15,3 +15,26 @@
 -> todo adjust ship jitters 
 -> todo ensure consist render of camera target
 -> todo add simulation distance cutoff too 
+
+
+5th of May
+-> implement the OctTree
+	-> build the regions
+	-> insert objects 
+	-> move objects around the tree
+	-> remove objects from the tree 
+
+-> setup catch2 testing framework to test these things
+-> draw and update the game based on the quadrant the player,
+-> one way is you could specify the number of levels of the tree to draw 
+
+-> the object has to fit in the region
+-> swtich ship and ocean collision to events
+
+
+-> calculate a camera frustum or whatever that is 
+current thought is to draw the parent of the current node that the player is in 
+
+
+-> DOUBLE CHECK THE BASIC LOGIC FOR THE BUILDING 
+-> OTHERWISE GO YOU OWN WAY DON'T JUST RELY ON SOMEONE ELSE'S CODE 

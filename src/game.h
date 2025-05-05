@@ -18,6 +18,9 @@ public:
 		// here in the game, add event listeners basewd on what you want to listen to
 		camera_height_ = 2.0 * RENDER_DISTANCE * tanf(player_.get_camera().fovy * DEG2RAD / 2.0);
 		camera_width_ = camera_height_ / (GetScreenWidth() / GetScreenHeight());
+
+		// the game holds the event listeners, you send an event when something occurs,
+		// then the game processes the event ?
 	}
 	Game(const Game& other)
 		: world_(other.world_), player_(other.player_) {
@@ -46,11 +49,15 @@ public:
 
 	World& get_world();
 
-	Player& get_player();
+	Player& get_player(); 
 
 
 
-	// and define what happens on those events
+	// here is where you define what happens on an event 
+	// e.g on player input event
+	// or on collision event 
+
+	// when an event is sent, it is handled 
 
 private:
 	World& world_;
