@@ -167,15 +167,9 @@ void World::render(BoundingBox& camera_view_box) {
 	// make sure you update before render, so that its sorted when you render
 
 	// ok it is sorted
-	auto num_rendered = 0;
 	for (auto& o : world_objects_) {
 		// check the distance and the direction from the camera
-		if (CheckCollisionBoxes(camera_view_box, o->get_bounding_box())) {
-			o->render();
-			num_rendered++;
-		
-		}
-
+		o->render();
 	}
 }
 

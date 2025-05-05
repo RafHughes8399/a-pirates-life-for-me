@@ -12,18 +12,18 @@ public:
 	Player()
 		:camera_(Camera3D{}), ship_(nullptr), camera_mode_(CAMERA_THIRD_PERSON), chunk_(std::make_pair(0,0)){
 			camera_.position = Vector3{ 0.0, 5.0, 5.0 };
-			camera_.target = Vector3{ 0.0,0.5,0.0 }; // the camera looks at the cube, slightly above sea level
+			camera_.target = Vector3{ 0.0,0.65,0.0 }; // the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
-			camera_.fovy = 90;
+			camera_.fovy = 120;
 			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode 
 			set_default_key_map();
 	}
 	Player(Ship* ship)
 		:camera_(Camera3D{}), ship_(ship), camera_mode_(CAMERA_THIRD_PERSON), chunk_(std::make_pair(0,0)){
 		camera_.position = Vector3{ 0.0, 5.0, 5.0 };
-		camera_.target = Vector3{ 0.0,0.5,0.0 }; // the camera looks at the cube, slightly above sea level
+		camera_.target = Vector3{ 0.0,0.65,0.0 }; // the camera looks at the cube, slightly above sea level
 		camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
-		camera_.fovy = 90;
+		camera_.fovy = 120;
 		camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
 		set_default_key_map();
 	}	
