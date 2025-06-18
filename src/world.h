@@ -44,7 +44,7 @@ public:
 		: wind_(Wind()){
 		
 		// init oceant
-		world_objects_.push_back(std::make_shared<Ocean>(Ocean(ocean_type, 
+		world_objects_.push_back(std::make_shared<Ocean>(Ocean(OceanType::get_instance(),
 			Vector3{0, WORLD_Y * -0.25, 0},
 			Vector3{WORLD_X, WORLD_Y *0.5, WORLD_Z},
 			WATER_DENISTY
@@ -56,7 +56,7 @@ public:
 
 		// init ship
 		auto ship_position = Vector3{200, 0.0f, -172.0f};
-		auto ship = std::make_shared<Ship>(Ship(ship_type,
+		auto ship = std::make_shared<Ship>(Ship(ShipType::get_instance(),
 			ship_position,
 			Vector3{ 0.75f, 0.5f, 1.2 },
 			Vector3{ship_position.x -1.0f ,ship_position.y, ship_position.z -1.0f},
@@ -100,9 +100,4 @@ private:
 
 	Wind wind_;
 	std::vector<std::shared_ptr<Object>> world_objects_;
-
-	// temp, will move to a factory or whatever else
-	ShipType& ship_type = ShipType::get_instance();
-	OceanType& ocean_type = OceanType::get_instance();
-	TerrainType& terrain_type = TerrainType::get_instance();
 };

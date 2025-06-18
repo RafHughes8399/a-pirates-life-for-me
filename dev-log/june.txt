@@ -1,0 +1,4 @@
+-> octtree
+-> switch back to unique pointers
+-> collision game events
+-> camera frustrum culling for rendering
