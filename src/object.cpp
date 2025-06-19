@@ -87,3 +87,17 @@ Vector3 MoveableObject::get_direction_coefficient(){
 void MoveableObject::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }
+
+void TestObject::update(float delta){
+	return;
+}
+
+void TestObject::render()
+{
+	return;
+}
+
+void TestObject::interact(Object* other)
+{
+	return;
+}

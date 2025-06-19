@@ -222,3 +222,27 @@ private:
 
     }
 };
+
+class TestType : public ObjectType {
+public:
+    TestType(const TestType& other) = delete;
+    TestType(TestType&& other) = delete;
+    TestType& operator=(const TestType& other) = delete;
+    TestType& operator=(TestType&& other) = delete;
+
+    // Singleton getter
+    static TestType& get_instance() {
+        static TestType instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    TestType()
+        : ObjectType(LoadModel(TEST_MODEL), LoadTexture(TEST_TEXTURE)) {
+        model_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_;            // Set map diffuse texture
+
+    }
+};
+
+

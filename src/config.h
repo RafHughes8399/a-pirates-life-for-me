@@ -2,6 +2,10 @@
 #include <numbers>
 
 // game models and textures
+
+#define TEST_TEXTURE "AAAAAAAAAAAAAAA"
+#define TEST_MODEL "BAHHHHHHHHHHHH"
+
 #define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown.glb"
 #define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
 

@@ -52,7 +52,9 @@ endif()
 enable_testing()
 add_executable(octree_test_exe 
 tests/octree_test.cpp 
-lib/catch2_main.cpp)
+lib/catch2_main.cpp
+src/object.cpp
+src/singleton_flyweight.cpp)
 
 target_link_libraries(octree_test_exe raylib)
 add_test(octree_test octree_test_exe)

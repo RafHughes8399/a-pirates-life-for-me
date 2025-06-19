@@ -10,7 +10,7 @@ class octree {
 private:
 	// node definition
 	struct node {
-		std::vector<std::unique_ptr<Object>> objects_;
+		std::vector<std::unique_ptr<T>> objects_;
 		std::vector<std::unique_ptr<node>> children_;
 		BoundingBox bounds_;
 		short life_; // how long a node has lived without any objects
@@ -23,14 +23,16 @@ private:
 	// methods
 
 	// insert and remove a T from the octree
-	void insert(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
-	void erase(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
+	void insert(std::unique_ptr<node>& tree, std::unique_ptr<T>& object) {
+		return;
+	}
+	void erase(std::unique_ptr<node>& tree, std::unique_ptr<T>& object);
 
 	void add_node();
 	void remove_node();
 
 	// reposition a T within the tree after it moves
-	std::unique_ptr<Object> extract(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
+	std::unique_ptr<Object> extract(std::unique_ptr<node>& tree, std::unique_ptr<T>& object);
 	void reposition(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
 
 	int height(std::unique_ptr<node>& tree);
@@ -77,7 +79,7 @@ public:
 		}
 	}
 
-	octree(BoundingBox root_bounds, std::vector<std::unique_ptr<Object>>& objects)
+	octree(BoundingBox root_bounds, std::vector<std::unique_ptr<T>>& objects)
 		: octree(root_bounds, objects.begin(), objects.end()) {
 	}
 
@@ -88,10 +90,12 @@ public:
 	octree& operator= (const octree& other);
 	octree& operator=(octree&& other);
 
-	void insert(std::unique_ptr<Object>& obj);
-	void erase(std::unique_ptr<Object>& obj);
-	std::unique_ptr<Object> extract(std::unique_ptr<Object>& obj);
-	void reposition(std::unique_ptr<Object>& obj);
+	void insert(std::unique_ptr<T>& obj) {
+		insert(root_, obj);
+	}
+	void erase(std::unique_ptr<T>& obj);
+	std::unique_ptr<T> extract(std::unique_ptr<T>& obj);
+	void reposition(std::unique_ptr<T>& obj);
 
 	std::unique_ptr<node>& get_root() {
 		return root_;
@@ -99,7 +103,7 @@ public:
 	std::vector<std::unique_ptr<node>>& get_children() {
 		return root_->children_;
 	}
-	std::vector<std::unique_ptr<Object>>& get_objects() {
+	std::vector<std::unique_ptr<T>>& get_objects() {
 		return root_->objects_;
 	}
 

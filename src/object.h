@@ -14,7 +14,8 @@ public:
 		: object_type_(object_type),position_(position), size_(size), density_(density), volume_(size.x * size.y * size.z){
 		// generate the bounding box, min and max
 		update_bounding_box();
-	};	Object(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
+	};	
+	Object(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
 		: object_type_(object_type),position_(position), size_(size), bounding_box_(BoundingBox{min, max}), density_(density), volume_(size.x * size.y * size.z){
 		// generate the bounding box, min and max
 	};
@@ -91,6 +92,32 @@ protected:
 	Vector3 acceleration_;
 	float direction_; // in radians
 };
+
+class TestObject : public Object {
+public:
+	TestObject(TestType& ship_type, Vector3 position, Vector3 size, float density, Vector3 velocity, float direction)
+		: Object(ship_type, position, size, direction){
+	};
+	TestObject(Vector3 position, Vector3 size)
+		:Object(TestType::get_instance(), position, size, 0) {
+	}
+	TestObject(const TestObject& other)
+		: Object(other){
+
+	};
+	TestObject(TestObject&& other)
+		: Object(other) {
+	};
+
+	void update(float delta) override;
+	void render() override;
+	void interact(Object* other) override;
+
+};
+
+
+
+
 
 
 class Ship : public MoveableObject {
