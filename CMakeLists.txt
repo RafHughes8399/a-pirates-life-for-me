@@ -10,6 +10,11 @@ if (POLICY CMP0141)
 endif()
 
 project ("pirate-cmake")
+if(MSVC)
+    add_compile_options(/permissive-)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options(-foperator-names)
+endif()
 set(RAYLIB_VERSION 5.5)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
@@ -37,7 +42,7 @@ add_executable (pirate-cmake
 
 "src/singleton_flyweight.h" "src/singleton_flyweight.cpp"   "src/game.h" "src/game.cpp"  
 "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp"
-"src/terrain.cpp" "src/octree.h" "tests/octree_test.cpp" "lib/catch2_main.cpp" "src/octree.cpp")
+"src/terrain.cpp" "src/octree.h" )
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
@@ -45,12 +50,11 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 enable_testing()
-add_library(catch2_main lib/catch2_main.cpp "src/octree.cpp")
+add_executable(octree_test_exe 
+tests/octree_test.cpp 
+lib/catch2_main.cpp)
 
-target_include_directories(catch2_main PUBLIC lib)
-link_libraries(catch2_main)
-
-add_executable(octree_test_exe tests/octree_test.cpp "src/octree.cpp")
+target_link_libraries(octree_test_exe raylib)
 add_test(octree_test octree_test_exe)
 
 
@@ -73,7 +77,7 @@ file(GLOB IMAGE_FILES "${CMAKE_SOURCE_DIR}/images/*")
 file(GLOB MODEL_FILES "${CMAKE_SOURCE_DIR}/models/*")
 
 # Add the resource files to the target
-add_custom_target(resources ALL SOURCES ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp" "src/terrain.cpp" "src/octree.h" "tests/octree_test.cpp" "lib/catch2_main.cpp" "src/octree.cpp")
+add_custom_target(resources ALL SOURCES ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp" "src/terrain.cpp" "src/octree.h" "tests/octree_test.cpp" "lib/catch2_main.cpp" )
 
 # Ensure the resource files are copied to the build directory
 add_custom_command(TARGET resources POST_BUILD
