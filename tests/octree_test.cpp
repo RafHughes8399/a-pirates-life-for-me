@@ -37,8 +37,32 @@ TEST_CASE("insert object into octree") {
 	tree.insert(test_obj);
 
 	// check it was inserted
-	//CHECK(tree.size() == 1);
+	CHECK(tree.size() == 1);
 	
 
 	// check it was inserted into the "correct" node
+	// confirm the placement
 }
+TEST_CASE("insert objects into octree") {
+
+}
+
+TEST_CASE("remove an object from the tree ") {
+
+}
+TEST_CASE("remove all objects from tree") {
+
+}
+TEST_CASE("check tree height") {
+
+}
+
+TEST_CASE("check tree size") {
+
+}
+
+TEST_CASE("reposition an object in the tree") {
+
+}
+
+
