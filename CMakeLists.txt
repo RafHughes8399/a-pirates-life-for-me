@@ -51,6 +51,7 @@ endif()
 
 enable_testing()
 add_executable(octree_test_exe 
+src/octree.h
 tests/octree_test.cpp 
 lib/catch2_main.cpp
 src/object.cpp

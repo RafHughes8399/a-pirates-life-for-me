@@ -19,7 +19,7 @@ std::vector<std::unique_ptr<Object>> build_test_objects() {
 
 TEST_CASE("empty octree construction") {
 	// build octree 
-	auto otree = octree<Object>(WORLD_BOX);
+	auto otree = octree(WORLD_BOX);
 
 	// check is leaf
 	CHECK(otree.is_leaf());
@@ -33,15 +33,15 @@ TEST_CASE("insert object into octree") {
 
 	// create an empty octree, insert the object into the tree
 
-	auto tree = octree<Object>(WORLD_BOX);
+	auto tree = octree(WORLD_BOX);
 	tree.insert(test_obj);
 
 	// check it was inserted
 	CHECK(tree.size() == 1);
-	
 
-	// check it was inserted into the "correct" node
-	// confirm the placement
+	// check it was inserted into the "correct" node, i.e confirm the placement
+	// find object node
+	// find object (that is, contains)
 }
 TEST_CASE("insert objects into octree") {
 

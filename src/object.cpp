@@ -48,7 +48,7 @@ Vector3 Object::get_size(){
 	return size_;
 }
 
-BoundingBox Object::get_bounding_box(){
+BoundingBox& Object::get_bounding_box(){
 	return bounding_box_;
 }
 

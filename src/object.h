@@ -43,7 +43,7 @@ public:
 	float get_density();
 	Vector3 get_position();
 	Vector3 get_size();
-	BoundingBox get_bounding_box();
+	BoundingBox& get_bounding_box();
 	void update_bounding_box();
 
 	// operator overloads

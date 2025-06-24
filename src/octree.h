@@ -2,10 +2,9 @@
 #include <vector>
 #include <memory>
 #include "object.h"
-
-
-#define NODE_LIFEObjectIME 30 // seconds
-#define MAX_DEPObjectH 15 // max height of the tree 
+#include "raylib.h"
+#define NODE_LIFETIME 30 // seconds
+#define MAX_DEPTH 15 // max height of the tree 
 class octree {
 private:
 	// node definition
@@ -26,14 +25,68 @@ private:
 	}
 	// assumes that the current node has no children
 	void build_children(std::unique_ptr<node>& tree) {
-		tree->children_.resize(8);
+		std::cout << "build children " << std::endl;
 		// first do quadrants then do octant	
-		
-		// left or right
-		// bottom or top
-		// front or back
+		// left or right, bottom or top, front or back
+		auto centre_point = Vector3Add(tree->bounds_.max, tree->bounds_.min);
+		centre_point = Vector3Scale(centre_point, 0.5);
 
-			
+		// left bottom front, (min -> centre x, y) (centre -> max z)
+		auto lbf = std::make_unique<node>();
+		lbf->bounds_ = BoundingBox{Vector3{tree->bounds_.min.x, tree->bounds_.min.y, centre_point.z},
+			Vector3{centre_point.x, centre_point.y, tree->bounds_.max.z}};
+		lbf->life_ = 0;
+		tree->children_.push_back(std::move(lbf));
+
+		// left top front (min -> centre x), (centre -> max y, z)
+		auto ltf = std::make_unique<node>();
+		ltf->bounds_ = BoundingBox{Vector3{tree->bounds_.min.x, centre_point.y, centre_point.z},
+			Vector3{centre_point.x, tree->bounds_.max.y, tree->bounds_.max.z}
+		};
+		ltf->life_ = 0;
+		tree->children_.push_back(std::move(ltf));
+
+		// left bottom back (min -> centre x, y, z)
+		auto lbb = std::make_unique<node>();
+		lbb->bounds_ = BoundingBox{tree->bounds_.min, centre_point};
+		lbb->life_ = 0;
+		tree->children_.push_back(std::move(lbb));
+
+		// left top back (min -> centre x, z) (centre -> max, y)
+		auto ltb = std::make_unique<node>();
+		ltb->bounds_ = BoundingBox{Vector3{tree->bounds_.min.x, centre_point.y, tree->bounds_.min.z},
+			Vector3{centre_point.x, tree->bounds_.max.y, centre_point.z}
+		};
+		ltb->life_ = 0;
+		tree->children_.push_back(std::move(ltb));
+
+		// right bottom front (min -> centre y) (centre -> max x, z)
+		auto rbf = std::make_unique<node>();
+		rbf->bounds_ = BoundingBox{Vector3{centre_point.x, tree->bounds_.min.y, centre_point.z}, 
+			Vector3{tree->bounds_.max.x, centre_point.y, tree->bounds_.max.z}
+		};
+		rbf->life_ = 0;
+		tree->children_.push_back(std::move(rbf));
+
+		// right top front (centre -> max x, y, z)
+		auto rtf = std::make_unique<node>();
+		rtf->bounds_ = BoundingBox{centre_point, tree->bounds_.max};
+		rtf->life_ = 0;
+		tree->children_.push_back(std::move(rtf));
+
+		// right bottom back (min -> centre y, z) (centre -> max, x)
+		auto rbb = std::make_unique<node>();
+		rbb->bounds_ = BoundingBox{Vector3{centre_point.x, tree->bounds_.min.y, tree->bounds_.min.z}, 
+			Vector3{tree->bounds_.max.x, centre_point.y, centre_point.z} };
+		rbb->life_ = 0;
+		tree->children_.push_back(std::move(rbb));
+
+		// right top back (min -> centre z) ( centre -> max x y)
+		auto rtb = std::make_unique<node>();
+		rtb->bounds_ = BoundingBox{ Vector3{centre_point.x, centre_point.y, tree->bounds_.min.z},
+		Vector3{tree->bounds_.max.x, tree->bounds_.max.y, centre_point.z} };
+		rtb->life_ = 0;
+		tree->children_.push_back(std::move(rtb));
 	}
 	
 	// insert and remove a Object from the octree
@@ -43,40 +96,55 @@ private:
 		// such that the max depth of the tree is not exceeded
 		
 
-		// if fits in parent, check the children, 
-		if (node_contains_object(tree->bounds, object->get_bounding_box())) {
+		// if fits in parent, check the children
+		auto object_bounds = object->get_bounding_box();
+		if (node_contains_object(tree->bounds_, object_bounds)) {
 			// if there are no children, generate the children
 			if (is_leaf(tree)) {
+				std::cout << "tree has " << tree->children_.size() << "children " << std::endl;
 				build_children(tree);
+				std::cout << "tree has " << tree->children_.size() << "children " << std::endl;
 			}
-			// then check the children, if does fit in a child, recursively insert
-
+			// then check the children,  
+			for (auto& child : tree->children_) {
+				// if does fit in a child, recursively
+				if (node_contains_object(child->bounds_, object_bounds)) {
+					insert(child, object);
+					return;
+				}
+			}
 			// otherwise insert into current node
+			tree->objects_.push_back(std::move(object));
 		
 		}
 		// if does not fit in node do not insert
 		return;
 	}
-	void erase(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
-
-	void add_node();
-	void remove_node();
+	void erase(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+		return;
+	}
 
 	// reposition a Object within the tree after it moves
-	std::unique_ptr<Object> extract(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
-	void reposition(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object);
+	std::unique_ptr<Object> extract(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+		return nullptr;
+	}
+	void reposition(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+		return;
+	}
 
-	int height(std::unique_ptr<node>& tree);
+	int height(std::unique_ptr<node>& tree) {
+		return 0;
+	}
 	int size(std::unique_ptr<node>& tree) {
 		auto empty = is_empty(tree);
 		if (empty) { return 0; }
 
 		if (tree != nullptr) {
-			auto size = tree->objects_.size();
+			auto t_size = tree->objects_.size();
 			for (auto& child : tree->children_) {
-				size += size(child);
+				t_size += size(child);
 			}
-			return size;
+			return t_size;
 		}
 		return 0;
 	}
@@ -101,14 +169,14 @@ private:
 	void check_leaves(std::unique_ptr<node>& tree, double delta) {
 			if (is_leaf(tree)) {
 				tree->life_ += delta;
-				if (tree->life_ > NODE_LIFEObjectIME) {
+				if (tree->life_ > NODE_LIFETIME) {
 					tree.reset();
 					return;
 				}
 			}
 			else {
 				for (auto& child : tree->children_) {
-					check_leaves(child, delta)
+					check_leaves(child, delta);
 				}
 			}
 		return;
@@ -175,8 +243,8 @@ public:
 	}
 
 	// checks leaves for their life, prunes if need be
-	void check_leaves() {
-		check_leaves(root_);
+	void check_leaves(double delta) {
+		check_leaves(root_, delta);
 	}
 };
 
