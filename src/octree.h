@@ -124,12 +124,53 @@ private:
 		return;
 	}
 
-	// reposition a Object within the tree after it moves
+	// reposition an Object within the tree after it moves
 	std::unique_ptr<Object> extract(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
 		return nullptr;
 	}
 	void reposition(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
 		return;
+	}
+
+	// get the node the object is located in 
+	std::unique_ptr<node>* find_object_node(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+		if (!tree) {
+			return nullptr;
+		}
+		for (auto& obj : tree->objects_) {
+			if (obj.get() == object.get()) {
+				return &tree;
+			}
+		}
+		for (auto& child : tree->children_) {
+			auto result =  find_object_node(child, object);
+			if (result != nullptr) {
+				return result;
+			}
+		}
+		return nullptr;
+	}
+
+	// same logic but returns the object instead of the node 
+	std::unique_ptr<Object>* find_object(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+		if (!tree) return nullptr;
+
+		// Check if object is in current node
+		for (auto& obj : tree->objects_) {
+			if (obj.get() == object.get()) {  // Compare raw pointers
+				return &obj;
+			}
+		}
+
+		// Recursively search children
+		for (auto& child : tree->children_) {
+			auto result = find_object(child, object);
+			if (result != nullptr) {
+				return result;
+			}
+		}
+
+		return nullptr;  // Not found
 	}
 
 	int height(std::unique_ptr<node>& tree) {
