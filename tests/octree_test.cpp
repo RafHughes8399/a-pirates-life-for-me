@@ -26,6 +26,16 @@ TEST_CASE("empty octree construction") {
 	// check num objects in the node 
 	CHECK(otree.is_empty());
 }
+TEST_CASE("check tree subdivision is correctly done") {
+	auto otree = octree(WORLD_BOX, 5);
+	// check that the height is correct
+	//CHECK(otree.height() == 5);
+	
+	// check the bounds of the node and its children
+
+
+
+}
 TEST_CASE("insert object into octree") {
 	auto test_position = Vector3{ 200, 0.0f, -172.0f };
 	auto test_size = Vector3{10, 10, 10};
@@ -42,7 +52,21 @@ TEST_CASE("insert object into octree") {
 	// check it was inserted into the "correct" node, i.e confirm the placement
 	// find object node
 	// find object (that is, contains)
+
+	auto node = tree.find_object_node(test_obj);
+	CHECK(node != nullptr); // the object is located in a node in the tree 
+	
+
+	/**
+	 * a object is correctly placed if it fits in a node but not its children
+	 * this indicates that it is in the smallest possible bound
+	 */
+	CHECK(tree.object_in_node(node->bounds_, test_obj->get_bounding_box()));
+	for (auto& child : node->children_) {
+		CHECK(! tree.object_in_node(child->bounds_, test_obj->get_bounding_box()));
+	}
 }
+
 TEST_CASE("insert objects into octree") {
 
 }

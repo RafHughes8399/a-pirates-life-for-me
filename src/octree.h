@@ -12,11 +12,13 @@ private:
 		std::vector<std::unique_ptr<Object>> objects_;
 		std::vector<std::unique_ptr<node>> children_;
 		BoundingBox bounds_;
+		int depth_;
 		short life_; // how long a node has lived without any objects
 	};
 
 	// members
 	std::unique_ptr<node> root_;
+	int max_depth_;
 	// methods
 
 	bool node_contains_object(BoundingBox& node, BoundingBox& object) {
@@ -25,7 +27,6 @@ private:
 	}
 	// assumes that the current node has no children
 	void build_children(std::unique_ptr<node>& tree) {
-		std::cout << "build children " << std::endl;
 		// first do quadrants then do octant	
 		// left or right, bottom or top, front or back
 		auto centre_point = Vector3Add(tree->bounds_.max, tree->bounds_.min);
@@ -36,6 +37,7 @@ private:
 		lbf->bounds_ = BoundingBox{Vector3{tree->bounds_.min.x, tree->bounds_.min.y, centre_point.z},
 			Vector3{centre_point.x, centre_point.y, tree->bounds_.max.z}};
 		lbf->life_ = 0;
+		lbf->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(lbf));
 
 		// left top front (min -> centre x), (centre -> max y, z)
@@ -44,12 +46,14 @@ private:
 			Vector3{centre_point.x, tree->bounds_.max.y, tree->bounds_.max.z}
 		};
 		ltf->life_ = 0;
+		ltf->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(ltf));
 
 		// left bottom back (min -> centre x, y, z)
 		auto lbb = std::make_unique<node>();
 		lbb->bounds_ = BoundingBox{tree->bounds_.min, centre_point};
 		lbb->life_ = 0;
+		lbb->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(lbb));
 
 		// left top back (min -> centre x, z) (centre -> max, y)
@@ -58,6 +62,7 @@ private:
 			Vector3{centre_point.x, tree->bounds_.max.y, centre_point.z}
 		};
 		ltb->life_ = 0;
+		ltb->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(ltb));
 
 		// right bottom front (min -> centre y) (centre -> max x, z)
@@ -66,12 +71,14 @@ private:
 			Vector3{tree->bounds_.max.x, centre_point.y, tree->bounds_.max.z}
 		};
 		rbf->life_ = 0;
+		rbf->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(rbf));
 
 		// right top front (centre -> max x, y, z)
 		auto rtf = std::make_unique<node>();
 		rtf->bounds_ = BoundingBox{centre_point, tree->bounds_.max};
 		rtf->life_ = 0;
+		rtf->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(rtf));
 
 		// right bottom back (min -> centre y, z) (centre -> max, x)
@@ -79,6 +86,7 @@ private:
 		rbb->bounds_ = BoundingBox{Vector3{centre_point.x, tree->bounds_.min.y, tree->bounds_.min.z}, 
 			Vector3{tree->bounds_.max.x, centre_point.y, centre_point.z} };
 		rbb->life_ = 0;
+		rbb->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(rbb));
 
 		// right top back (min -> centre z) ( centre -> max x y)
@@ -86,6 +94,7 @@ private:
 		rtb->bounds_ = BoundingBox{ Vector3{centre_point.x, centre_point.y, tree->bounds_.min.z},
 		Vector3{tree->bounds_.max.x, tree->bounds_.max.y, centre_point.z} };
 		rtb->life_ = 0;
+		rtb->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(rtb));
 	}
 	
@@ -99,13 +108,16 @@ private:
 		// if fits in parent, check the children
 		auto object_bounds = object->get_bounding_box();
 		if (node_contains_object(tree->bounds_, object_bounds)) {
-			// if there are no children, generate the children
-			if (is_leaf(tree)) {
-				std::cout << "tree has " << tree->children_.size() << "children " << std::endl;
+			// if there are no children, check depth, if node is not at the max dpeth, generate the children
+			if (is_leaf(tree) && tree->depth_ != max_depth_) {
 				build_children(tree);
-				std::cout << "tree has " << tree->children_.size() << "children " << std::endl;
+				// then check the children,  
 			}
-			// then check the children,  
+			else if (tree->depth_ == max_depth_) {
+				tree->objects_.push_back(std::move(object));
+				return;
+			}
+			// then check the children
 			for (auto& child : tree->children_) {
 				// if does fit in a child, recursively
 				if (node_contains_object(child->bounds_, object_bounds)) {
@@ -115,7 +127,6 @@ private:
 			}
 			// otherwise insert into current node
 			tree->objects_.push_back(std::move(object));
-		
 		}
 		// if does not fit in node do not insert
 		return;
@@ -133,13 +144,13 @@ private:
 	}
 
 	// get the node the object is located in 
-	std::unique_ptr<node>* find_object_node(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+	node* find_object_node(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
 		if (!tree) {
 			return nullptr;
 		}
 		for (auto& obj : tree->objects_) {
 			if (obj.get() == object.get()) {
-				return &tree;
+				return tree.get();
 			}
 		}
 		for (auto& child : tree->children_) {
@@ -152,13 +163,13 @@ private:
 	}
 
 	// same logic but returns the object instead of the node 
-	std::unique_ptr<Object>* find_object(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
+	Object* find_object(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
 		if (!tree) return nullptr;
 
 		// Check if object is in current node
 		for (auto& obj : tree->objects_) {
 			if (obj.get() == object.get()) {  // Compare raw pointers
-				return &obj;
+				return obj.get();
 			}
 		}
 
@@ -174,7 +185,19 @@ private:
 	}
 
 	int height(std::unique_ptr<node>& tree) {
-		return 0;
+		if (!tree) {
+			return -1;
+		}
+		else {
+			int max_child_height = -1;
+			for (auto& child : tree->children_) {
+				int child_height = height(child);
+				if (child_height >= max_child_height) {
+					max_child_height = child_height;
+				}
+			}
+			return 1 + max_child_height;
+		}
 	}
 	int size(std::unique_ptr<node>& tree) {
 		auto empty = is_empty(tree);
@@ -224,14 +247,25 @@ private:
 	} 
 
 public:
+// CONSTRUCTORS
 	~octree() = default;
 	// creates an empty octree with a root node
 	octree(BoundingBox root_bounds)
-		: root_(std::make_unique<node>()) {
+		: root_(std::make_unique<node>()), max_depth_(MAX_DEPTH) {
 		root_->bounds_ = root_bounds;
 		root_->life_ = 0;
+		root_->depth_ = 0;
 	}
+	// creates an octree of the defined depth
+	octree(BoundingBox root_bounds, int depth)
+		: octree(root_bounds) {
+		max_depth_ = depth;
+		// build the children until the desired depth is reach
+		build_children(root_); // so depth is now 1
 
+		// consider how to recursively generate the tree, would it be a BFS / DFS kind of 
+		// implementation, perhaps a stack is necessary
+	}
 	// creates an empty octree, then populates it with the list of objects
 	template<typename InputIt>
 	octree(BoundingBox root_bounds, InputIt first, InputIt last)
@@ -287,18 +321,18 @@ public:
 	void check_leaves(double delta) {
 		check_leaves(root_, delta);
 	}
+
+	node* find_object_node(std::unique_ptr<Object>& obj) {
+		return find_object_node(root_, obj);
+	}
+
+	Object* find_object(std::unique_ptr<Object>& obj) {
+		return find_object(root_, obj);
+	}
+
+	// for testing purposes 
+	bool object_in_node(BoundingBox& node, BoundingBox& obj) {
+		return node_contains_object(node, obj);
+	}
+
 };
-
-
-/**	so what is an octrees
- *	each non-leaf node has 8 children
- * .each node spans a particular 3D area, expressed as a BB
- * each node has a middle point 
- * each of the 8 children of a node
- * each node has a list of objects within the space partition
- * the root node is the entire world
- * 
- * 
- * 
- * the main things, i need 
- */
