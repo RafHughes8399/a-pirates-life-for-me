@@ -7,3 +7,11 @@
 -> octree size
 -> octree height
 -> octree insert
+
+
+
+26/06
+-> building based on depth input
+-> check insert location
+-> insert multiple objects in different nodes
+-> prune leaves

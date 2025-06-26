@@ -21,6 +21,8 @@ private:
 	int max_depth_;
 	// methods
 
+
+
 	bool node_contains_object(BoundingBox& node, BoundingBox& object) {
 		return (object.min.x > node.min.x and object.min.y > node.min.y and object.min.z > node.min.z)
 			and (object.max.x < node.max.x and object.max.y < node.max.y and object.max.z < node.max.z);
@@ -97,7 +99,6 @@ private:
 		rtb->depth_ = tree->depth_ + 1;
 		tree->children_.push_back(std::move(rtb));
 	}
-	
 	// insert and remove a Object from the octree
 	void insert(std::unique_ptr<node>& tree, std::unique_ptr<Object>& object) {
 		// ok so what is the insert logic
@@ -255,16 +256,16 @@ public:
 		root_->bounds_ = root_bounds;
 		root_->life_ = 0;
 		root_->depth_ = 0;
+
 	}
 	// creates an octree of the defined depth
 	octree(BoundingBox root_bounds, int depth)
-		: octree(root_bounds) {
-		max_depth_ = depth;
-		// build the children until the desired depth is reach
-		build_children(root_); // so depth is now 1
+		: root_(std::make_unique<node>()), max_depth_(depth) {
+		root_->bounds_ = root_bounds;
+		root_->life_ = 0;
+		root_->depth_ = 0;
 
-		// consider how to recursively generate the tree, would it be a BFS / DFS kind of 
-		// implementation, perhaps a stack is necessary
+		// build lazily
 	}
 	// creates an empty octree, then populates it with the list of objects
 	template<typename InputIt>
