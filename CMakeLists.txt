@@ -1,73 +1,122 @@
-﻿# CMakeList.txt : CMake project for pirate-cmake, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿# ------------------------------------------------------------ #
+# -------------- DO NOT TOUCH BELOW THIS LINE ---------------- #
+# ------------------------------------------------------------ #
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# this must be the first line of a CMake script.
+# sets the lowerbound on what CMake version can be used.
+cmake_minimum_required(VERSION 3.0)
 
-project ("pirate-cmake")
-set(RAYLIB_VERSION 5.5)
-find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
-if (NOT raylib_FOUND) # If there's none, fetch and build raylib
-  include(FetchContent)
-  FetchContent_Declare(
-    raylib
-    DOWNLOAD_EXTRACT_TIMESTAMP OFF
-    URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
-  )
-  FetchContent_GetProperties(raylib)
-  if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
-    set(FETCHCONTENT_QUIET NO)
-    FetchContent_MakeAvailable(raylib)
-    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
-  endif()
-endif()
-# Add source to this project's executable.
-add_executable (pirate-cmake 
-"src/pirate-cmake.cpp"
-"src/world.h" "src/player.h" "src/player.cpp" 
-"src/ship.cpp" "src/world.cpp" "src/ocean.cpp" 
-"src/config.h"  "src/object.h"  "src/object.cpp" 
-"src/ship_components.cpp" "src/wind.h" "src/wind.cpp" 
-"src/utility_functions.h" "src/utility_functions.cpp" "src/hitbox.h" 
+# the name of this CMake project and what language it uses
+# we could list more languages if we were using more.
+project(COMP6771_LAB_001 LANGUAGES CXX)
 
-"src/singleton_flyweight.h" "src/singleton_flyweight.cpp" "src/object_factory.h" "src/object_factory.cpp" "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp" "src/terrain.cpp")
-target_link_libraries(${PROJECT_NAME} raylib)
+# we use C++23
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS NO)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET pirate-cmake PROPERTY CXX_STANDARD 20)
-endif()
+# this is helpful for editors like VS Code
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-
-# Web Configurations
-if (${PLATFORM} STREQUAL "Web")
-    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html") # Tell Emscripten to build an example.html file.
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY -s GL_ENABLE_GET_PROC_ADDRESS=1")
-endif()
-
-# Checks if OSX and links appropriate frameworks (Only required on MacOS)
-if (APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
-    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
-endif()
-# TODO: Add tests and install targets if needed.
-# Include all files in textures, images, and models folders
-file(GLOB TEXTURE_FILES "${CMAKE_SOURCE_DIR}/textures/*")
-file(GLOB IMAGE_FILES "${CMAKE_SOURCE_DIR}/images/*")
-file(GLOB MODEL_FILES "${CMAKE_SOURCE_DIR}/models/*")
-
-# Add the resource files to the target
-add_custom_target(resources ALL SOURCES ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} "src/game.h" "src/game.cpp"   "src/event.h" "src/event_handler.h" "src/event.cpp" "src/collision_events.h" "src/event_handler.cpp" "src/terrain.cpp")
-
-# Ensure the resource files are copied to the build directory
-add_custom_command(TARGET resources POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${TEXTURE_FILES} ${IMAGE_FILES} ${MODEL_FILES} $<TARGET_FILE_DIR:pirate-cmake>
+# helpful compiler flags for gcc/clang
+# the descriptions for these flags can be found on the GNU Compiler Collection's webpage.
+set(MY_COMPILE_OPTIONS
+  -Wall
+  -Wextra
+  #-Werror
+  -pedantic-errors
+  -Wconversion
+  -Wcast-align
+  -Wformat=2
+  -Wuninitialized
+  -Wnull-dereference
+  -Wnon-virtual-dtor
+  -Woverloaded-virtual
+  -Wdeprecated-copy-dtor
+  -Wold-style-cast
+  -Wzero-as-null-pointer-constant
+  -Wsuggest-override
+  -fstack-protector-strong
+  # Disable problematic warnings for external headers
+  -Wno-double-promotion
+  -Wno-missing-field-initializers
 )
 
-set_property(TARGET pirate-cmake PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+# debug builds should be compiled with sanitizers
+# sanitizers are small libraries that check things like buffer overrun with minimal runtime overhead.
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "-fsanitize=address,undefined")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-fsanitize=address,undefined")
+set(CMAKE_CXX_EXE_LINKER_FLAGS_DEBUG_INIT "-fsanitize=address,undefined")
+set(CMAKE_CXX_EXE_LINKER_FLAGS_RELWITHDEBINFO_INIT "-fsanitize=address,undefined")
+
+# add the testing library Catch2
+enable_testing()
+add_library(catch2_main lib/catch2_main.cpp)
+target_include_directories(catch2_main PUBLIC lib)
+
+# ------------------------------------------------------------ #
+# -------------- DO NOT MODIFY ABOVE THIS LINE --------------- #
+# ------------------------------------------------------------ #
+
+# Function to add a library with strict compilation options
+function(add_lib name source)
+  add_library(${name} ${source})
+  target_compile_options(${name} PRIVATE ${MY_COMPILE_OPTIONS})
+  # Make raylib headers system headers to avoid warnings
+  target_include_directories(${name} SYSTEM PRIVATE ${raylib_INCLUDE_DIRS})
+  target_link_libraries(${name} PRIVATE raylib)
+endfunction()
+
+add_subdirectory(lib/raylib)
+# Create a list to store all your custom libraries
+set(MY_LIBRARIES)
+
+# Add all your libraries with strict compilation
+add_lib(event_handler src/event_handler.cpp)
+list(APPEND MY_LIBRARIES event_handler)
+
+add_lib(event src/event.cpp)
+list(APPEND MY_LIBRARIES event)
+
+add_lib(game src/game.cpp)
+list(APPEND MY_LIBRARIES game)
+
+add_lib(object src/object.cpp)
+list(APPEND MY_LIBRARIES object)
+
+add_lib(ocean src/ocean.cpp)
+list(APPEND MY_LIBRARIES ocean)
+
+add_lib(player src/player.cpp)
+list(APPEND MY_LIBRARIES player)
+
+add_lib(ship_components src/ship_components.cpp)
+list(APPEND MY_LIBRARIES ship_components)
+
+add_lib(ship src/ship.cpp)
+list(APPEND MY_LIBRARIES ship)
+
+add_lib(singleton_flyweight src/singleton_flyweight.cpp)
+list(APPEND MY_LIBRARIES singleton_flyweight)
+
+add_lib(terrain src/terrain.cpp)
+list(APPEND MY_LIBRARIES terrain)
+
+add_lib(utility src/utility_functions.cpp)
+list(APPEND MY_LIBRARIES utility)
+
+add_lib(wind src/wind.cpp)
+list(APPEND MY_LIBRARIES wind)
+
+add_lib(world src/world.cpp)
+list(APPEND MY_LIBRARIES world)
+
+# Main executable
+add_executable(pirate_life src/pirate-cmake.cpp)
+target_link_libraries(pirate_life ${MY_LIBRARIES} catch2_main raylib)
+
+
+# add_executable(test_example tests/example)
+#add_test(test_example test_example)
+
+# TODO: Add tests and install targets if needed.
