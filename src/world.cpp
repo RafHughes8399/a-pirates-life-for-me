@@ -1,5 +1,4 @@
 #include "world.h"
-#include "raymath.h"
 #include "utility_functions.h"
 #include <algorithm>
 
@@ -57,6 +56,7 @@ void World::sort_objects() {
 }
 
 void World::generate_islands(){
+	/**
 	// for now, just generate the underlying terrain for all the islands in the game 
 	// TODO: position them
 	// TODO: calculate their bounding boxes
@@ -141,7 +141,6 @@ void World::generate_islands(){
 	world_objects_.push_back(bay);
 	world_objects_.push_back(isle);
 	world_objects_.push_back(cove);
-	/**
 	*/
 
 }

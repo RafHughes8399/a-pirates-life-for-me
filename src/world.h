@@ -4,8 +4,6 @@
 #include <string>
 #include <numbers>
 
-#include "raylib.h"
-
 #include "wind.h"
 #include "player.h"
 #include "object.h"

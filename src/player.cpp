@@ -1,8 +1,6 @@
 #include "player.h"
 #include "config.h"
 #include "utility_functions.h"
-#include "raymath.h"
-#include "rcamera.h"
 
 // player is updated after the objects so this should wok
 void Player::update(float delta) {

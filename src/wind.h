@@ -5,7 +5,6 @@
 #include <memory>
 #include <cmath>
 
-#include "raylib.h"
 #include "object.h"
 #include "config.h"
 

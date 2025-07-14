@@ -2,10 +2,12 @@
 #include <map>
 #include <functional>
 #include <utility>
-#include "raylib.h"
 #include "object.h"
 #include "config.h"
-#include <rcamera.h>
+#include "../lib/raylib/src/raylib.h"
+#include "../lib/raylib/src/raymath.h"
+#include "../lib/raylib/src/rcamera.h"
+
 class Player {
 public:
 	~Player() = default;

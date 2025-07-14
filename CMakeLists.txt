@@ -4,7 +4,7 @@
 
 # this must be the first line of a CMake script.
 # sets the lowerbound on what CMake version can be used.
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.25)
 
 # the name of this CMake project and what language it uses
 # we could list more languages if we were using more.
@@ -75,9 +75,6 @@ set(MY_LIBRARIES)
 add_lib(event_handler src/event_handler.cpp)
 list(APPEND MY_LIBRARIES event_handler)
 
-add_lib(event src/event.cpp)
-list(APPEND MY_LIBRARIES event)
-
 add_lib(game src/game.cpp)
 list(APPEND MY_LIBRARIES game)
 
@@ -95,9 +92,6 @@ list(APPEND MY_LIBRARIES ship_components)
 
 add_lib(ship src/ship.cpp)
 list(APPEND MY_LIBRARIES ship)
-
-add_lib(singleton_flyweight src/singleton_flyweight.cpp)
-list(APPEND MY_LIBRARIES singleton_flyweight)
 
 add_lib(terrain src/terrain.cpp)
 list(APPEND MY_LIBRARIES terrain)

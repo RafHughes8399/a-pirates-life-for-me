@@ -1,6 +1,6 @@
 #pragma once
 #include <set>
-#include "raylib.h"
+#include "../lib/raylib/src/raylib.h"
 
 // as a data structure i want really quick access and lookup
 // insertion doesn't really matter 

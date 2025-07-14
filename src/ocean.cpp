@@ -1,5 +1,4 @@
 #include "object.h"
-#include "config.h"
 
 void Ocean::interact(Object* other) {
 	auto ship = dynamic_cast<Ship*>(other);

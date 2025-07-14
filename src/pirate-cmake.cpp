@@ -18,7 +18,7 @@ int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
-	InitWindow(width, height, "a pirate life for me");
+	//InitWindow(width, height, "a pirate life for me");
 	// setup the camera
 
 	// temp - will setup some obj factory
@@ -29,11 +29,14 @@ int main(){
 	DisableCursor();
 	SetTargetFPS(FPS);
 	// adjust the current working directory
-	while (!WindowShouldClose()) {
-		tick(game);
-		render(game);
-	}
-	CloseWindow();
+    InitWindow(400, 300, "Test Window");
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(RED);
+        DrawText("Hello World!", 10, 10, 20, WHITE);
+        EndDrawing();
+    }
+    CloseWindow();
 }
 
 void tick(Game& game) {

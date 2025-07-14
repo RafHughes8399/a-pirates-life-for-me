@@ -5,16 +5,18 @@
 #include <iostream>
 
 #include "singleton_flyweight.h"
-#include "raylib.h"
-#include "raymath.h"
+#include "../lib/raylib/src/raylib.h"
+#include "../lib/raylib/src/raymath.h"
 #include "ship_components.h"
+#include "config.h"
 class Object {
 public:
 	Object(ObjectType& object_type, Vector3 position, Vector3 size, float density)
 		: object_type_(object_type),position_(position), size_(size), density_(density), volume_(size.x * size.y * size.z){
 		// generate the bounding box, min and max
 		update_bounding_box();
-	};	Object(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
+	};	
+	Object(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
 		: object_type_(object_type),position_(position), size_(size), bounding_box_(BoundingBox{min, max}), density_(density), volume_(size.x * size.y * size.z){
 		// generate the bounding box, min and max
 	};
@@ -177,7 +179,7 @@ public:
 		: Object(other) {
 	};
 	
-
+	void update(float delta) override;
 	void render() override;
 	void interact(Object* other) override;
 private:

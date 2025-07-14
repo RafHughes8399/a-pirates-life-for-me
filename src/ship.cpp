@@ -1,5 +1,4 @@
 #include "object.h"
-#include "raymath.h"
 #include "config.h"
 void Ship::update(float delta){
 	//MoveableObject::update(delta);
@@ -68,6 +67,7 @@ void Ship::interact(Object* other){
 		buoynacy.y += p * g * v * -1; // make it a better deeper
 		adjust_acceleration(buoynacy);
 	}
+	return;
 
 }
 
