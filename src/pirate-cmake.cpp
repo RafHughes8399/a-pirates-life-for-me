@@ -6,40 +6,39 @@
 
 #include "pirate-cmake.h"
 #include "game.h"
-#include "player.h"
-#include "world.h"
-#include "raylib.h"
 #include "config.h"
 #include "utility_functions.h"
-void tick(Game& world);
+
+#include "../lib/raylib/src/raylib.h"
+/* void tick(Game& world);
 void render(Game& world);
-void debug(Camera3D& camera, Game& game);
+void debug(Camera3D& camera, Game& game); */
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
-	SetConfigFlags(FLAG_MSAA_4X_HINT);
-	//InitWindow(width, height, "a pirate life for me");
+	//SetConfigFlags(FLAG_MSAA_4X_HINT);
+	InitWindow(width, height, "a pirate life for me");
 	// setup the camera
 
 	// temp - will setup some obj factory
-	Player player = Player();
-	World world = World(player);
+	//Player player = Player();
+	//World world = World(player);
 
-	Game game = Game(world, player);
+	//Game game = Game(world, player);
 	DisableCursor();
 	SetTargetFPS(FPS);
 	// adjust the current working directory
-    InitWindow(400, 300, "Test Window");
-    while (!WindowShouldClose()) {
-        BeginDrawing();
-        ClearBackground(RED);
-        DrawText("Hello World!", 10, 10, 20, WHITE);
-        EndDrawing();
-    }
-    CloseWindow();
+	while (!WindowShouldClose()) {
+		//tick(game);
+		//render(game);
+		BeginDrawing();
+		ClearBackground(WHITE);
+		EndDrawing();
+	}
+	CloseWindow();
 }
 
-void tick(Game& game) {
+/* void tick(Game& game) {
 	game.update();
 }
 
@@ -113,4 +112,4 @@ void debug(Camera3D& camera, Game& game) {
 	DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", camera.up.x, camera.up.y, camera.up.z), 610, 90, 10, BLACK);
 
 
-}
+} */

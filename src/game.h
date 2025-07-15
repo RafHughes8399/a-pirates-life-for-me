@@ -1,6 +1,5 @@
 #pragma once
 #include "world.h"
-#include "player.h"
 #include "config.h"
 // #include "hud.h"
 

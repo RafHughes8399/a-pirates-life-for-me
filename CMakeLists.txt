@@ -59,55 +59,16 @@ target_include_directories(catch2_main PUBLIC lib)
 # ------------------------------------------------------------ #
 
 # Function to add a library with strict compilation options
-function(add_lib name source)
-  add_library(${name} ${source})
-  target_compile_options(${name} PRIVATE ${MY_COMPILE_OPTIONS})
-  # Make raylib headers system headers to avoid warnings
-  target_include_directories(${name} SYSTEM PRIVATE ${raylib_INCLUDE_DIRS})
-  target_link_libraries(${name} PRIVATE raylib)
-endfunction()
 
 add_subdirectory(lib/raylib)
 # Create a list to store all your custom libraries
-set(MY_LIBRARIES)
 
-# Add all your libraries with strict compilation
-add_lib(event_handler src/event_handler.cpp)
-list(APPEND MY_LIBRARIES event_handler)
-
-add_lib(game src/game.cpp)
-list(APPEND MY_LIBRARIES game)
-
-add_lib(object src/object.cpp)
-list(APPEND MY_LIBRARIES object)
-
-add_lib(ocean src/ocean.cpp)
-list(APPEND MY_LIBRARIES ocean)
-
-add_lib(player src/player.cpp)
-list(APPEND MY_LIBRARIES player)
-
-add_lib(ship_components src/ship_components.cpp)
-list(APPEND MY_LIBRARIES ship_components)
-
-add_lib(ship src/ship.cpp)
-list(APPEND MY_LIBRARIES ship)
-
-add_lib(terrain src/terrain.cpp)
-list(APPEND MY_LIBRARIES terrain)
-
-add_lib(utility src/utility_functions.cpp)
-list(APPEND MY_LIBRARIES utility)
-
-add_lib(wind src/wind.cpp)
-list(APPEND MY_LIBRARIES wind)
-
-add_lib(world src/world.cpp)
-list(APPEND MY_LIBRARIES world)
+# add libarary
+# link library 
 
 # Main executable
 add_executable(pirate_life src/pirate-cmake.cpp)
-target_link_libraries(pirate_life ${MY_LIBRARIES} catch2_main raylib)
+target_link_libraries(pirate_life catch2_main raylib)
 
 
 # add_executable(test_example tests/example)
