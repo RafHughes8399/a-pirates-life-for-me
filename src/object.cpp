@@ -52,6 +52,9 @@ BoundingBox Object::get_bounding_box(){
 	return bounding_box_;
 }
 
+int Object::get_id(){
+	return id_;
+}
 void Object::update_bounding_box(){
 	bounding_box_ = BoundingBox{ position_.x - (size_.x / 2), position_.y - (size_.y / 2), position_.z - (size_.z / 2),
 								position_.x + (size_.x / 2), position_.y + (size_.y / 2), position_.z + (size_.z / 2) };

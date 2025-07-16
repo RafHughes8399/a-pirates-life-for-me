@@ -87,6 +87,11 @@ link_libraries(terrain)
 add_library(ocean src/ocean.cpp)
 link_libraries(ocean)
 
+add_library(wind src/wind.cpp)
+link_libraries(wind)
+
+add_library(octree src/octree.cpp)
+link_libraries(octree)
 
 add_library(player src/player.cpp)
 link_libraries(player)

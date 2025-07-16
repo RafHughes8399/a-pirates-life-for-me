@@ -1,0 +1,18 @@
+
+-> fix model and texture paths
+
+
+-> rename classes and establish namespaces
+-> switch from shared to unique ptr
+-> fix up constructors and define the magic numbers
+-> integrate octree
+
+
+
+
+-> switch world to use the octree
+-> add an object constructor to take in id, adjust the variables
+-> swtich from shared and weak to unique and * 
+-> go lower case and change from object to entities, establish a namespace
+
+-> change how world, game and player interact, make sure you are using references

@@ -9,6 +9,7 @@
 #include "../lib/raylib/src/raymath.h"
 #include "ship_components.h"
 #include "config.h"
+
 class Object {
 public:
 	Object(ObjectType& object_type, Vector3 position, Vector3 size, float density)
@@ -39,6 +40,8 @@ public:
 	float get_width();
 	float get_length();
 
+	int get_id();
+
 	// getters and setters 
 	Model& get_model();
 	float get_density();
@@ -48,6 +51,9 @@ public:
 	void update_bounding_box();
 
 	// operator overloads
+	friend bool operator==(const Object& a, const Object& b){
+		return a.id_ == b.id_;
+	}
 protected:
 
 	// all objects have a model and position, and a hitbox
@@ -60,6 +66,7 @@ protected:
 	// objects also have 
 	float density_;
 	float volume_;
+	int id_;
 };
 
 class MoveableObject : public Object {

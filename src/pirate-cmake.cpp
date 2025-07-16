@@ -10,9 +10,11 @@
 #include "utility_functions.h"
 
 #include "../lib/raylib/src/raylib.h"
-/* void tick(Game& world);
+
+void tick(Game& world);
 void render(Game& world);
-void debug(Camera3D& camera, Game& game); */
+void debug(Camera3D& camera, Game& game);
+
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
@@ -21,24 +23,21 @@ int main(){
 	// setup the camera
 
 	// temp - will setup some obj factory
-	//Player player = Player();
-	//World world = World(player);
+	Player player = Player();
+	World world = World(player);
 
-	//Game game = Game(world, player);
+	Game game = Game(world, player);
 	DisableCursor();
 	SetTargetFPS(FPS);
 	// adjust the current working directory
 	while (!WindowShouldClose()) {
-		//tick(game);
-		//render(game);
-		BeginDrawing();
-		ClearBackground(WHITE);
-		EndDrawing();
+		tick(game);
+		render(game);
 	}
 	CloseWindow();
 }
 
-/* void tick(Game& game) {
+ void tick(Game& game) {
 	game.update();
 }
 
@@ -112,4 +111,4 @@ void debug(Camera3D& camera, Game& game) {
 	DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", camera.up.x, camera.up.y, camera.up.z), 610, 90, 10, BLACK);
 
 
-} */
+}

@@ -1,10 +1,9 @@
 #pragma once
 #include <utility>
-#include <cstdlib>
 #include <vector>
 #include <memory>
 #include <cmath>
-
+#include <algorithm>
 #include "object.h"
 #include "config.h"
 
@@ -40,6 +39,7 @@ public:
 	void remove_ship_subscriber(std::weak_ptr<Ship>& ship);
 	void notify_ships();
 	void notify_ship(size_t ship_);
+
 private:
 	std::vector<std::weak_ptr<Ship>> ship_subscribers_;
 	float direction_;
