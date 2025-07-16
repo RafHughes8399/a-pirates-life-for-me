@@ -6,13 +6,19 @@
 // raylib includes 
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
+
 // project includes
 #include "object.h"
-
+#include "utility_functions.h"
 
 #define MAX_DEPTH 7
 #define NODE_LIFETIME 30
 #define CHILDREN 8
+
+#define WORLD_MIN Vector3Scale(Vector3{WORLD_X, WORLD_Y, WORLD_Z}, -0.5)
+#define WORLD_MAX Vector3Scale(Vector3{WORLD_X, WORLD_Y, WORLD_Z}, 0.5)
+#define WORLD_BOX BoundingBox{WORLD_MIN, WORLD_MAX}
+
 namespace tree{
     class octree {
     protected:
@@ -87,9 +93,11 @@ namespace tree{
         bool is_empty(std::unique_ptr<o_node>& tree);
         bool is_leaf(std::unique_ptr<o_node>& tree);
         
-        // TODO: leaf pruning
+        
         void prune_leaves(std::unique_ptr<o_node>& tree, double delta);
         
+        // update and render
+        void render(std::unique_ptr<o_node>& tree, BoundingBox bounds);
         public:
         // CONSTRUCTORS
         ~octree() = default;
@@ -153,8 +161,15 @@ namespace tree{
             return get_objects(root_);
         }
         
-        // update 
+        // update and render
         void update(double delta);
+
+        // render the tree within a certain bounding box, default is the whole tree
+        void render(BoundingBox bounds = WORLD_BOX){
+            render(root_, bounds);
+        }
+
+        
         std::unique_ptr<o_node>& get_root() {
             return root_;
         }

@@ -19,5 +19,7 @@ namespace utility {
 	
 
 	}
+
+	bool contains(BoundingBox a, BoundingBox b);
 }
 	

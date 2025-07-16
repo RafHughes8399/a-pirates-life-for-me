@@ -52,3 +52,9 @@ float utility::get_maximal_variance_axis(Vector3 bb, int axis) {
 		break;
 	}
 }
+
+// does a contain b, is b in a?
+bool utility::contains(BoundingBox a, BoundingBox b){
+	return b.min.x >= a.min.x and b.min.y >= a.min.y and b.min.z >= a.max.z
+		and b.max.x <= a.max.x and b.max.y <= a.max.y and b.max.z <= a.max.z;
+}

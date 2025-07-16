@@ -2,6 +2,7 @@
 #include <numbers>
 
 // game models and textures
+// TODO: sort out the CWD for the model and texture paths
 #define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown.glb"
 #define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
 
