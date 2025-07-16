@@ -6,6 +6,8 @@
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
 #include "config.h"
+#include "utility_functions.h"
+
 
 class Sail {
 public:

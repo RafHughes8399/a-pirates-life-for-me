@@ -64,7 +64,38 @@ add_subdirectory(lib/raylib)
 # Create a list to store all your custom libraries
 
 # add libarary
-# link library 
+# link libraries 
+add_library(event_handler src/event_handler.cpp)
+link_libraries(event_handler)
+
+add_library(util src/utility_functions.cpp)
+link_libraries(util)
+
+
+add_library(ship_components src/ship_components.cpp)
+link_libraries(ship_components)
+
+add_library(object src/object.cpp)
+link_libraries(object)
+
+add_library(ship src/ship.cpp)
+link_libraries(ship)
+
+add_library(terrain src/terrain.cpp)
+link_libraries(terrain)
+
+add_library(ocean src/ocean.cpp)
+link_libraries(ocean)
+
+
+add_library(player src/player.cpp)
+link_libraries(player)
+
+add_library(world src/world.cpp)
+link_libraries(world)
+
+add_library(game src/game.cpp)
+link_libraries(game)
 
 # Main executable
 add_executable(pirate_life src/pirate-cmake.cpp)

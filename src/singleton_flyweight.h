@@ -1,5 +1,5 @@
 #pragma once
-#include "raylib.h"
+#include "../lib/raylib/src/raylib.h"
 #include "config.h"
 
 class ObjectType {
