@@ -63,31 +63,31 @@ namespace tree{
         
         template<class UnaryPred>
         std::vector<std::reference_wrapper<std::unique_ptr<Object>>> get_objects(std::unique_ptr<o_node>& tree, UnaryPred p){
-        // pass the object to the predicate
-        auto predicate_objects = std::vector<std::reference_wrapper<std::unique_ptr<Object>>>{};
-        if(not tree){
+            // pass the object to the predicate
+            auto predicate_objects = std::vector<std::reference_wrapper<std::unique_ptr<Object>>>{};
+            if(not tree){
+                return predicate_objects;
+            }
+            for(auto& obj : tree->objects_){
+                if(p(obj)){
+                    predicate_objects.push_back(obj);
+                }
+            }
+            for(auto& child : tree->children_){
+                auto child_objects = get_objects(child, p);
+                for(auto child_object : child_objects){
+                    predicate_objects.push_back(child_object.get());
+                }
+            }
             return predicate_objects;
         }
-        for(auto& obj : tree->objects_){
-            if(p(obj)){
-                predicate_objects.push_back(obj);
-            }
-        }
-        for(auto& child : tree->children_){
-            auto child_objects = get_objects(child, p);
-            for(auto child_object : child_objects){
-                predicate_objects.push_back(child_object.get());
-            }
-        }
-        return predicate_objects;
-        }
             
-        // height, size and traversal
+        // height, size,  traversal and copying
         int height(std::unique_ptr<o_node>& tree);
         size_t size(std::unique_ptr<o_node>& tree);
         size_t num_nodes(std::unique_ptr<o_node>& tree);
         void traverse_tree(std::unique_ptr<o_node>& tree);
-        
+        std::unique_ptr<o_node> copy_tree(o_node* tree, std::unique_ptr<o_node>* parent);
         // tree characteristics
         bool is_root(std::unique_ptr<o_node>& tree);
         bool is_empty(std::unique_ptr<o_node>& tree);
@@ -123,8 +123,12 @@ namespace tree{
         : octree(root_bounds, objects.begin(), objects.end()) {
         }
         
-        // copy and move overloads
-        octree(const octree& other);
+        // copy and move overloads, root, depth and next id
+        octree(const octree& other)
+        :  max_depth_(other.max_depth_), next_id_(other.next_id_){
+            root_ = copy_tree(other.root_.get(), nullptr);
+        };
+
         octree(octree&& other);
         
         octree& operator= (const octree& other);

@@ -343,6 +343,27 @@ void tree::octree::prune_leaves(std::unique_ptr<o_node>& tree, double delta) {
     return;
 } 
 
+std::unique_ptr<tree::octree::o_node> tree::octree::copy_tree(o_node* tree, std::unique_ptr<o_node>* parent){
+    if(not tree){
+        return nullptr;
+    }
+    auto copy = std::make_unique<o_node>();
+    
+    // copy the bounds, life, depth
+    copy->bounds_ = tree->bounds_;
+    copy->depth_ = tree->depth_;
+    copy->life_ = tree->life_;
+    copy->parent_ = parent;
+    // and then the objects, deep copy 
+    for(auto & obj : tree->objects_){
+        copy->objects_.push_back(std::make_unique<Object>(*obj));
+    }
+    auto new_parent = &copy;
+    for(auto & child : tree->children_){
+        copy->children_.push_back(copy_tree(child.get(), new_parent));
+    }
+    return copy;
+}
 void tree::octree::traverse_tree(std::unique_ptr<o_node>& tree){
 		// print the box of the node 
 		if(!tree){

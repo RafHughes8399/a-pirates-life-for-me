@@ -54,11 +54,12 @@ public:
 		// init player
 		player.set_ship(ship.get());
 		world_objects_.push_back(ship); */
-	World(const World& other) = default;
+	World(const World& other)
+		: wind_(other.wind_), world_entities_(other.world_entities_){};
 
 	World(const World&& other);
 
-	World& operator=(const World& ohter);
+	World& operator=(const World& other);
 	World& operator= (const World && other);
 
 	void update();
