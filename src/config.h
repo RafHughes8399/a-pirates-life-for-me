@@ -1,5 +1,5 @@
-#pragma once
 #include <numbers>
+#include "../lib/raylib/src/raylib.h"
 
 // game models and textures
 // TODO: sort out the CWD for the model and texture paths
@@ -52,6 +52,9 @@
 #define NUM_CHUNKS 25
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
+
+
+
 // wind properties
 #define NO_WIND 4.2f
 #define WIND_SPEED_MIN	8.3f - NO_WIND
@@ -76,6 +79,5 @@
 
 
 
-
-// terrain image path
-#define TERRAIN_IMAGE "../../../images/heightmap.png"
+// locations 
+#define SHIP_START Vector3 {5, 0, 5}

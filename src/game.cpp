@@ -36,7 +36,7 @@ void Game::render(){
 	world_.render(camera_box);
 }
 
-World& Game::get_world(){
+environment::world& Game::get_world(){
 	return world_;
 }
 

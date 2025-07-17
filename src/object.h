@@ -12,23 +12,17 @@
 
 class Object {
 public:
-	Object(ObjectType& object_type, Vector3 position, Vector3 size, float density)
-		: object_type_(object_type),position_(position), size_(size), density_(density), volume_(size.x * size.y * size.z){
-		// generate the bounding box, min and max
-		update_bounding_box();
-	};	
-	Object(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
-		: object_type_(object_type),position_(position), size_(size), bounding_box_(BoundingBox{min, max}), density_(density), volume_(size.x * size.y * size.z){
+	Object(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id)
+		: object_type_(object_type),position_(position), bounding_box_(BoundingBox{min, max}), id_(id){
 		// generate the bounding box, min and max
 	};
 
 	Object(const Object& other)
-		: object_type_(other.object_type_), position_(other.position_), size_(other.size_), bounding_box_(other.bounding_box_), density_(other.density_), volume_(other.volume_){
+		: object_type_(other.object_type_), position_(other.position_), bounding_box_(other.bounding_box_), id_(other.id_){
 	};
 
 	Object(Object&& other)
-		: object_type_(other.object_type_), position_(std::move(other.position_)), size_(std::move(other.size_)), bounding_box_(std::move(other.bounding_box_)), density_(std::move(other.density_)),
-		volume_(std::move(other.volume_)) {
+		: object_type_(other.object_type_), position_(std::move(other.position_)), bounding_box_(std::move(other.bounding_box_)), id_(std::move(other.id_)){
 	};
 
 
@@ -44,9 +38,7 @@ public:
 
 	// getters and setters 
 	Model& get_model();
-	float get_density();
 	Vector3 get_position();
-	Vector3 get_size();
 	BoundingBox get_bounding_box();
 	void update_bounding_box();
 
@@ -59,24 +51,14 @@ protected:
 	// all objects have a model and position, and a hitbox
 	ObjectType& object_type_;
 	Vector3 position_;
-	
-	Vector3 size_;
 	BoundingBox bounding_box_;
-
-	// objects also have 
-	float density_;
-	float volume_;
 	int id_;
 };
 
 class MoveableObject : public Object {
-public:
-	MoveableObject(ObjectType& object_type, Vector3 position, Vector3 size, float density,  Vector3 velocity, float direction)
-		: Object(object_type, position, size, density), velocity_(velocity), direction_(direction) {
-		acceleration_ = Vector3{ 0.0,0.0,0.0 };
-	};	
-	MoveableObject(ObjectType& object_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density,  Vector3 velocity, float direction)
-		: Object(object_type, position, size, min, max,  density), velocity_(velocity), direction_(direction) {
+public:	
+	MoveableObject(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id,  Vector3 velocity, float direction)
+		: Object(object_type, position, min, max,  id), velocity_(velocity), direction_(direction) {
 		acceleration_ = Vector3{ 0.0,0.0,0.0 };
 	};
 	MoveableObject(const MoveableObject& other)
@@ -104,13 +86,8 @@ protected:
 
 class Ship : public MoveableObject {
 public:
-
-	Ship(ShipType& ship_type, Vector3 position, Vector3 size, float density, Vector3 velocity, float direction)
-		: MoveableObject(ship_type, position, size, density, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
-
-	};	
-	Ship(ShipType& ship_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density, Vector3 velocity, float direction)
-		: MoveableObject(ship_type, position, size, min, max,  density, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
+	Ship(ShipType& ship_type, Vector3 position, Vector3 min, Vector3 max, int id, Vector3 velocity = Vector3Zero(), float direction = 0.0f)
+		: MoveableObject(ship_type, position, min, max, id, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
 
 	};
 
@@ -155,8 +132,8 @@ private:
 
 class Ocean : public Object {
 public:
-	Ocean(OceanType& ocean_type, Vector3 position, Vector3 size, float density)
-		: Object(ocean_type, position, size, density){
+	Ocean(OceanType& ocean_type, Vector3 position, Vector3 min, Vector3 max, int id)
+		: Object(ocean_type, position, min, max, id){
 	};
 
 	Ocean(const Ocean& other)
@@ -173,12 +150,9 @@ private:
 
 class Terrain : public Object {
 public:
-	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 size, float density)
-		: Object(terrain_type, position, size, density) {
+	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 min, Vector3 max, int id)
+		: Object(terrain_type, position, min, max, id) {
 	};	
-	Terrain(ObjectType& terrain_type, Vector3 position, Vector3 size, Vector3 min, Vector3 max, float density)
-		: Object(terrain_type, position, size, min, max, density) {
-	};
 	Terrain(const Terrain& other)
 		: Object(other) {
 	};

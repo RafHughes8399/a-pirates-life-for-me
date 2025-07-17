@@ -61,7 +61,7 @@ void Ship::interact(Object* other){
 		// buoyancy
 		auto buoynacy = Vector3{ 0.0f,-0.2f,0.0f };
 		auto submerged_height = 0.2f;
-		auto p = ocean->get_density();
+		auto p = WATER_DENISTY;
 		auto g = GRAVITY;
 		auto v = get_width() * get_length() * submerged_height;
 		buoynacy.y += p * g * v * -1; // make it a better deeper

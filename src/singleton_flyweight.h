@@ -66,31 +66,6 @@ private:
     }
 };
 
-class TerrainType : public ObjectType {
-public:
-    // Delete copy and move operations
-    TerrainType(const TerrainType& other) = delete;
-    TerrainType(TerrainType&& other) = delete;
-    TerrainType& operator=(const TerrainType& other) = delete;
-    TerrainType& operator=(TerrainType&& other) = delete;
-
-    // Singleton getter
-    static TerrainType& get_instance() {
-        static TerrainType instance;
-        return instance;
-    }
-
-private:
-    // Private constructor
-    TerrainType()
-        : ObjectType(LoadModelFromMesh(GenMeshHeightmap(LoadImage(TERRAIN_IMAGE),
-            Vector3{ WORLD_X, WORLD_Y * 0.5, WORLD_Z })),
-            LoadTextureFromImage(LoadImage(TERRAIN_IMAGE))) {
-        // Additional initialization if needed
-    }
-};
-
-
 class HubType : public ObjectType {
 public:
     HubType(const HubType& other) = delete;

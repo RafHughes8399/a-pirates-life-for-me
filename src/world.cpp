@@ -1,107 +1,118 @@
-#include "world.h"
+#include "environment.h"
 #include "utility_functions.h"
 #include <algorithm>
 
-void World::generate_islands(){
-	/**
+#define HUB Vector3{ -80.0f, -4.3f, 50.0f}
+#define LAGOON Vector3{ -225.0f, -4.8f, 325.0f }
+#define REEF Vector3{75.0f, -1.2f, 500}
+#define BAY Vector3{300, -1.0f, 400}
+#define COVE Vector3{315, -1.4f, -350}
+#define ISLE Vector3{-275, -0.3f, -280}
+void environment::world::build_world(){
+	// build the ocean
+	std::unique_ptr<Object> ocean = std::make_unique<Ocean>(
+		OceanType::get_instance(),
+		WORLD_CENTRE,
+		WORLD_MIN,
+		WORLD_MAX,
+		world_entities_.get_next_id()
+	);
+	world_entities_.insert(ocean);
+	// build the ship
+	std::unique_ptr<Object> player_ship = std::make_unique<Ship>(
+		ShipType::get_instance(),
+		SHIP_START,
+		Vector3{SHIP_START.x -1.0f ,SHIP_START.y, SHIP_START.z -1.0f},
+		Vector3{SHIP_START.x + 1.6f, SHIP_START.y + 2.8f, SHIP_START.z + 1.6f},
+		world_entities_.get_next_id()
+	);
+	world_entities_.insert(player_ship);
+	// build the islands
+
+	generate_islands();
+}
+void environment::world::generate_islands(){
 	// for now, just generate the underlying terrain for all the islands in the game 
 	// TODO: position them
 	// TODO: calculate their bounding boxes
 	// TODO: texture them
 
-	// the object constructor is 
+	// the object constructor is, i think size and density can go, they seem not so necessary
 	// obj type,
 	// position
-	// size
 	// min
 	// max
-	// density.
+	// id, which you know.
 	
-	auto hub_position = Vector3{ -80.0f, -4.3f, 50.0f};
-
-	auto hub = std::make_shared<Terrain>(Terrain(
+	std::unique_ptr<Object> hub = std::make_unique<Terrain>(Terrain(
 		HubType::get_instance(),
-		hub_position,
-		Vector3{100, 25, 135},
-		Vector3{hub_position.x - 70.0f, hub_position.y + 1.6f, hub_position.z  - 75.0f},
-		Vector3{hub_position.x + 75.0f, hub_position.y + 14, hub_position.z + 25.0f},
-		100			
+		HUB,
+		Vector3{HUB.x - 70.0f, HUB.y + 1.6f, HUB.z  - 75.0f},
+		Vector3{HUB.x + 75.0f, HUB.y + 14, HUB.z + 25.0f},
+		world_entities_.get_next_id()		
 	));
-	auto lagoon_position = Vector3{ -225.0f, -4.8f, 325.0f };
-	auto lagoon = std::make_shared<Terrain>(Terrain(
+
+	std::unique_ptr<Object> lagoon = std::make_unique<Terrain>(Terrain(
 		LagoonType::get_instance(),
-		lagoon_position,
-		Vector3{ 125, 25, 125 },
-		Vector3{lagoon_position.x - 80.0f, lagoon_position.y - 0.2f, lagoon_position.z - 75.0f},
-		Vector3{lagoon_position.x + 80.0f, lagoon_position.y + 14.2f, lagoon_position.z + 70.0f},
-		100
+		LAGOON,
+		Vector3{LAGOON.x - 80.0f, LAGOON.y - 0.2f, LAGOON.z - 75.0f},
+		Vector3{LAGOON.x + 80.0f, LAGOON.y + 14.2f, LAGOON.z + 70.0f},
+		world_entities_.get_next_id()
 	));
 
 	// make the reef
-	auto reef_position = Vector3{75.0f, -1.2f, 500};
-	auto reef = std::make_shared<Terrain>(Terrain(
+	std::unique_ptr<Object> reef = std::make_unique<Terrain>(Terrain(
 		ReefType::get_instance(),
-		reef_position,
-		Vector3{ 100, 100, 100 },
-		Vector3{reef_position.x - 40.0f, reef_position.y - 1.5f, reef_position.z - 90.0f},
-		Vector3{reef_position.x + 39.0f, reef_position.y + 4.5f, reef_position.z + 100.0f},
-		100
+		REEF,
+		Vector3{REEF.x - 40.0f, REEF.y - 1.5f, REEF.z - 90.0f},
+		Vector3{REEF.x + 39.0f, REEF.y + 4.5f, REEF.z + 100.0f},
+		world_entities_.get_next_id()
 	));
-	auto bay_position = Vector3{300, -1.0f, 400};
-	auto bay = std::make_shared<Terrain>(Terrain(
+	std::unique_ptr<Object> bay = std::make_unique<Terrain>(Terrain(
 		BayType::get_instance(),
-		bay_position,
-		Vector3{ 100, 10, 100 },
-		Vector3{bay_position.x - 94.9f, bay_position.y -1.0f, bay_position.z - 63.0f},
-		Vector3{bay_position.x + 101.5f, bay_position.y + 11.2f, bay_position.z + 66.2f},
+		BAY,
+		Vector3{BAY.x - 94.9f, BAY.y -1.0f, BAY.z - 63.0f},
+		Vector3{BAY.x + 101.5f, BAY.y + 11.2f, BAY.z + 66.2f},
 		100
 	));
 
-
-	auto min = Vector3{191, -1, -432};
-	auto max = Vector3{420, 9.2, -256};
-	auto cove_position = Vector3{315, -1.4f, -350};
-	auto cove = std::make_shared<Terrain>(Terrain(
+	std::unique_ptr<Object> cove = std::make_unique<Terrain>(Terrain(
 		CoveType::get_instance(),
-		cove_position,
-		Vector3{100, 10, 100},
-		Vector3{cove_position.x - 114 , cove_position.y -1.2f, cove_position.z - 82},
-		Vector3{cove_position.x + 125, cove_position.y + 11.2f, cove_position.z + 94},
-		100
+		COVE,
+		Vector3{COVE.x - 114 , COVE.y -1.2f, COVE.z - 82},
+		Vector3{COVE.x + 125, COVE.y + 11.2f, COVE.z + 94},
+		world_entities_.get_next_id()
 	));
 
 	// make the isle
-	auto isle_position = Vector3{-275, -0.3f, -280};
-	auto isle = std::make_shared<Terrain>(Terrain(
+	std::unique_ptr<Object> isle = std::make_unique<Terrain>(Terrain(
 		IsleType::get_instance(),
-		isle_position,
-		Vector3{100, 10, 100},
-		Vector3{isle_position.x - 60.5f, isle_position.y - 1.7f, isle_position.z - 102.5f},
-		Vector3{isle_position.x + 49.5f, isle_position.y + 8.2f, isle_position.z + 116.5f},
-		100
+		ISLE,
+		Vector3{ISLE.x - 60.5f, ISLE.y - 1.7f, ISLE.z - 102.5f},
+		Vector3{ISLE.x + 49.5f, ISLE.y + 8.2f, ISLE.z + 116.5f},
+		world_entities_.get_next_id()
 	));
 
 	// make the bay
-	world_objects_.push_back(hub);
-	world_objects_.push_back(lagoon);
-	world_objects_.push_back(reef);
-	world_objects_.push_back(bay);
-	world_objects_.push_back(isle);
-	world_objects_.push_back(cove);
-	*/
-
+	world_entities_.insert(hub);
+	world_entities_.insert(lagoon);
+	world_entities_.insert(reef);
+	world_entities_.insert(bay);
+	world_entities_.insert(isle);
+	world_entities_.insert(cove);
 }
 
-void World::update(){
+void environment::world::update(){
 	// based on player position, update based on simulation distance
 	// check for interactions 
 	auto delta = GetFrameTime();
 	world_entities_.update(delta);
+
 	// randomise the wind every 90 seconds ? 
 	wind_.update(GetTime());
 }
 
-void World::render(BoundingBox& camera_view_box) {
+void environment::world::render(BoundingBox& camera_view_box) {
 	// TODO: frustrum culling, for now just render everything in the tree 
 	world_entities_.render();
 }

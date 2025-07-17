@@ -1,5 +1,5 @@
 #pragma once
-#include "world.h"
+#include "environment.h"
 #include "config.h"
 // #include "hud.h"
 
@@ -10,7 +10,7 @@
 class Game {
 public:
 	~Game() = default;
-	Game(World& world, Player& player)
+	Game(environment::world& world, Player& player)
 		: world_(world), player_(player) {
 
 
@@ -43,7 +43,7 @@ public:
 	void update();
 	void render();
 
-	World& get_world();
+	environment::world& get_world();
 
 	Player& get_player();
 
@@ -52,7 +52,7 @@ public:
 	// and define what happens on those events
 
 private:
-	World& world_;
+	environment::world& world_;
 	Player& player_;
 	// Hud hud_;
 

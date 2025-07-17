@@ -24,7 +24,7 @@ int main(){
 
 	// temp - will setup some obj factory
 	Player player = Player();
-	World world = World(player);
+	auto world = environment::world(player);
 
 	Game game = Game(world, player);
 	DisableCursor();
