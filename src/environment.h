@@ -51,13 +51,13 @@ class wind {
 		void update(double time);
 		Vector3 get_direction_coefficient();
 
-		void add_ship_subscriber(std::weak_ptr<Ship>& ship);
-		void remove_ship_subscriber(std::weak_ptr<Ship>& ship);
+		void add_ship_subscriber(Ship* & ship);
+		void remove_ship_subscriber(Ship* & ship);
 		void notify_ships();
 		void notify_ship(size_t ship_);
 
 	private:
-		std::vector<std::weak_ptr<Ship>> ship_subscribers_;
+		std::vector<Ship*> ship_subscribers_;
 		float direction_;
 		float speed_; 
 		double time_randomised_ = WIND_CHANGE_TIME;
@@ -65,18 +65,10 @@ class wind {
 class world {
 		public:
 		// CONSTRUCTORS
-		world(Player& player)
+		world(player::player& player)
 		: wind_(wind()), world_entities_(tree::octree(WORLD_BOX)){
-			build_world();
+			build_world(wind_, player);
 		}
-		/* 
-		std::weak_ptr<Ship> ship_weak = ship;	
-		wind_.add_ship_subscriber(ship_weak);
-		wind_.notify_ship(0);	
-		
-		// init player
-		player.set_ship(ship.get());
-		world_objects_.push_back(ship); */
 		world(const world& other)
 		: wind_(other.wind_), world_entities_(other.world_entities_){};
 		
@@ -88,9 +80,9 @@ class world {
 		void update();
 		void render(BoundingBox& camera_view_box);
 		
-		private:
+	private:
 		void generate_islands();
-		void build_world();
+		void build_world(wind& wind, player::player& player);
 		wind wind_;
 		tree::octree world_entities_;
 		

@@ -1,13 +1,13 @@
 #include "game.h"
 
-void Game::update(){
+void game::game::update(){
 	auto delta = GetFrameTime();
 	player_.update(delta);
 	// pass in player pos
 	world_.update();
 }
 
-void Game::render(){
+void game::game::render(){
 	// render the player 
 	player_.render();
 	// render the world based on the player chunk 
@@ -36,10 +36,10 @@ void Game::render(){
 	world_.render(camera_box);
 }
 
-environment::world& Game::get_world(){
+environment::world& game::game::get_world(){
 	return world_;
 }
 
-Player& Game::get_player() {
+player::player& game::game::get_player() {
 	return player_;
 }

@@ -36,26 +36,27 @@ Vector3 environment::wind::get_direction_coefficient(){
 	return Vector3{sinf(direction_), 0.0f, sinf(direction_)};
 }
 
-void environment::wind::add_ship_subscriber(std::weak_ptr<Ship>& ship)
+void environment::wind::add_ship_subscriber(Ship* & ship)
 {
 	ship_subscribers_.push_back(ship);
 }
 
-void environment::wind::remove_ship_subscriber(std::weak_ptr<Ship>& ship){
-	ship_subscribers_.erase(std::remove_if(ship_subscribers_.begin(), ship_subscribers_.end(),
-		[&ship](const std::weak_ptr<Ship>& s) { return s.lock() == ship.lock(); }), ship_subscribers_.end());
+void environment::wind::remove_ship_subscriber(Ship* & ship){
+	auto new_end = std::remove_if(ship_subscribers_.begin(), ship_subscribers_.end(), 
+		[ship] (auto& subscriber) -> bool {
+			return ship == subscriber;
+		});
+	ship_subscribers_.erase(new_end, ship_subscribers_.end());
 }
 
 void environment::wind::notify_ships(){
 	for (auto & ship : ship_subscribers_) {
-		if (auto s = ship.lock()) {
-			s->update_sail_wind(direction_, speed_);
-		}
+		ship->update_sail_wind(direction_, speed_);
 	}
 }
 
 void environment::wind::notify_ship(size_t ship){
 	if (ship < ship_subscribers_.size()) {
-		ship_subscribers_[ship].lock()->update_sail_wind(direction_, speed_);
+		ship_subscribers_[ship]->update_sail_wind(direction_, speed_);
 	}
 }

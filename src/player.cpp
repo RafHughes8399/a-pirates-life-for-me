@@ -1,9 +1,7 @@
-#include "player.h"
-#include "config.h"
-#include "utility_functions.h"
+#include "game.h"
 
 // player is updated after the objects so this should wok
-void Player::update(float delta) {
+void player::player::update(float delta) {
 	check_key_input(delta);
 	auto ship_position = ship_->get_position();
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
@@ -12,19 +10,19 @@ void Player::update(float delta) {
 	chunk_ = utility::position_to_chunk(ship_position);
 	
 }
-void Player::render() {
+void player::player::render() {
 	//this is where the hud will be drawn and other components
 }
 
-Camera3D& Player::get_camera(){
+Camera3D& player::player::get_camera(){
 	return camera_;
 }
 
-std::pair<int, int>& Player::get_chunk(){
+std::pair<int, int>& player::player::get_chunk(){
 	return chunk_;
 }
 
-void Player::move_camera(int mode, Vector3& difference){
+void player::player::move_camera(int mode, Vector3& difference){
 	Vector2 delta_mouse = GetMouseDelta();
 	auto delta_time = GetFrameTime();
 	// my version of camera update
@@ -52,15 +50,15 @@ void Player::move_camera(int mode, Vector3& difference){
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
 }
 
-Ship* Player::get_ship(){
+Ship* player::player::get_ship(){
 	return ship_;
 }
 
-void Player::set_ship(Ship* ship){
+void player::player::set_ship(Ship* ship){
 	ship_ = ship;
 }
 
-void Player::check_key_input(float delta){
+void player::player::check_key_input(float delta){
 	// iterate through both key maps
 
 
@@ -76,7 +74,7 @@ void Player::check_key_input(float delta){
 	}
 }
 
-void Player::set_default_key_map(){
+void player::player::set_default_key_map(){
 	// fill the control maps, figure out how to e
 
 	key_down_inputs_[KEY_A] = [this](float delta) { ship_->steer_left(delta); };

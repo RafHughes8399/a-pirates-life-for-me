@@ -8,7 +8,7 @@
 #define BAY Vector3{300, -1.0f, 400}
 #define COVE Vector3{315, -1.4f, -350}
 #define ISLE Vector3{-275, -0.3f, -280}
-void environment::world::build_world(){
+void environment::world::build_world(wind& wind, player::player& player){
 	// build the ocean
 	std::unique_ptr<Object> ocean = std::make_unique<Ocean>(
 		OceanType::get_instance(),
@@ -26,6 +26,13 @@ void environment::world::build_world(){
 		Vector3{SHIP_START.x + 1.6f, SHIP_START.y + 2.8f, SHIP_START.z + 1.6f},
 		world_entities_.get_next_id()
 	);
+
+	//let the player ship subscribe to the wind to listen for updates 
+	auto player_ship_ptr = static_cast<Ship*>(player_ship.get());
+	wind_.add_ship_subscriber(player_ship_ptr);
+	//then set the player ship pointer, so it can be tracked
+	player.set_ship(player_ship_ptr);
+
 	world_entities_.insert(player_ship);
 	// build the islands
 

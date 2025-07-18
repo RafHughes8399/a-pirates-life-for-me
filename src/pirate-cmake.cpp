@@ -11,9 +11,9 @@
 
 #include "../lib/raylib/src/raylib.h"
 
-void tick(Game& world);
-void render(Game& world);
-void debug(Camera3D& camera, Game& game);
+void tick(game::game& world);
+void render(game::game& world);
+void debug(Camera3D& camera, game::game& game);
 
 int main(){
 	auto width = GetScreenWidth();
@@ -23,10 +23,10 @@ int main(){
 	// setup the camera
 
 	// temp - will setup some obj factory
-	Player player = Player();
+	auto player = player::player();
 	auto world = environment::world(player);
 
-	Game game = Game(world, player);
+	auto game = game::game(world, player);
 	DisableCursor();
 	SetTargetFPS(FPS);
 	// adjust the current working directory
@@ -37,11 +37,11 @@ int main(){
 	CloseWindow();
 }
 
- void tick(Game& game) {
+ void tick(game::game& game) {
 	game.update();
 }
 
-void render(Game& game) {
+void render(game::game& game) {
 	BeginDrawing();
 	ClearBackground(WHITE);
 	auto camera = game.get_player().get_camera();
@@ -56,7 +56,7 @@ void render(Game& game) {
 	EndDrawing();
 }
 
-void debug(Camera3D& camera, Game& game) {
+void debug(Camera3D& camera, game::game& game) {
 
 	auto ship = game.get_player().get_ship();
 	// FPS Counter
