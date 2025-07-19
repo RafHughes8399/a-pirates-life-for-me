@@ -2,7 +2,7 @@
 #include "config.h"
 
 #include "../lib/raylib/src/raymath.h"
-
+#include "../lib/raylib/src/raylib.h"
 namespace rendering{
     struct plane {
         Vector3 normal_;
@@ -13,6 +13,8 @@ namespace rendering{
 
         plane(Vector3 point, Vector3 normal)
         : normal_(normal), distance_(Vector3DotProduct(normal, point)){}
+
+        float signed_distance_to_plane(Vector3& point);
     };
 
     class frustrum{
@@ -54,6 +56,8 @@ namespace rendering{
             frustrum& operator=(const frustrum& other);
 
             frustrum& operator=(frustrum&& other);
+
+            bool contains(BoundingBox& object_box);
 
         private:
             plane top_;

@@ -78,7 +78,7 @@ class world {
 		world& operator= (const world && other);
 		
 		void update();
-		void render();
+		void render(rendering::frustrum& rendering_frustrum);
 		
 	private:
 		void generate_islands();

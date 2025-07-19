@@ -39,7 +39,7 @@ public:
 	// getters and setters 
 	Model& get_model();
 	Vector3 get_position();
-	BoundingBox get_bounding_box();
+	BoundingBox& get_bounding_box();
 	void update_bounding_box();
 
 	// operator overloads

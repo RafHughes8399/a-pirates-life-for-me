@@ -414,20 +414,17 @@ void tree::octree::update(double delta){
     // read the blog for a better implementation 
 }
 
-void tree::octree::render(std::unique_ptr<o_node>& tree, BoundingBox bounds){
+void tree::octree::render(std::unique_ptr<o_node>& tree){
     // if null tree skip 
     if(not tree){
         return; 
     }
     // if tree in bounds, render objects 
-    if(utility::contains(tree->bounds_, bounds)){
-        for(auto & object : tree->objects_){
+    for(auto & object : tree->objects_){
             object->render();
-        }
     }
     // then iterate through children, only render those in bounds
     for(auto & child : tree->children_){
-        render(child, bounds);
+        render(child);
     }
-
 }

@@ -119,7 +119,19 @@ void environment::world::update(){
 	wind_.update(GetTime());
 }
 
-void environment::world::render() {
+void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// TODO: frustrum culling, for now just render everything in the tree 
-	world_entities_.render();
+	// pass the frustrum in, check objects against it
+	auto num_rendered = 0;
+	auto entities = world_entities_.get_objects();
+	for(auto & entity: entities){
+		// check if the entitiy
+		if(rendering_frustrum.contains(entity.get()->get_bounding_box())){
+			entity.get()->render();
+			num_rendered++;
+		}
+
+		// quick debug to check if this is working 
+		std::cout << "total objects: " << entities.size() << " || objects rendered: " << num_rendered << std::endl;
+	}
 }

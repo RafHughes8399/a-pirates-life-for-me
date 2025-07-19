@@ -39,7 +39,7 @@ Model& Object::get_model(){
 Vector3 Object::get_position(){
 	return position_;
 }
-BoundingBox Object::get_bounding_box(){
+BoundingBox& Object::get_bounding_box(){
 	return bounding_box_;
 }
 

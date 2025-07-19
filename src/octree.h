@@ -97,7 +97,7 @@ namespace tree{
         void prune_leaves(std::unique_ptr<o_node>& tree, double delta);
         
         // update and render
-        void render(std::unique_ptr<o_node>& tree, BoundingBox bounds);
+        void render(std::unique_ptr<o_node>& tree);
         public:
         // CONSTRUCTORS
         ~octree() = default;
@@ -169,8 +169,8 @@ namespace tree{
         void update(double delta);
 
         // render the tree within a certain bounding box, default is the whole tree
-        void render(BoundingBox bounds = WORLD_BOX){
-            render(root_, bounds);
+        void render(){
+            render(root_);
         }
 
         

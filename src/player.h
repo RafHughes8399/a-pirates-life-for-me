@@ -51,6 +51,8 @@ namespace player{
 		void move_camera(int mode, Vector3& new_position);
 		Ship* get_ship();
 		void set_ship(Ship* ship);
+
+		rendering::frustrum& get_frustrum();
 		private:
 			void check_key_input(float delta);
 			void set_default_key_map();

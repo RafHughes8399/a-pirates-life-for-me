@@ -11,7 +11,7 @@ void game::game::render(){
 	// render the player 
 	player_.render();
 	// then the world
-	world_.render();
+	world_.render(player_.get_frustrum());
 
 }
 

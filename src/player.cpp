@@ -18,6 +18,9 @@ Camera3D& player::player::get_camera(){
 	return camera_;
 }
 
+rendering::frustrum& player::player::get_frustrum(){
+	return camera_frustrum_;
+}
 void player::player::move_camera(int mode, Vector3& difference){
 	Vector2 delta_mouse = GetMouseDelta();
 	auto delta_time = GetFrameTime();

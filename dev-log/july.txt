@@ -32,3 +32,7 @@
 -> ok i have the frustrum, then i need to create it and pass it to render 
 -> make sure the frustrum updates with the camera movement
 -> pass the
+
+-> the player has the frustrum, the game has the player, the game connects the world and the player
+
+-> the world gets the entities, then checks  
