@@ -63,7 +63,7 @@ class wind {
 		double time_randomised_ = WIND_CHANGE_TIME;
 	};
 class world {
-		public:
+	public:
 		// CONSTRUCTORS
 		world(player::player& player)
 		: wind_(wind()), world_entities_(tree::octree(WORLD_BOX)){
@@ -78,7 +78,7 @@ class world {
 		world& operator= (const world && other);
 		
 		void update();
-		void render(BoundingBox& camera_view_box);
+		void render();
 		
 	private:
 		void generate_islands();

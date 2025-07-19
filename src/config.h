@@ -22,8 +22,7 @@
 
 // game properties
 #define FPS 60
-#define RENDER_DISTANCE 250 //  units
-#define SIMULATION_DISTANCE 2 // chunk radius
+#define ASPECT_RATIO GetScreenWidth() / GetScreenHeight()
 
 
 // physics constants
@@ -38,6 +37,11 @@
 #define CAMERA_ORBITAL_SPEED 0.5f       // Radians per second
 #define CAMERA_MIN_LEVEL 0.25f
 #define CAMERA_MOUSE_MOVE_SENSITIVITY 0.003f
+
+// rendering properties
+#define FOV 120
+#define NEAR 0.5 // start with 0.5, i think some work can be done in calculating the target of the camera
+#define FAR 100 // go for 100 units for now,
 
 
 // angles

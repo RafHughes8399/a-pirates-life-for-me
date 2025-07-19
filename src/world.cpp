@@ -119,7 +119,7 @@ void environment::world::update(){
 	wind_.update(GetTime());
 }
 
-void environment::world::render(BoundingBox& camera_view_box) {
+void environment::world::render() {
 	// TODO: frustrum culling, for now just render everything in the tree 
 	world_entities_.render();
 }

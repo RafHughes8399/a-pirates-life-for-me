@@ -13,7 +13,22 @@
 -> switch world to use the octree
 -> add an object constructor to take in id, adjust the variables
 -> swtich from shared and weak to unique and * 
--> go lower case and change from object to entities, establish a namespace
--> change how world, game and player interact, make sure you are using references
 -> then frustrum culling and rendering
 -> then event and collision interaction system
+
+
+-> switch to raw pointers  x 
+-> finish world setup x 
+-> go lower case and change from object to entities, establish a namespace
+-> get rid of warnings, clean up model and texture paths
+
+-> frustrum culling 
+-> octree moving entities 
+-> event handling and interaction infrastructure 
+-> then 
+
+
+-> a frustrum is comprised of 6 planes
+-> ok i have the frustrum, then i need to create it and pass it to render 
+-> make sure the frustrum updates with the camera movement
+-> pass the

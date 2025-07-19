@@ -7,8 +7,8 @@ void player::player::update(float delta) {
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
 	
 	move_camera(camera_mode_, target_difference);
-	chunk_ = utility::position_to_chunk(ship_position);
 	
+	// recalculate the frustrum if the camera has moved()
 }
 void player::player::render() {
 	//this is where the hud will be drawn and other components
@@ -16,10 +16,6 @@ void player::player::render() {
 
 Camera3D& player::player::get_camera(){
 	return camera_;
-}
-
-std::pair<int, int>& player::player::get_chunk(){
-	return chunk_;
 }
 
 void player::player::move_camera(int mode, Vector3& difference){

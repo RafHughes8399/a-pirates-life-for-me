@@ -71,7 +71,6 @@ link_libraries(event_handler)
 add_library(util src/utility_functions.cpp)
 link_libraries(util)
 
-
 add_library(ship_components src/ship_components.cpp)
 link_libraries(ship_components)
 
@@ -93,6 +92,8 @@ link_libraries(wind)
 add_library(octree src/octree.cpp)
 link_libraries(octree)
 
+add_library(rendering src/rendering.cpp)
+link_libraries(rendering)
 add_library(player src/player.cpp)
 link_libraries(player)
 

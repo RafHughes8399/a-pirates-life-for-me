@@ -19,11 +19,7 @@ namespace game{
 		~game() = default;
 		game(environment::world& world, player::player& player)
 			: world_(world), player_(player) {
-
-
 			// here in the game, add event listeners basewd on what you want to listen to
-			camera_height_ = 2.0 * RENDER_DISTANCE * tanf(player_.get_camera().fovy * DEG2RAD / 2.0);
-			camera_width_ = camera_height_ / (GetScreenWidth() / GetScreenHeight());
 		}
 		game(const game& other)
 			: world_(other.world_), player_(other.player_) {
@@ -63,8 +59,5 @@ namespace game{
 		player::player& player_;
 		// Hud hud_;
 
-
-		float camera_height_;
-		float camera_width_;
 	};
 }
