@@ -3,21 +3,22 @@
 
 // game models and textures
 // TODO: sort out the CWD for the model and texture paths
-#define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown.glb"
-#define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
+// CWD is build
+#define PIRATE_SHIP_MODEL "../models/medium_ship_brown.glb"
+#define PIRATE_SHIP_TEXTURE "../textures/pirate-textures/pirate_ship_texture.png"
 
 
-#define HUB_TERRAIAN_MODEL "../../../models/hub_terrain.glb"
-#define COVE_TERRAIN_MODEL "../../../models/cove_terrain.glb"
-#define LAGOON_TERRAIN_MODEL "../../../models/lagoon_terrain.glb"
-#define BAY_TERRAIN_MODEL "../../../models/bay_terrain.glb"
-#define ISLE_TERRAIN_MODEL "../../../models/isle_terrain.glb"
-#define REEF_TERRAIN_MODEL "../../../models/reef_terrain.glb"
+#define HUB_TERRAIAN_MODEL "../models/hub_terrain.glb"
+#define COVE_TERRAIN_MODEL "../models/cove_terrain.glb"
+#define LAGOON_TERRAIN_MODEL "../models/lagoon_terrain.glb"
+#define BAY_TERRAIN_MODEL "../models/bay_terrain.glb"
+#define ISLE_TERRAIN_MODEL "../models/isle_terrain.glb"
+#define REEF_TERRAIN_MODEL "../models/reef_terrain.glb"
 
 // game textures 
-#define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"
-#define WATER_TEXTURE "../../../textures/environment-textures/Core/WaterNormals_01.png"
-#define SAND_TEXTURE "../../../textures/environment-textures/Core/Sand_Texture_01.png"
+#define TEXTURE3B "../textures/pirate-textures/Texture_03_B.png"
+#define WATER_TEXTURE "../textures/environment-textures/Core/WaterNormals_01.png"
+#define SAND_TEXTURE "../textures/environment-textures/Core/Sand_Texture_01.png"
 
 
 // game properties

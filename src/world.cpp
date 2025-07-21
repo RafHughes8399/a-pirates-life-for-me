@@ -10,6 +10,8 @@
 #define ISLE Vector3{-275, -0.3f, -280}
 void environment::world::build_world(wind& wind, player::player& player){
 	// build the ocean
+
+	std::cout << "building the world " << std::endl;
 	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
 		OceanType::get_instance(),
 		WORLD_CENTRE,

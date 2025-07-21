@@ -40,8 +40,10 @@
 
 TODO
 -> fix model paths
--> rename objects and establish namespaces
--> get rid of warnings
+-> rename objects and establish namespaces x  
+-> get rid of warnings x 
 -> test frustrum stuff 
 
 -> then merge into master
+
+-> then move onto other stuff 

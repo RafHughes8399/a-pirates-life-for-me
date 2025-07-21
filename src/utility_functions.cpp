@@ -50,6 +50,9 @@ float utility::get_maximal_variance_axis(Vector3 bb, int axis) {
 	case 2:
 		return bb.z;
 		break;
+	default:
+		return -1;
+		break;
 	}
 }
 

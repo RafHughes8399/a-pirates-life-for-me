@@ -14,20 +14,17 @@ namespace player{
 	class player {
 		public:
 		~player() = default;
-		player(entities::ship* ship)
-		:camera_(Camera3D{}), ship_(ship), camera_mode_(CAMERA_THIRD_PERSON),
+		player()
+		:camera_(Camera3D{}), ship_(nullptr), camera_mode_(CAMERA_THIRD_PERSON),
 		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR){
+			std::cout << "building player" << std::endl;
 			camera_.position = Vector3{ 0.0, 5.0, 5.0 };
-			camera_.target = ship_->get_position(); // the camera looks at the cube, slightly above sea level
+			camera_.target = SHIP_START; // the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
 			camera_.fovy = FOV;
 			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
 			set_default_key_map();
-		}	
-		player()
-		:player(nullptr){
-
-		};
+		}
 		player(const player& other)
 			: camera_(other.camera_), ship_(other.ship_), camera_mode_(other.camera_mode_), key_pressed_inputs_(other.key_pressed_inputs_),
 			key_down_inputs_(other.key_down_inputs_), camera_frustrum_(other.camera_frustrum_){
