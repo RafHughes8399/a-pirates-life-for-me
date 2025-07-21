@@ -36,3 +36,12 @@
 -> the player has the frustrum, the game has the player, the game connects the world and the player
 
 -> the world gets the entities, then checks  
+
+
+TODO
+-> fix model paths
+-> rename objects and establish namespaces
+-> get rid of warnings
+-> test frustrum stuff 
+
+-> then merge into master
