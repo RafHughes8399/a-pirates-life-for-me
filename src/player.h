@@ -40,6 +40,7 @@ namespace player{
 			ship_ = other.ship_;
 			camera_mode_ = other.camera_mode_;
 			camera_frustrum_ = other.camera_frustrum_;
+			return *this;
 		}
 		player& operator= (const player&& other);
 			
