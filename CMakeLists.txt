@@ -74,8 +74,8 @@ link_libraries(util)
 add_library(ship_components src/ship_components.cpp)
 link_libraries(ship_components)
 
-add_library(object src/object.cpp)
-link_libraries(object)
+add_library(entities src/entities.cpp)
+link_libraries(entities)
 
 add_library(ship src/ship.cpp)
 link_libraries(ship)

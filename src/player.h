@@ -2,7 +2,7 @@
 #include <functional>
 #include <utility>
 
-#include "object.h"
+#include "entities.h"
 #include "config.h"
 #include "rendering.h"
 
@@ -14,7 +14,7 @@ namespace player{
 	class player {
 		public:
 		~player() = default;
-		player(Ship* ship)
+		player(entities::ship* ship)
 		:camera_(Camera3D{}), ship_(ship), camera_mode_(CAMERA_THIRD_PERSON),
 		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR){
 			camera_.position = Vector3{ 0.0, 5.0, 5.0 };
@@ -49,8 +49,8 @@ namespace player{
 		Camera3D& get_camera();
 		std::pair<int, int>& get_chunk();
 		void move_camera(int mode, Vector3& new_position);
-		Ship* get_ship();
-		void set_ship(Ship* ship);
+		entities::ship* get_ship();
+		void set_ship(entities::ship* ship);
 
 		rendering::frustrum& get_frustrum();
 		private:
@@ -60,7 +60,7 @@ namespace player{
 			rendering::frustrum camera_frustrum_;
 			int camera_mode_;
 			
-			Ship* ship_;
+			entities::ship* ship_;
 		
 			std::map<int, std::function<void(float)>> key_down_inputs_;
 			std::map<int, std::function<void()>> key_pressed_inputs_;

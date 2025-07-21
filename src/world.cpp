@@ -10,7 +10,7 @@
 #define ISLE Vector3{-275, -0.3f, -280}
 void environment::world::build_world(wind& wind, player::player& player){
 	// build the ocean
-	std::unique_ptr<Object> ocean = std::make_unique<Ocean>(
+	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
 		OceanType::get_instance(),
 		WORLD_CENTRE,
 		WORLD_MIN,
@@ -19,7 +19,7 @@ void environment::world::build_world(wind& wind, player::player& player){
 	);
 	world_entities_.insert(ocean);
 	// build the ship
-	std::unique_ptr<Object> player_ship = std::make_unique<Ship>(
+	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::ship>(
 		ShipType::get_instance(),
 		SHIP_START,
 		Vector3{SHIP_START.x -1.0f ,SHIP_START.y, SHIP_START.z -1.0f},
@@ -28,7 +28,7 @@ void environment::world::build_world(wind& wind, player::player& player){
 	);
 
 	//let the player ship subscribe to the wind to listen for updates 
-	auto player_ship_ptr = static_cast<Ship*>(player_ship.get());
+	auto player_ship_ptr = static_cast<entities::ship*>(player_ship.get());
 	wind_.add_ship_subscriber(player_ship_ptr);
 	//then set the player ship pointer, so it can be tracked
 	player.set_ship(player_ship_ptr);
@@ -51,7 +51,7 @@ void environment::world::generate_islands(){
 	// max
 	// id, which you know.
 	
-	std::unique_ptr<Object> hub = std::make_unique<Terrain>(Terrain(
+	std::unique_ptr<entities::entity> hub = std::make_unique<entities::terrain>(entities::terrain(
 		HubType::get_instance(),
 		HUB,
 		Vector3{HUB.x - 70.0f, HUB.y + 1.6f, HUB.z  - 75.0f},
@@ -59,7 +59,7 @@ void environment::world::generate_islands(){
 		world_entities_.get_next_id()		
 	));
 
-	std::unique_ptr<Object> lagoon = std::make_unique<Terrain>(Terrain(
+	std::unique_ptr<entities::entity> lagoon = std::make_unique<entities::terrain>(entities::terrain(
 		LagoonType::get_instance(),
 		LAGOON,
 		Vector3{LAGOON.x - 80.0f, LAGOON.y - 0.2f, LAGOON.z - 75.0f},
@@ -68,14 +68,14 @@ void environment::world::generate_islands(){
 	));
 
 	// make the reef
-	std::unique_ptr<Object> reef = std::make_unique<Terrain>(Terrain(
+	std::unique_ptr<entities::entity> reef = std::make_unique<entities::terrain>(entities::terrain(
 		ReefType::get_instance(),
 		REEF,
 		Vector3{REEF.x - 40.0f, REEF.y - 1.5f, REEF.z - 90.0f},
 		Vector3{REEF.x + 39.0f, REEF.y + 4.5f, REEF.z + 100.0f},
 		world_entities_.get_next_id()
 	));
-	std::unique_ptr<Object> bay = std::make_unique<Terrain>(Terrain(
+	std::unique_ptr<entities::entity> bay = std::make_unique<entities::terrain>(entities::terrain(
 		BayType::get_instance(),
 		BAY,
 		Vector3{BAY.x - 94.9f, BAY.y -1.0f, BAY.z - 63.0f},
@@ -83,7 +83,7 @@ void environment::world::generate_islands(){
 		100
 	));
 
-	std::unique_ptr<Object> cove = std::make_unique<Terrain>(Terrain(
+	std::unique_ptr<entities::entity> cove = std::make_unique<entities::terrain>(entities::terrain(
 		CoveType::get_instance(),
 		COVE,
 		Vector3{COVE.x - 114 , COVE.y -1.2f, COVE.z - 82},
@@ -92,7 +92,7 @@ void environment::world::generate_islands(){
 	));
 
 	// make the isle
-	std::unique_ptr<Object> isle = std::make_unique<Terrain>(Terrain(
+	std::unique_ptr<entities::entity> isle = std::make_unique<entities::terrain>(entities::terrain(
 		IsleType::get_instance(),
 		ISLE,
 		Vector3{ISLE.x - 60.5f, ISLE.y - 1.7f, ISLE.z - 102.5f},
@@ -123,8 +123,8 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// TODO: frustrum culling, for now just render everything in the tree 
 	// pass the frustrum in, check objects against it
 	auto num_rendered = 0;
-	auto entities = world_entities_.get_objects();
-	for(auto & entity: entities){
+	auto w_entities = world_entities_.get_objects();
+	for(auto & entity : w_entities){
 		// check if the entitiy
 		if(rendering_frustrum.contains(entity.get()->get_bounding_box())){
 			entity.get()->render();
@@ -132,6 +132,6 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 		}
 
 		// quick debug to check if this is working 
-		std::cout << "total objects: " << entities.size() << " || objects rendered: " << num_rendered << std::endl;
+		std::cout << "total objects: " << w_entities.size() << " || objects rendered: " << num_rendered << std::endl;
 	}
 }

@@ -121,7 +121,7 @@ void tree::octree::build_child(std::unique_ptr<o_node>& tree, int child_to_build
 }
 
 // insertion
-void tree::octree::insert(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>& object){
+void tree::octree::insert(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object){
 	auto object_bounds = object->get_bounding_box();
     // check if the node contains the object, if not then immediately return
 	if(not node_contains_object(tree->bounds_, object_bounds)){ return; }
@@ -159,7 +159,7 @@ void tree::octree::insert(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>
 	}
 }
 
-void tree::octree::insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<Object>>& objects){
+void tree::octree::insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<entities::entity>>& objects){
     // quite similar logic to before, just goes with a list of objects instead, level by level, less overall
     // traversal cost than inserting one by one
 
@@ -204,7 +204,7 @@ void tree::octree::clear(std::unique_ptr<o_node>& tree){
 
 // object lookup
 
-tree::octree::o_node* tree::octree::find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>& object) {
+tree::octree::o_node* tree::octree::find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object) {
     if (!tree) {
         return nullptr;
     }
@@ -224,7 +224,7 @@ tree::octree::o_node* tree::octree::find_object_node(std::unique_ptr<o_node>& tr
     return nullptr;
 }
 
-Object* tree::octree::find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>& object) {
+entities::entity* tree::octree::find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object) {
     if (!tree) return nullptr;
 
     // Check if object is in current o_node
@@ -240,7 +240,7 @@ Object* tree::octree::find_object(std::unique_ptr<o_node>& tree, std::unique_ptr
     return nullptr;  // Not found
 }
 
-std::vector<std::reference_wrapper<std::unique_ptr<Object>>> tree::octree::get_objects(std::unique_ptr<o_node>& tree){
+std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> tree::octree::get_objects(std::unique_ptr<o_node>& tree){
     return get_objects(tree, [](auto& object) -> bool{
         (void) object;
         return true;
@@ -356,7 +356,7 @@ std::unique_ptr<tree::octree::o_node> tree::octree::copy_tree(o_node* tree, std:
     copy->parent_ = parent;
     // and then the objects, deep copy 
     for(auto & obj : tree->objects_){
-        copy->objects_.push_back(std::make_unique<Object>(*obj));
+        copy->objects_.push_back(std::make_unique<entities::entity>(*obj));
     }
     auto new_parent = &copy;
     for(auto & child : tree->children_){
@@ -386,7 +386,7 @@ void tree::octree::update(double delta){
     // update objects within the node, tag ones that have been moved
 
     // this is more game logic
-/*     auto moved_objects = std::vector<std::reference_wrapper<std::unique_ptr<Object>>>{};     // for now is empty, pending game implementation
+/*     auto moved_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};     // for now is empty, pending game implementation
     for(auto& obj : root_->objects_){
         // this depends on obj implementation 
         if(obj->update(delta) == MOVED){

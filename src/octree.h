@@ -8,7 +8,7 @@
 #include "../lib/raylib/src/raymath.h"
 
 // project includes
-#include "object.h"
+#include "entities.h"
 #include "utility_functions.h"
 
 #define MAX_DEPTH 7
@@ -24,7 +24,7 @@ namespace tree{
     protected:
         // node definition
         struct o_node {
-            std::vector<std::unique_ptr<Object>> objects_;
+            std::vector<std::unique_ptr<entities::entity>> objects_;
             std::vector<std::unique_ptr<o_node>> children_;
             BoundingBox bounds_;
             int depth_;
@@ -49,22 +49,22 @@ namespace tree{
         bool is_child_built(std::unique_ptr<o_node>& tree, std::unique_ptr<o_node>& child);
         void build_child(std::unique_ptr<o_node>& tree, int child_to_build);
         // object insert and erase
-        void insert(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>& object);
-        void insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<Object>>& objects);
+        void insert(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
+        void insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<entities::entity>>& objects);
         void erase(std::unique_ptr<o_node>& tree, size_t object_id);
         
         void clear(std::unique_ptr<o_node>& tree);
         // object lookup
-        o_node* find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>& object);
-        Object* find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<Object>& object);
+        o_node* find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
+        entities::entity* find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         
         // TODO: object retrieval
-        std::vector<std::reference_wrapper<std::unique_ptr<Object>>> get_objects(std::unique_ptr<o_node>& tree);
+        std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree);
         
         template<class UnaryPred>
-        std::vector<std::reference_wrapper<std::unique_ptr<Object>>> get_objects(std::unique_ptr<o_node>& tree, UnaryPred p){
+        std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree, UnaryPred p){
             // pass the object to the predicate
-            auto predicate_objects = std::vector<std::reference_wrapper<std::unique_ptr<Object>>>{};
+            auto predicate_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};
             if(not tree){
                 return predicate_objects;
             }
@@ -119,7 +119,7 @@ namespace tree{
             }
         }
         
-        octree(BoundingBox root_bounds, std::vector<std::unique_ptr<Object>>& objects)
+        octree(BoundingBox root_bounds, std::vector<std::unique_ptr<entities::entity>>& objects)
         : octree(root_bounds, objects.begin(), objects.end()) {
         }
         
@@ -135,11 +135,11 @@ namespace tree{
         octree& operator=(octree&& other);
         
         // insert and erase 
-        void insert(std::vector<std::unique_ptr<Object>>& objs){
+        void insert(std::vector<std::unique_ptr<entities::entity>>& objs){
             insert(root_, objs);
             
         }
-        void insert(std::unique_ptr<Object>& obj) {
+        void insert(std::unique_ptr<entities::entity>& obj) {
             insert(root_, obj);
             next_id_ += 1;
         }
@@ -150,18 +150,18 @@ namespace tree{
             clear(root_);
         }
         // object lookup
-        o_node* find_object_node(std::unique_ptr<Object>& obj) {
+        o_node* find_object_node(std::unique_ptr<entities::entity>& obj) {
             return find_object_node(root_, obj);
         }
         
-        Object* find_object(std::unique_ptr<Object>& obj) {
+        entities::entity* find_object(std::unique_ptr<entities::entity>& obj) {
             return find_object(root_, obj);
         }
         template<typename UnaryPred>
-        std::vector<std::reference_wrapper<std::unique_ptr<Object>>> get_objects(UnaryPred p){
+        std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(UnaryPred p){
             return get_objects(root_, p);
         }
-        std::vector<std::reference_wrapper<std::unique_ptr<Object>>> get_objects(){
+        std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(){
             return get_objects(root_);
         }
         

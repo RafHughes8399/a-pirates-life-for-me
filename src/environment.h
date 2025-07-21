@@ -9,7 +9,7 @@
 
 // game includes
 #include "player.h"
-#include "object.h"
+#include "entities.h"
 #include "octree.h"
 #include "config.h"
 
@@ -51,13 +51,13 @@ class wind {
 		void update(double time);
 		Vector3 get_direction_coefficient();
 
-		void add_ship_subscriber(Ship* & ship);
-		void remove_ship_subscriber(Ship* & ship);
+		void add_ship_subscriber(entities::ship* & ship);
+		void remove_ship_subscriber(entities::ship* & ship);
 		void notify_ships();
 		void notify_ship(size_t ship_);
 
 	private:
-		std::vector<Ship*> ship_subscribers_;
+		std::vector<entities::ship*> ship_subscribers_;
 		float direction_;
 		float speed_; 
 		double time_randomised_ = WIND_CHANGE_TIME;

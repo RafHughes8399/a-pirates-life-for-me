@@ -1,6 +1,6 @@
-#include "object.h"
+#include "entities.h"
 #include "config.h"
-void Ship::update(float delta){
+void entities::ship::update(float delta){
 	//MoveableObject::update(delta);
 	// update the anchor
 	anchor_.update();
@@ -47,14 +47,14 @@ void Ship::update(float delta){
 	bounding_box_.max = Vector3Add(bounding_box_.max, velocity_);
 }
 
-void Ship::render(){
+void entities::ship::render(){
 	DrawModel(object_type_.get_model(), position_, 0.15f, WHITE);
 	DrawBoundingBox(bounding_box_, RED);
 }
 
 
-void Ship::interact(Object* other){
-	auto ocean = dynamic_cast<Ocean*>(other);
+void entities::ship::interact(entities::entity* other){
+	auto ocean = dynamic_cast<entities::ocean*>(other);
 	// cast to ocean
 	if (ocean != nullptr) {
 		
@@ -71,29 +71,29 @@ void Ship::interact(Object* other){
 
 }
 
-void Ship::set_position(Vector3 position) {
+void entities::ship::set_position(Vector3 position) {
 	position_ = position;
 }
 
-Vector3 Ship::get_position(){
+Vector3 entities::ship::get_position(){
 	return position_;
 }
 
-Sail Ship::get_sail(){
+Sail entities::ship::get_sail(){
 	return sail_;
 }
 
-Anchor Ship::get_anchor(){
+Anchor entities::ship::get_anchor(){
 	return anchor_;
 }
 
-void Ship::move_anchor(){
+void entities::ship::move_anchor(){
 	// either drop or raise depending on the state
 	// change the anchor stuff to move 
 	anchor_.move();
 }
 
-void Ship::steer_left(float delta){
+void entities::ship::steer_left(float delta){
 	auto turn = SHIP_TURN_SPEED * delta;
 	direction_ = std::fmod((direction_ + turn), ( 2 * PI));
 	
@@ -105,7 +105,7 @@ void Ship::steer_left(float delta){
 	object_type_.get_model().transform = MatrixRotateXYZ(rotate);
 }
 
-void Ship::steer_right(float delta){
+void entities::ship::steer_right(float delta){
 	// change ship direction to the right
 	auto turn = SHIP_TURN_SPEED * delta;
 	direction_ = std::fmod((direction_ - turn), ( 2 * PI));
@@ -118,25 +118,25 @@ void Ship::steer_right(float delta){
 	object_type_.get_model().transform = MatrixRotateXYZ(rotate);
 }
 
-void Ship::raise_sail(float delta){
+void entities::ship::raise_sail(float delta){
 	auto raise = LOWER_RAISE_SPEED * delta;
 	sail_.raise_sail(raise);
 }
 
-void Ship::lower_sail(float delta){
+void entities::ship::lower_sail(float delta){
 	auto lower = LOWER_RAISE_SPEED * delta;
 	sail_.lower_sail(lower);
 }
 
-void Ship::turn_sail_left(float delta){
+void entities::ship::turn_sail_left(float delta){
 	sail_.sail_left(direction_, delta);
 }
 
-void Ship::turn_sail_right(float delta) {
+void entities::ship::turn_sail_right(float delta) {
 	sail_.sail_right(direction_, delta);
 }
 
-void Ship::update_sail_wind(float direction, float speed){
+void entities::ship::update_sail_wind(float direction, float speed){
 
 	sail_.set_wind(direction, speed);
 

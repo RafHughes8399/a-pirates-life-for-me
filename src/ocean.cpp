@@ -1,7 +1,7 @@
-#include "object.h"
+#include "entities.h"
 
-void Ocean::interact(Object* other) {
-	auto ship = dynamic_cast<Ship*>(other);
+void entities::ocean::interact(entities::entity* other) {
+	auto ship = dynamic_cast<entities::ship*>(other);
 	if (ship != nullptr) {
 		auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
 
@@ -14,7 +14,7 @@ void Ocean::interact(Object* other) {
 	}
 }
 
-void Ocean::render() {
+void entities::ocean::render() {
 	DrawModel(object_type_.get_model(), position_, 1.0f, Fade(BLUE, 0.75));
 	DrawBoundingBox(bounding_box_, RED);
 }

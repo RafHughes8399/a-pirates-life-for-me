@@ -49,11 +49,11 @@ void player::player::move_camera(int mode, Vector3& difference){
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
 }
 
-Ship* player::player::get_ship(){
+entities::ship* player::player::get_ship(){
 	return ship_;
 }
 
-void player::player::set_ship(Ship* ship){
+void player::player::set_ship(entities::ship* ship){
 	ship_ = ship;
 }
 

@@ -36,12 +36,12 @@ Vector3 environment::wind::get_direction_coefficient(){
 	return Vector3{sinf(direction_), 0.0f, sinf(direction_)};
 }
 
-void environment::wind::add_ship_subscriber(Ship* & ship)
+void environment::wind::add_ship_subscriber(entities::ship* & ship)
 {
 	ship_subscribers_.push_back(ship);
 }
 
-void environment::wind::remove_ship_subscriber(Ship* & ship){
+void environment::wind::remove_ship_subscriber(entities::ship* & ship){
 	auto new_end = std::remove_if(ship_subscribers_.begin(), ship_subscribers_.end(), 
 		[ship] (auto& subscriber) -> bool {
 			return ship == subscriber;

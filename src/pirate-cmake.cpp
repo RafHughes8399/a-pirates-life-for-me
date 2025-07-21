@@ -66,7 +66,7 @@ void debug(Camera3D& camera, game::game& game) {
 	auto text_y = 15;
 	DrawRectangle(200, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(200, 5, 195, 170, BLUE);
-	DrawText("Ship status: ", 210, text_y, 10, BLACK);
+	DrawText("ship status: ", 210, text_y, 10, BLACK);
 	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", ship->get_position().x, ship->get_position().y, ship->get_position().z), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Direction: %06.3f", ship->get_direction()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Sail Angle: %06.3f", ship->get_sail().get_sail_direction()), 210, text_y += 17, 10, BLACK);
