@@ -65,9 +65,20 @@ class wind {
 class world {
 	public:
 		// CONSTRUCTORS
-		world(player::player& player)
+		world(player::player& player, int type = 0)
 		: wind_(wind()), world_entities_(tree::octree(WORLD_BOX)){
-			build_world(wind_, player);
+			switch(type){
+				case 0:
+					build_world(wind_, player);
+					break;
+				case 1:
+					build_frustrum_test_world(wind_, player);
+					break;
+				default:
+					build_world(wind_, player);
+					break;
+
+			}
 		}
 		world(const world& other)
 		: wind_(other.wind_), world_entities_(other.world_entities_){};
@@ -80,9 +91,11 @@ class world {
 		void update();
 		void render(rendering::frustrum& rendering_frustrum);
 		
+		void populate_test_objects();
 	private:
 		void generate_islands();
 		void build_world(wind& wind, player::player& player);
+		void build_frustrum_test_world(wind& wind, player::player& player);
 		wind wind_;
 		tree::octree world_entities_;
 		

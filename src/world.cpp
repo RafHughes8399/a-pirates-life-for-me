@@ -111,6 +111,46 @@ void environment::world::generate_islands(){
 	world_entities_.insert(cove);
 }
 
+void environment::world::build_frustrum_test_world(wind& wind, player::player& player){
+	
+	std::cout << "building the world " << std::endl;
+	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
+		OceanType::get_instance(),
+		WORLD_CENTRE,
+		WORLD_MIN,
+		WORLD_MAX,
+		world_entities_.get_next_id()
+	);
+	world_entities_.insert(ocean);
+	// build the ship
+	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::ship>(
+		ShipType::get_instance(),
+		SHIP_START,
+		Vector3{SHIP_START.x -1.0f ,SHIP_START.y, SHIP_START.z -1.0f},
+		Vector3{SHIP_START.x + 1.6f, SHIP_START.y + 2.8f, SHIP_START.z + 1.6f},
+		world_entities_.get_next_id()
+	);
+
+	//let the player ship subscribe to the wind to listen for updates 
+	auto player_ship_ptr = static_cast<entities::ship*>(player_ship.get());
+	wind_.add_ship_subscriber(player_ship_ptr);
+	//then set the player ship pointer, so it can be tracked
+	player.set_ship(player_ship_ptr);
+
+	world_entities_.insert(player_ship);
+	// generate a bunch of test objects, objects are 10, 10, 10
+	for(float i = WORLD_MIN.x + 10; i < WORLD_MAX.x - 10; i += 20){
+		std::unique_ptr<entities::entity> cube = std::make_unique<entities::test_entity>(
+			TestType::get_instance(),
+			Vector3{i, 5, i},
+			Vector3{i - 5, 0, i - 5},
+			Vector3{i + 5, 0, i + 5},
+			world_entities_.get_next_id()
+		);
+		world_entities_.insert(cube);
+	}
+}
+
 void environment::world::update(){
 	// based on player position, update based on simulation distance
 	// check for interactions 
@@ -133,7 +173,10 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 			num_rendered++;
 		}
 
-		// quick debug to check if this is working 
-		std::cout << "total objects: " << w_entities.size() << " || objects rendered: " << num_rendered << std::endl;
 	}
+	// quick debug to check if this is working, i think not because its rendering everything
+	// do some more debug printing here
+	
+	
+	std::cout << "total objects: " << w_entities.size() << " || objects rendered: " << num_rendered << std::endl;
 }

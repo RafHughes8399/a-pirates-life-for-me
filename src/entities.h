@@ -168,4 +168,21 @@ class terrain : public entity {
 
 };
 
+class test_entity : public entity{
+	public:
+	test_entity(ObjectType& test_type, Vector3 position, Vector3 min, Vector3 max, int id)
+	: entity(test_type, position, min, max, id) {
+	};	
+	test_entity (const test_entity & other)
+	: entity(other) {
+	};
+	test_entity (test_entity && other)
+	: entity(other) {
+	};
+	
+	void update(float delta) override;
+	void render() override;
+	void interact(entity* other) override;
+	private:
+};
 }

@@ -76,3 +76,18 @@ Vector3 entities::moveable_entity::get_direction_coefficient(){
 void entities::moveable_entity::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }
+
+
+void entities::test_entity::update(float delta ){
+	(void) delta;
+	return;
+}
+
+void entities::test_entity::render(){
+	DrawModel(object_type_.get_model(), position_, 1.0f, RED);
+	return;
+}
+
+void entities::test_entity::interact(entity* other){
+	return;
+}

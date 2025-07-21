@@ -23,15 +23,15 @@ int main(){
 	// setup the camera
 
 	// temp - will setup some obj factory
-	std::cout << "build player " << std::endl;
 	auto player = player::player();
 
-	std::cout << "built player - game" << std::endl;
-	std::cout << "build world" << std::endl;
 	auto world = environment::world(player);
 	
-	std::cout << "build game" << std::endl;
 	auto game = game::game(world, player);
+
+
+	auto test_world = environment::world(player, 1);
+	auto test_game = game::game(test_world, player);
 
 	DisableCursor();
 	SetTargetFPS(FPS);
@@ -40,8 +40,8 @@ int main(){
 	std::cout << "pre game loop" <<std::endl;
 	while (!WindowShouldClose()) {
 		std::cout << "in game loop" <<std::endl;
-		tick(game);
-		render(game);
+		tick(test_game);
+		render(test_game);
 	}
 	CloseWindow();
 }
