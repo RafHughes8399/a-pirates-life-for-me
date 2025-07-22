@@ -4,6 +4,23 @@
 float rendering::plane::signed_distance_to_plane(Vector3& point){
     return Vector3DotProduct(normal_, point) - distance_; 
 }
+
+void rendering::frustrum::update_frustrum(Camera3D& camera, float aspect, float fov_y, float z_near, float z_far){
+    float half_v_side = z_far * tanf(fov_y * 0.5f);
+    float half_h_side = half_v_side * aspect;
+    auto camera_front = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
+    auto camera_right = Vector3CrossProduct(camera_front, camera.up);
+    auto front_mult_far = Vector3Scale(camera_front, z_far);
+                
+            // planes are constructed with a point on the plane and a normal vector
+    near_  = plane{Vector3Add(camera.position, Vector3Scale(camera_front, z_near)), camera_front};
+    far_  = plane{Vector3Add(camera.position, front_mult_far), camera_front};
+     
+     right_  = plane{camera.position, Vector3CrossProduct(Vector3Subtract(front_mult_far, Vector3Scale(camera_right, half_h_side)), camera.up)};
+     left_  = plane{camera.position, Vector3CrossProduct(camera.up, Vector3Add(front_mult_far, Vector3Scale(camera_right, half_h_side)))};
+     top_  = plane{camera.position, Vector3CrossProduct(camera_right, Vector3Subtract(front_mult_far, Vector3Scale(camera.up, half_v_side)))};
+     bottom_  = plane{camera.position, Vector3CrossProduct(Vector3Add(front_mult_far, Vector3Scale(camera.up, half_v_side)), camera_right)};
+}
 rendering::frustrum& rendering::frustrum::operator=(const frustrum& other){
     near_ = other.near_;
     far_ = other.far_;

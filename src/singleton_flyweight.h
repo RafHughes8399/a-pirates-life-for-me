@@ -214,8 +214,6 @@ public:
 private:
     // Private constructor
     TestType()
-        : ObjectType(LoadModelFromMesh(GenMeshCube(10, 10, 10)), LoadTexture(SAND_TEXTURE)) {
-        model_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_;            // Set map diffuse texture
-
+        : ObjectType(LoadModelFromMesh(GenMeshCube(2, 2, 2)), LoadTexture(SAND_TEXTURE)) {
     }
 };

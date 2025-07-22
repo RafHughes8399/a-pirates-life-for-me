@@ -15,6 +15,10 @@ void tick(game::game& world);
 void render(game::game& world);
 void debug(Camera3D& camera, game::game& game);
 
+
+void tick(game::test_game& game);
+void render(game::test_game& game);
+void debug(Camera3D& camera, game::test_game& game);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
@@ -24,14 +28,12 @@ int main(){
 
 	// temp - will setup some obj factory
 	auto player = player::player();
-
 	auto world = environment::world(player);
-	
 	auto game = game::game(world, player);
 
-
-	auto test_world = environment::world(player, 1);
-	auto test_game = game::game(test_world, player);
+	auto test_player = player::test_player();
+	auto test_world = environment::world(test_player);
+	auto test_game = game::test_game(test_world, test_player);
 
 	DisableCursor();
 	SetTargetFPS(FPS);
@@ -62,6 +64,22 @@ void render(game::game& game) {
 
 	debug(camera, game);
 
+	EndDrawing();
+}
+
+ void tick(game::test_game& game) {
+	game.update();
+}
+
+void render(game::test_game& game) {
+	BeginDrawing();
+	ClearBackground(WHITE);
+	auto camera = game.get_player().get_camera();
+	BeginMode3D(camera);
+
+	game.render();
+	EndMode3D();
+	debug(camera, game);
 	EndDrawing();
 }
 
@@ -120,4 +138,16 @@ void debug(Camera3D& camera, game::game& game) {
 	DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", camera.up.x, camera.up.y, camera.up.z), 610, 90, 10, BLACK);
 
 
+}
+
+void debug(Camera3D& camera, game::test_game& game){
+	(void) game;
+	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
+	// player debug info
+	auto text_y = 15;
+	DrawRectangle(200, 5, 195, 170, Fade(SKYBLUE, 0.5f));
+	DrawRectangleLines(200, 5, 195, 170, BLUE);
+	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", camera.position.x, camera.position.y, camera.position.z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Target: %06.3f", camera.target), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("FOV: %06.3f", camera.fovy), 210, text_y += 17, 10, BLACK);
 }

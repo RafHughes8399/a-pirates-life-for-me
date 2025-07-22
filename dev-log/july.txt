@@ -47,3 +47,7 @@ TODO
 -> then merge into master
 
 -> then move onto other stuff 
+
+
+-> frustrum testing 
+-> generate test world, shrink the objects {2, 2, 2}, make a test player, a free form camera, not tied to anything

@@ -62,5 +62,41 @@ namespace player{
 		
 			std::map<int, std::function<void(float)>> key_down_inputs_;
 			std::map<int, std::function<void()>> key_pressed_inputs_;
-	};	
+	};
+	
+	class test_player{
+		public:
+		~test_player() = default;
+		test_player()
+		:camera_(Camera3D{}),  camera_mode_(CAMERA_THIRD_PERSON),
+		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR){
+			std::cout << "building test_player" << std::endl;
+			camera_.position = Vector3{ 0.0, 5.0, 5.0 };
+			camera_.target = SHIP_START; // the camera looks at the cube, slightly above sea level
+			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
+			camera_.fovy = FOV;
+			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
+		}
+		test_player(const test_player& other)
+			: camera_(other.camera_), camera_mode_(other.camera_mode_),
+			camera_frustrum_(other.camera_frustrum_){
+		};
+				
+		test_player(test_player&& other);
+
+		test_player& operator=(const test_player& other) {
+			camera_ = other.camera_;
+			camera_mode_ = other.camera_mode_;
+			camera_frustrum_ = other.camera_frustrum_;
+			return *this;
+		}
+		
+		void update(float delta);
+		rendering::frustrum& get_frustrum();
+		Camera3D& get_camera();
+		private:
+			Camera3D camera_;
+			int camera_mode_;
+			rendering::frustrum camera_frustrum_;
+	};
 }

@@ -89,3 +89,19 @@ void player::player::set_default_key_map(){
 	key_pressed_inputs_[KEY_R] = [this]() { ship_->move_anchor(); }; // adjust the function call, it should not be raise/lower anchor but rather 
 	// something that changes the movement of the anchor . this is placeholder
 }
+
+void player::test_player::update(float delta){
+	// allows the camera to move freely
+	UpdateCamera(&camera_, CAMERA_FREE);
+
+	// update the frustrum too
+	camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);
+}
+
+rendering::frustrum& player::test_player::get_frustrum(){
+	return camera_frustrum_;
+}
+
+Camera3D& player::test_player::get_camera(){
+	return camera_;
+}

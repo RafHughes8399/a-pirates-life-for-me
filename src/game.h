@@ -60,4 +60,51 @@ namespace game{
 		// Hud hud_;
 
 	};
+
+class test_game {
+	public:
+		~test_game() = default;
+		test_game(environment::world& world, player::test_player& player)
+			: world_(world), player_(player) {
+			// here in the test_game, add event listeners basewd on what you want to listen to
+		}
+		test_game(const test_game& other)
+			: world_(other.world_), player_(other.player_) {
+		}
+		test_game(test_game&& other) noexcept
+			: world_(other.world_), player_(other.player_) {
+		}
+
+		test_game& operator=(const test_game& other) {
+			if (this != &other) {
+				world_ = other.world_;
+				player_ = other.player_;
+			}
+			return *this;
+		}
+		test_game& operator=(test_game&& other) noexcept {
+			if (this != &other) {
+				world_ = std::move(other.world_);
+				player_ = std::move(other.player_);
+			}
+			return *this;
+		}
+		// temp until events
+		void update();
+		void render();
+
+		environment::world& get_world();
+
+		player::test_player& get_player();
+
+
+
+		// and define what happens on those events
+
+	private:
+		environment::world& world_;
+		player::test_player& player_;
+		// Hud hud_;
+
+	};
 }

@@ -22,3 +22,24 @@ environment::world& game::game::get_world(){
 player::player& game::game::get_player() {
 	return player_;
 }
+
+
+void game::test_game::update(){
+	auto delta = GetFrameTime();
+	player_.update(delta);
+	world_.update();
+}
+
+void game::test_game::render(){
+	world_.render(player_.get_frustrum());
+
+
+}
+
+environment::world& game::test_game::get_world(){
+	return world_;
+}
+
+player::test_player& game::test_game::get_player() {
+	return player_;
+}

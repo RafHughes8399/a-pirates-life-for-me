@@ -111,43 +111,22 @@ void environment::world::generate_islands(){
 	world_entities_.insert(cove);
 }
 
-void environment::world::build_frustrum_test_world(wind& wind, player::player& player){
+void environment::world::build_frustrum_test_world(){
 	
 	std::cout << "building the world " << std::endl;
-	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
-		OceanType::get_instance(),
-		WORLD_CENTRE,
-		WORLD_MIN,
-		WORLD_MAX,
-		world_entities_.get_next_id()
-	);
-	world_entities_.insert(ocean);
-	// build the ship
-	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::ship>(
-		ShipType::get_instance(),
-		SHIP_START,
-		Vector3{SHIP_START.x -1.0f ,SHIP_START.y, SHIP_START.z -1.0f},
-		Vector3{SHIP_START.x + 1.6f, SHIP_START.y + 2.8f, SHIP_START.z + 1.6f},
-		world_entities_.get_next_id()
-	);
-
-	//let the player ship subscribe to the wind to listen for updates 
-	auto player_ship_ptr = static_cast<entities::ship*>(player_ship.get());
-	wind_.add_ship_subscriber(player_ship_ptr);
-	//then set the player ship pointer, so it can be tracked
-	player.set_ship(player_ship_ptr);
-
-	world_entities_.insert(player_ship);
-	// generate a bunch of test objects, objects are 10, 10, 10
-	for(float i = WORLD_MIN.x + 10; i < WORLD_MAX.x - 10; i += 20){
-		std::unique_ptr<entities::entity> cube = std::make_unique<entities::test_entity>(
-			TestType::get_instance(),
-			Vector3{i, 5, i},
-			Vector3{i - 5, 0, i - 5},
-			Vector3{i + 5, 0, i + 5},
-			world_entities_.get_next_id()
-		);
-		world_entities_.insert(cube);
+	// generate a bunch of test objects, objects are 2, 2 , 2
+	// 2 dimensional loop silly boy, ok wait thats far too many cubes, literally half a million
+	for(float i = WORLD_MIN.x + 2; i < WORLD_MAX.x - 2; i += 2){
+		for(float j = WORLD_MIN.z + 2; j < WORLD_MAX.z -2; j += 2){
+			std::unique_ptr<entities::entity> cube = std::make_unique<entities::test_entity>(
+				TestType::get_instance(),
+				Vector3{i, 2, j},
+				Vector3{i - 2, 0, j - 2},
+				Vector3{i + 2, 0, j + 2},
+				world_entities_.get_next_id()
+			);
+			world_entities_.insert(cube);
+		}
 	}
 }
 
@@ -165,6 +144,7 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// TODO: frustrum culling, for now just render everything in the tree 
 	// pass the frustrum in, check objects against it
 	auto num_rendered = 0;
+	// this is ineffective, figure out another way
 	auto w_entities = world_entities_.get_objects();
 	for(auto & entity : w_entities){
 		// check if the entitiy
