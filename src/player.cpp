@@ -1,32 +1,27 @@
-#include "player.h"
-#include "config.h"
-#include "utility_functions.h"
-#include "raymath.h"
-#include "rcamera.h"
+#include "game.h"
 
 // player is updated after the objects so this should wok
-void Player::update(float delta) {
+void player::player::update(float delta) {
 	check_key_input(delta);
 	auto ship_position = ship_->get_position();
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
 	
 	move_camera(camera_mode_, target_difference);
-	chunk_ = utility::position_to_chunk(ship_position);
 	
+	// recalculate the frustrum if the camera has moved()
 }
-void Player::render() {
+void player::player::render() {
 	//this is where the hud will be drawn and other components
 }
 
-Camera3D& Player::get_camera(){
+Camera3D& player::player::get_camera(){
 	return camera_;
 }
 
-std::pair<int, int>& Player::get_chunk(){
-	return chunk_;
+rendering::frustrum& player::player::get_frustrum(){
+	return camera_frustrum_;
 }
-
-void Player::move_camera(int mode, Vector3& difference){
+void player::player::move_camera(int mode, Vector3& difference){
 	Vector2 delta_mouse = GetMouseDelta();
 	auto delta_time = GetFrameTime();
 	// my version of camera update
@@ -54,15 +49,15 @@ void Player::move_camera(int mode, Vector3& difference){
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
 }
 
-Ship* Player::get_ship(){
+entities::ship* player::player::get_ship(){
 	return ship_;
 }
 
-void Player::set_ship(Ship* ship){
+void player::player::set_ship(entities::ship* ship){
 	ship_ = ship;
 }
 
-void Player::check_key_input(float delta){
+void player::player::check_key_input(float delta){
 	// iterate through both key maps
 
 
@@ -78,7 +73,7 @@ void Player::check_key_input(float delta){
 	}
 }
 
-void Player::set_default_key_map(){
+void player::player::set_default_key_map(){
 	// fill the control maps, figure out how to e
 
 	key_down_inputs_[KEY_A] = [this](float delta) { ship_->steer_left(delta); };
@@ -93,4 +88,20 @@ void Player::set_default_key_map(){
 
 	key_pressed_inputs_[KEY_R] = [this]() { ship_->move_anchor(); }; // adjust the function call, it should not be raise/lower anchor but rather 
 	// something that changes the movement of the anchor . this is placeholder
+}
+
+void player::test_player::update(float delta){
+	// allows the camera to move freely
+	UpdateCamera(&camera_, CAMERA_FREE);
+
+	// update the frustrum too
+	camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);
+}
+
+rendering::frustrum& player::test_player::get_frustrum(){
+	return camera_frustrum_;
+}
+
+Camera3D& player::test_player::get_camera(){
+	return camera_;
 }

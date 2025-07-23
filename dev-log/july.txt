@@ -1,0 +1,53 @@
+
+-> fix model and texture paths
+
+
+-> rename classes and establish namespaces
+-> switch from shared to unique ptr
+-> fix up constructors and define the magic numbers
+-> integrate octree
+
+
+
+
+-> switch world to use the octree
+-> add an object constructor to take in id, adjust the variables
+-> swtich from shared and weak to unique and * 
+-> then frustrum culling and rendering
+-> then event and collision interaction system
+
+
+-> switch to raw pointers  x 
+-> finish world setup x 
+-> go lower case and change from object to entities, establish a namespace
+-> get rid of warnings, clean up model and texture paths
+
+-> frustrum culling 
+-> octree moving entities 
+-> event handling and interaction infrastructure 
+-> then 
+
+
+-> a frustrum is comprised of 6 planes
+-> ok i have the frustrum, then i need to create it and pass it to render 
+-> make sure the frustrum updates with the camera movement
+-> pass the
+
+-> the player has the frustrum, the game has the player, the game connects the world and the player
+
+-> the world gets the entities, then checks  
+
+
+TODO
+-> fix model paths
+-> rename objects and establish namespaces x  
+-> get rid of warnings x 
+-> test frustrum stuff 
+
+-> then merge into master
+
+-> then move onto other stuff 
+
+
+-> frustrum testing 
+-> generate test world, shrink the objects {2, 2, 2}, make a test player, a free form camera, not tied to anything

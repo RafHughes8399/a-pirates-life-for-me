@@ -6,41 +6,53 @@
 
 #include "pirate-cmake.h"
 #include "game.h"
-#include "player.h"
-#include "world.h"
-#include "raylib.h"
 #include "config.h"
 #include "utility_functions.h"
-void tick(Game& world);
-void render(Game& world);
-void debug(Camera3D& camera, Game& game);
+
+#include "../lib/raylib/src/raylib.h"
+
+void tick(game::game& world);
+void render(game::game& world);
+void debug(Camera3D& camera, game::game& game);
+
+
+void tick(game::test_game& game);
+void render(game::test_game& game);
+void debug(Camera3D& camera, game::test_game& game);
 int main(){
 	auto width = GetScreenWidth();
 	auto height = GetScreenHeight();
-	SetConfigFlags(FLAG_MSAA_4X_HINT);
+	//SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(width, height, "a pirate life for me");
 	// setup the camera
 
 	// temp - will setup some obj factory
-	Player player = Player();
-	World world = World(player);
+	auto player = player::player();
+	auto world = environment::world(player);
+	auto game = game::game(world, player);
 
-	Game game = Game(world, player);
+	auto test_player = player::test_player();
+	auto test_world = environment::world(test_player);
+	auto test_game = game::test_game(test_world, test_player);
+
 	DisableCursor();
 	SetTargetFPS(FPS);
 	// adjust the current working directory
+
+	std::cout << "pre game loop" <<std::endl;
 	while (!WindowShouldClose()) {
-		tick(game);
-		render(game);
+		std::cout << "in game loop" <<std::endl;
+		tick(test_game);
+		render(test_game);
 	}
 	CloseWindow();
 }
 
-void tick(Game& game) {
+ void tick(game::game& game) {
 	game.update();
 }
 
-void render(Game& game) {
+void render(game::game& game) {
 	BeginDrawing();
 	ClearBackground(WHITE);
 	auto camera = game.get_player().get_camera();
@@ -55,7 +67,23 @@ void render(Game& game) {
 	EndDrawing();
 }
 
-void debug(Camera3D& camera, Game& game) {
+ void tick(game::test_game& game) {
+	game.update();
+}
+
+void render(game::test_game& game) {
+	BeginDrawing();
+	ClearBackground(WHITE);
+	auto camera = game.get_player().get_camera();
+	BeginMode3D(camera);
+
+	game.render();
+	EndMode3D();
+	debug(camera, game);
+	EndDrawing();
+}
+
+void debug(Camera3D& camera, game::game& game) {
 
 	auto ship = game.get_player().get_ship();
 	// FPS Counter
@@ -65,7 +93,7 @@ void debug(Camera3D& camera, Game& game) {
 	auto text_y = 15;
 	DrawRectangle(200, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(200, 5, 195, 170, BLUE);
-	DrawText("Ship status: ", 210, text_y, 10, BLACK);
+	DrawText("ship status: ", 210, text_y, 10, BLACK);
 	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", ship->get_position().x, ship->get_position().y, ship->get_position().z), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Direction: %06.3f", ship->get_direction()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Sail Angle: %06.3f", ship->get_sail().get_sail_direction()), 210, text_y += 17, 10, BLACK);
@@ -110,4 +138,16 @@ void debug(Camera3D& camera, Game& game) {
 	DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", camera.up.x, camera.up.y, camera.up.z), 610, 90, 10, BLACK);
 
 
+}
+
+void debug(Camera3D& camera, game::test_game& game){
+	(void) game;
+	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
+	// player debug info
+	auto text_y = 15;
+	DrawRectangle(200, 5, 195, 170, Fade(SKYBLUE, 0.5f));
+	DrawRectangleLines(200, 5, 195, 170, BLUE);
+	DrawText(TextFormat("Position: (%06.3f, %06.3f, %06.3f)", camera.position.x, camera.position.y, camera.position.z), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("Target: %06.3f", camera.target), 210, text_y += 17, 10, BLACK);
+	DrawText(TextFormat("FOV: %06.3f", camera.fovy), 210, text_y += 17, 10, BLACK);
 }

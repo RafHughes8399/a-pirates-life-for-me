@@ -1,28 +1,29 @@
-#pragma once
 #include <numbers>
+#include "../lib/raylib/src/raylib.h"
 
 // game models and textures
-#define PIRATE_SHIP_MODEL "../../../models/medium_ship_brown.glb"
-#define PIRATE_SHIP_TEXTURE "../../../textures/pirate-textures/pirate_ship_texture.png"
+// TODO: sort out the CWD for the model and texture paths
+// CWD is build
+#define PIRATE_SHIP_MODEL "../models/medium_ship_brown.glb"
+#define PIRATE_SHIP_TEXTURE "../textures/pirate-textures/pirate_ship_texture.png"
 
 
-#define HUB_TERRAIAN_MODEL "../../../models/hub_terrain.glb"
-#define COVE_TERRAIN_MODEL "../../../models/cove_terrain.glb"
-#define LAGOON_TERRAIN_MODEL "../../../models/lagoon_terrain.glb"
-#define BAY_TERRAIN_MODEL "../../../models/bay_terrain.glb"
-#define ISLE_TERRAIN_MODEL "../../../models/isle_terrain.glb"
-#define REEF_TERRAIN_MODEL "../../../models/reef_terrain.glb"
+#define HUB_TERRAIAN_MODEL "../models/hub_terrain.glb"
+#define COVE_TERRAIN_MODEL "../models/cove_terrain.glb"
+#define LAGOON_TERRAIN_MODEL "../models/lagoon_terrain.glb"
+#define BAY_TERRAIN_MODEL "../models/bay_terrain.glb"
+#define ISLE_TERRAIN_MODEL "../models/isle_terrain.glb"
+#define REEF_TERRAIN_MODEL "../models/reef_terrain.glb"
 
 // game textures 
-#define TEXTURE3B "../../../textures/pirate-textures/Texture_03_B.png"
-#define WATER_TEXTURE "../../../textures/environment-textures/Core/WaterNormals_01.png"
-#define SAND_TEXTURE "../../../textures/environment-textures/Core/Sand_Texture_01.png"
+#define TEXTURE3B "../textures/pirate-textures/Texture_03_B.png"
+#define WATER_TEXTURE "../textures/environment-textures/Core/WaterNormals_01.png"
+#define SAND_TEXTURE "../textures/environment-textures/Core/Sand_Texture_01.png"
 
 
 // game properties
 #define FPS 60
-#define RENDER_DISTANCE 250 //  units
-#define SIMULATION_DISTANCE 2 // chunk radius
+#define ASPECT_RATIO GetScreenWidth() / GetScreenHeight()
 
 
 // physics constants
@@ -38,6 +39,11 @@
 #define CAMERA_MIN_LEVEL 0.25f
 #define CAMERA_MOUSE_MOVE_SENSITIVITY 0.003f
 
+// rendering properties
+#define FOV 90
+#define NEAR 0.2 // start with 0.5, i think some work can be done in calculating the target of the camera
+#define FAR 200 // go for 100 units for now,
+
 
 // angles
 #define ZERO 0.0f // in radians
@@ -50,6 +56,9 @@
 
 #define NUM_CHUNKS 25
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
+
+
+
 
 // wind properties
 #define NO_WIND 4.2f
@@ -75,6 +84,5 @@
 
 
 
-
-// terrain image path
-#define TERRAIN_IMAGE "../../../images/heightmap.png"
+// locations 
+#define SHIP_START Vector3 {5, 0, 5}

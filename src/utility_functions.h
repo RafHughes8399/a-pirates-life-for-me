@@ -1,6 +1,6 @@
 #pragma once
 #include "config.h"
-#include "raylib.h"
+#include "../lib/raylib/src/raylib.h"
 #include <utility>
 namespace utility {
 	float shortest_distance_unit_circle(float a, float b);
@@ -19,5 +19,7 @@ namespace utility {
 	
 
 	}
+
+	bool contains(BoundingBox a, BoundingBox b);
 }
 	

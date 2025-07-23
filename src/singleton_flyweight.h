@@ -1,5 +1,5 @@
 #pragma once
-#include "raylib.h"
+#include "../lib/raylib/src/raylib.h"
 #include "config.h"
 
 class ObjectType {
@@ -65,31 +65,6 @@ private:
         // Additional initialization if needed
     }
 };
-
-class TerrainType : public ObjectType {
-public:
-    // Delete copy and move operations
-    TerrainType(const TerrainType& other) = delete;
-    TerrainType(TerrainType&& other) = delete;
-    TerrainType& operator=(const TerrainType& other) = delete;
-    TerrainType& operator=(TerrainType&& other) = delete;
-
-    // Singleton getter
-    static TerrainType& get_instance() {
-        static TerrainType instance;
-        return instance;
-    }
-
-private:
-    // Private constructor
-    TerrainType()
-        : ObjectType(LoadModelFromMesh(GenMeshHeightmap(LoadImage(TERRAIN_IMAGE),
-            Vector3{ WORLD_X, WORLD_Y * 0.5, WORLD_Z })),
-            LoadTextureFromImage(LoadImage(TERRAIN_IMAGE))) {
-        // Additional initialization if needed
-    }
-};
-
 
 class HubType : public ObjectType {
 public:
@@ -220,5 +195,25 @@ private:
         : ObjectType(LoadModel(REEF_TERRAIN_MODEL), LoadTexture(SAND_TEXTURE)) {
         model_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_;            // Set map diffuse texture
 
+    }
+};
+
+class TestType : public ObjectType {
+public:
+    TestType(const TestType& other) = delete;
+    TestType(TestType&& other) = delete;
+    TestType& operator=(const TestType& other) = delete;
+    TestType& operator=(TestType&& other) = delete;
+
+    // Singleton getter
+    static TestType& get_instance() {
+        static TestType instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    TestType()
+        : ObjectType(LoadModelFromMesh(GenMeshCube(5, 5, 5)), LoadTexture(SAND_TEXTURE)) {
     }
 };
