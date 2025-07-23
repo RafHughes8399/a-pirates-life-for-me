@@ -40,9 +40,9 @@
 #define CAMERA_MOUSE_MOVE_SENSITIVITY 0.003f
 
 // rendering properties
-#define FOV 120
-#define NEAR 0.5 // start with 0.5, i think some work can be done in calculating the target of the camera
-#define FAR 250 // go for 100 units for now,
+#define FOV 90
+#define NEAR 0.2 // start with 0.5, i think some work can be done in calculating the target of the camera
+#define FAR 200 // go for 100 units for now,
 
 
 // angles

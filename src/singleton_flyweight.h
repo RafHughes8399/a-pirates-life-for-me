@@ -214,6 +214,6 @@ public:
 private:
     // Private constructor
     TestType()
-        : ObjectType(LoadModelFromMesh(GenMeshCube(2, 2, 2)), LoadTexture(SAND_TEXTURE)) {
+        : ObjectType(LoadModelFromMesh(GenMeshCube(5, 5, 5)), LoadTexture(SAND_TEXTURE)) {
     }
 };

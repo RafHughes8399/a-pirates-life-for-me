@@ -116,13 +116,13 @@ void environment::world::build_frustrum_test_world(){
 	std::cout << "building the world " << std::endl;
 	// generate a bunch of test objects, objects are 2, 2 , 2
 	// 2 dimensional loop silly boy, ok wait thats far too many cubes, literally half a million
-	for(float i = WORLD_MIN.x + 2; i < WORLD_MAX.x - 2; i += 2){
-		for(float j = WORLD_MIN.z + 2; j < WORLD_MAX.z -2; j += 2){
+	for(float i = WORLD_MIN.x + 5; i < WORLD_MAX.x - 5; i += 20){
+		for(float j = WORLD_MIN.z + 5; j < WORLD_MAX.z -5; j += 20){
 			std::unique_ptr<entities::entity> cube = std::make_unique<entities::test_entity>(
 				TestType::get_instance(),
-				Vector3{i, 2, j},
-				Vector3{i - 2, 0, j - 2},
-				Vector3{i + 2, 0, j + 2},
+				Vector3{i, 5, j},
+				Vector3{i - 2.5, 0, j - 2.5},
+				Vector3{i + 2.5, 0, j + 2.5},
 				world_entities_.get_next_id()
 			);
 			world_entities_.insert(cube);
