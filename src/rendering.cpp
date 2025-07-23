@@ -1,7 +1,7 @@
 #include "rendering.h"
 
 
-float rendering::plane::signed_distance_to_plane(Vector3& point){
+float rendering::plane::signed_distance_to_plane(Vector3& point) const{
     return Vector3DotProduct(normal_, point) - distance_; 
 }
 
@@ -45,7 +45,7 @@ rendering::frustrum& rendering::frustrum::operator=(frustrum&& other){
     return *this;
 }
 
-bool on_in_front_plane(BoundingBox& box, rendering::plane& plane){
+bool on_in_front_plane(BoundingBox& box, const rendering::plane& plane){
     auto centre = Vector3Scale(Vector3Add(box.min, box.max), 0.5);
     auto extents = Vector3Subtract(box.max, centre);
 
@@ -55,7 +55,7 @@ bool on_in_front_plane(BoundingBox& box, rendering::plane& plane){
     return -r <= plane.signed_distance_to_plane(centre);
 }
 
-bool rendering::frustrum::contains(BoundingBox& box){
+bool rendering::frustrum::contains(BoundingBox& box) const{
     return on_in_front_plane(box, near_)
     and on_in_front_plane(box, far_)
     and on_in_front_plane(box, top_)

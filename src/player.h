@@ -11,6 +11,9 @@
 #include "../lib/raylib/src/rcamera.h"
 namespace player{
 	// class inventory{}
+
+	//TODO: change the pointer to ship to just a target location
+	// a reference the ship's position 
 	class player {
 		public:
 		~player() = default;

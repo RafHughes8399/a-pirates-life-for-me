@@ -65,8 +65,8 @@ add_subdirectory(lib/raylib)
 
 # add libarary
 # link libraries 
-add_library(event_handler src/event_handler.cpp)
-link_libraries(event_handler)
+add_library(events src/events.cpp)
+link_libraries(events)
 
 add_library(util src/utility_functions.cpp)
 link_libraries(util)

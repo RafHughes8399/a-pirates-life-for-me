@@ -144,19 +144,14 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// TODO: frustrum culling, for now just render everything in the tree 
 	// pass the frustrum in, check objects against it
 	auto num_rendered = 0;
-	// this is ineffective, figure out another way
-	auto w_entities = world_entities_.get_objects();
-	for(auto & entity : w_entities){
-		// check if the entitiy
-		if(rendering_frustrum.contains(entity.get()->get_bounding_box())){
-			entity.get()->render();
-			num_rendered++;
-		}
-
-	}
+	// entity is std::unique_ptr<entities::entity>
+	auto frustrum_predicate = [rendering_frustrum](auto & entity)-> bool{
+		return rendering_frustrum.contains(entity->get_bounding_box());
+	};
+	world_entities_.render(frustrum_predicate);
 	// quick debug to check if this is working, i think not because its rendering everything
 	// do some more debug printing here
 	
-	
-	std::cout << "total objects: " << w_entities.size() << " || objects rendered: " << num_rendered << std::endl;
+	// debug
+	std::cout << "total objects: " << world_entities_.size() << " || objects rendered: " << num_rendered << std::endl;
 }
