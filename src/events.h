@@ -2,6 +2,8 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <algorithm>
+#include <queue>
 namespace events{
 	// an enum ID for event types
 	enum event_types{
@@ -17,19 +19,27 @@ namespace events{
 	};
 	class event{
 	protected:
+		bool handled_ = false;
+		const int type_;
+		float delay_; // potential execution delay for the event, i.e an event 
+		// can take palce 10s after another,
+	public:
 		virtual ~event() = default;	
 		event(int id)
 		: type_(id), handled_(false){};
-
-		bool handled_ = false;
-		const int type_;
-
-	public:
+		
+		event(event&& other) = default;
+		event& operator=(event&& other) = default;
+		
 		bool is_handled(){
 			return handled_;
 		}
-		const int get_type(){
-			return type_;
+		const int get_type() const{
+				return type_;
+		}
+		bool update_delay(float delta){
+			delay_ = std::max(0.0f, delay_ - delta);
+			return delay_ == 0;
 		}
 	};
 
@@ -53,26 +63,30 @@ namespace events{
 	
 	class event_handler_interface{
 		public:
+		virtual ~event_handler_interface() = default;
 		void execute(const event& e){
 			call_event(e);
 		}
-		virtual std::string get_type() const = 0;
+		virtual const int get_type() = 0;
 		private:
 		virtual void call_event(const event& e) = 0;
+
 	};
 	
 	template<typename E> // E for event
 	class event_handler : event_handler_interface{
 	public:
+		~event_handler() override = default;
 		event_handler() = default;
-			/* TODO figure this out 		
-			void call_event(const event& e) override{
-			if(e.get_type() == E::get_static_event_type()){
-				handler_(static_cast<const E&>(e));
-			}
-		} */
-		const int get_type(){
+		void call_event(const event& e) override{
+			//TODO: implement
+			return;
+		}
+		const int get_type() override{
 			return handler_type_;
+		}
+		bool operator==(const event_handler& other){
+			return handler_type_ == other.handler_type_; 
 		}
 	private:
 		std::function<void(const E& e)> handler_;
@@ -86,14 +100,16 @@ namespace events{
 	// the dispatcher manages all the listeners for that 
 	class event_dispatcher {
 	public:
-		void subscribe(const int& event_type, const std::unique_ptr<event_handler_interface>&& handler);
-		void unsubscribe(const int& event_type, const int handler);
+		void subscribe(int event_key, std::unique_ptr<event_handler_interface>& handler_value);
+		void unsubscribe(int event_key, const int handler_value);
 		void execute_event(const event& event);
-		void queue_event(std::unique_ptr<event>&& event);
-		void dispatch();
+		void queue_event(std::unique_ptr<event>& event);
+		void add_delayed_event(std::unique_ptr<event>& event);
+		void dispatch(float delta);
 	private:
 		// for storing and processing events
-		std::vector<std::unique_ptr<event>> event_queue_;
+		std::queue<std::unique_ptr<event>> event_queue_;
+		std::vector<std::unique_ptr<event>> delayed_events_;
 		// pairs arn event id with instances of event handlers listening for the event
 		std::unordered_map<int, std::vector<std::unique_ptr<event_handler_interface>>> subscriber_map_;
 	};

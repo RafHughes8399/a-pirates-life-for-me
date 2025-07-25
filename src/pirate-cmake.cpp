@@ -42,8 +42,8 @@ int main(){
 	std::cout << "pre game loop" <<std::endl;
 	while (!WindowShouldClose()) {
 		std::cout << "in game loop" <<std::endl;
-		tick(test_game);
-		render(test_game);
+		tick(game);
+		render(game);
 	}
 	CloseWindow();
 }

@@ -14,17 +14,17 @@ namespace entities{
 	class entity {
 		public:
 		entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id)
-		: object_type_(object_type),position_(position), bounding_box_(BoundingBox{min, max}), id_(id){
-		// generate the bounding box, min and max
-	};
-	
-	entity(const entity& other)
-		: object_type_(other.object_type_), position_(other.position_), bounding_box_(other.bounding_box_), id_(other.id_){
+			: object_type_(object_type),position_(position), bounding_box_(BoundingBox{min, max}), id_(id){
+			// generate the bounding box, min and max
 		};
+	
+		entity(const entity& other)
+			: object_type_(other.object_type_), position_(other.position_), bounding_box_(other.bounding_box_), id_(other.id_){
+			};
 		
 		entity(entity&& other)
-		: object_type_(other.object_type_), position_(std::move(other.position_)), bounding_box_(std::move(other.bounding_box_)), id_(std::move(other.id_)){
-		};
+			: object_type_(other.object_type_), position_(std::move(other.position_)), bounding_box_(std::move(other.bounding_box_)), id_(std::move(other.id_)){
+			};
 		
 		
 		// a default update and render, the default update does nothing, render just draws the 
