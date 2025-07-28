@@ -117,8 +117,8 @@ void environment::world::build_frustrum_test_world(){
 			std::unique_ptr<entities::entity> cube = std::make_unique<entities::test_entity>(
 				TestType::get_instance(),
 				Vector3{i, 5, j},
-				Vector3{i - 2.5, 0, j - 2.5},
-				Vector3{i + 2.5, 0, j + 2.5},
+				Vector3{i - 2.5f, 0.0f, j - 2.5f},
+				Vector3{i + 2.5f, 0.0f, j + 2.5f},
 				world_entities_.get_next_id()
 			);
 			world_entities_.insert(cube);

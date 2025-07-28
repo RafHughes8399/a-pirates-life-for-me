@@ -1,5 +1,6 @@
 #include "events.h"
 
+// facade pattern
 // clean method interface for events to be used throughout the project
 template<typename E> // e for event
 inline void subscribe(const events::event_handler<E>& handler){

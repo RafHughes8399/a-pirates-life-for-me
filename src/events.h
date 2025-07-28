@@ -1,19 +1,28 @@
+// std includes 
 #include <functional>
 #include <string>
 #include <memory>
 #include <vector>
 #include <algorithm>
 #include <queue>
+
+// project includes
+#include "entities.h" // will need to change the build order ? 
+
+// other includes
+
 namespace events{
 	// an enum ID for event types
 	enum event_types{
 		test = 0,
-		collision = 1 // for example
+		collision = 1, // for example
+		key_input = 2,
+		camera_movement = 3
 		/**
 		 * types of events:
 		 * 	-> collision
 		 * -> player input
-		 * -> camera movement (recalculating frustrum)
+		 * -> camera movement (recalculating frustrum) ?
 		 * -> items being picked up ?
 		 */
 	};
@@ -55,9 +64,69 @@ namespace events{
 		}
 
 	};
+	
 	// define event subclasses
+	
+	/// @brief event to manage collisions between two entities
+	class collision_event : event{
+	public:
+		~collision_event() = default;
+		collision_event(entities::entity& a, entities::entity& b)
+		: event(event_types::collision), a_(a), b_(b){};
+
+		static const int get_static_event_type(){
+			return event_types::collision;
+		}
+	private:
+		entities::entity& a_;
+		entities::entity& b_;
+
+		// a collision event takes two entities and processes 
+		// what happens when those two entities collide
+
+		// entities needs events 
+		// events need entities
+		
+		// unless, the world handles collisions
+		// or there is a separate collision manager
+		// use an intermediate class between event and entities to 
+		// manage the collision, it is abridge between the two
+		// then the game or the world has the collision manager
+		// the game would have the system, access the entities through the world
 
 
+		// there's a design pattern for that right, let's have a look
+	};
+
+	class key_input_event : event{
+	public:
+		~key_input_event() = default;
+		key_input_event(int key)
+		: event(event_types::key_input), key_(key){};
+		// somewhere there would need to be a key, function stored
+		// like a player_controls class or something
+		static const int get_static_event_type(){
+			return event_types::key_input;
+		}
+	private:
+		int key_;
+		// something along the lines of:
+		// player_controls& control_scheme -> maps keys to functions 
+	};
+	
+	// mainly used to recalcualte the frustrum when the camera moves
+	class camera_move_event : event{
+	public:
+		~camera_move_event() = default;
+		camera_move_event(Vector3& position)
+		:event(event_types::camera_movement), camera_position_(position){};
+
+		static const int get_static_event_type(){
+			return event_types::camera_movement;
+		}
+	private: 
+		Vector3 camera_position_;
+	};
 
 	// handler is templated for event types, there 
 	// is a handler for each event type

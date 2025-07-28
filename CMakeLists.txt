@@ -65,8 +65,7 @@ add_subdirectory(lib/raylib)
 
 # add libarary
 # link libraries 
-add_library(events src/events.cpp)
-link_libraries(events)
+
 
 add_library(util src/utility_functions.cpp)
 link_libraries(util)
@@ -88,6 +87,12 @@ link_libraries(ocean)
 
 add_library(wind src/wind.cpp)
 link_libraries(wind)
+
+add_library(events src/events.cpp)
+link_libraries(events)
+
+add_library(managers src/managers.cpp)
+link_libraries(managers) 
 
 add_library(octree src/octree.cpp)
 link_libraries(octree)
