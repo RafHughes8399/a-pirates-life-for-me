@@ -1,3 +1,6 @@
+
+#ifndef RENDERING_H
+#define RENDERING_H
 #include <cmath>
 #include "config.h"
 
@@ -58,3 +61,4 @@ namespace rendering{
             plane far_;
     };
 }
+#endif

@@ -50,7 +50,7 @@ void events::event_dispatcher::add_delayed_event(std::unique_ptr<event>& event){
     delayed_events_.push_back(std::move(event));
     return;
 }
-void events::event_dispatcher::dispatch(float delta){
+void events::event_dispatcher::process_events(float delta){
     // execute events within the queue
     
     // pop is a void remove

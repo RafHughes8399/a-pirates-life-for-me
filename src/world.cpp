@@ -126,10 +126,9 @@ void environment::world::build_frustrum_test_world(){
 	}
 }
 
-void environment::world::update(){
+void environment::world::update(float delta){
 	// based on player position, update based on simulation distance
 	// check for interactions 
-	auto delta = GetFrameTime();
 	world_entities_.update(delta);
 
 	// randomise the wind every 90 seconds ? 

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SINGLETON_H
+#define SINGLETON_H
 #include "../lib/raylib/src/raylib.h"
 #include "config.h"
 
@@ -217,3 +218,5 @@ private:
         : ObjectType(LoadModelFromMesh(GenMeshCube(5, 5, 5)), LoadTexture(SAND_TEXTURE)) {
     }
 };
+
+#endif

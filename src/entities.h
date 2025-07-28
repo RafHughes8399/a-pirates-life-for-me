@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ENTITIES_H
+#define ENTITIES_H
 #include <utility>
 #include <string>
 #include <cmath>
@@ -186,3 +187,4 @@ class test_entity : public entity{
 	private:
 };
 }
+#endif

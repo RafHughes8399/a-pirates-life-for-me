@@ -117,3 +117,8 @@ essentially the collision manager is an interface between events and the world d
 in order of things
 -> the game updates the world, that generates events
 -> then the events are processed
+
+
+the issue is not circular includes
+its that because of the include setups game could have defined entities more 
+than once for example

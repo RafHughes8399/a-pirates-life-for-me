@@ -1,3 +1,5 @@
+#ifndef EVENTS_H
+#define EVENTS_H
 // std includes 
 #include <functional>
 #include <string>
@@ -180,7 +182,7 @@ namespace events{
 		void execute_event(const event& event);
 		void queue_event(std::unique_ptr<event>& event);
 		void add_delayed_event(std::unique_ptr<event>& event);
-		void dispatch(float delta);
+		void process_events(float delta);
 	private:
 		// for storing and processing events
 		std::queue<std::unique_ptr<event>> event_queue_;
@@ -192,3 +194,5 @@ namespace events{
 	extern event_dispatcher global_dispatcher_;
 
 }
+
+#endif

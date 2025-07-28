@@ -1,4 +1,6 @@
-#pragma once 
+#ifndef SHIP_COMPONENTS_H
+#define SHIP_COMPONENTS_H
+
 #include <memory>
 #include <numbers>
 #include <utility>
@@ -117,3 +119,5 @@ private:
 	float depth_;
 	Vector3 force_coefficient_; // that is currently applied to the ship, depends on state
 };
+
+#endif

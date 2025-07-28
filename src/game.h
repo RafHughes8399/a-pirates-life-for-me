@@ -1,3 +1,5 @@
+#ifndef GAME_H
+#define GAME_H
 
 // std lib includes 
 #include <utility>
@@ -7,8 +9,7 @@
 // project includes
 #include "environment.h" // has player, and object, and raylib, and config
 #include "config.h"
-
-// currently world, player and hud
+#include "events.h"
 // events too maybe 
 
 namespace game{
@@ -58,7 +59,6 @@ namespace game{
 		environment::world& world_;
 		player::player& player_;
 		// Hud hud_;
-
 	};
 
 class test_game {
@@ -108,3 +108,4 @@ class test_game {
 
 	};
 }
+#endif

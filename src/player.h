@@ -1,3 +1,5 @@
+#ifndef PLAYER_H
+#define PLAYER_H
 #include <map>
 #include <functional>
 #include <utility>
@@ -12,7 +14,16 @@
 namespace player{
 	// class inventory{}
 
-	//TODO: change the pointer to ship to just a target location
+	
+	//TODO: figure out a more elegant way to track the ship, maybe a mediator 
+	// TODO: a control map for key and mouse inputs to functions in the game
+	class control_scheme{
+	public:
+		// TODO: methods that can be used by the event manager
+	private:
+		// std::map<int, event ?>
+		// or maybe std::map<int, std::function>
+	};
 	// a reference the ship's position 
 	class player {
 		public:
@@ -103,3 +114,4 @@ namespace player{
 			rendering::frustrum camera_frustrum_;
 	};
 }
+#endif

@@ -1,3 +1,5 @@
+#ifndef EVENT_INTERFACE_H
+#define EVENT_INTERFACE_H
 #include "events.h"
 
 // facade pattern
@@ -11,7 +13,6 @@ inline void subscribe(const events::event_handler<E>& handler){
 
 template<typename E> // e for event
 inline void unsubscribe(const events::event_handler<E>& handler){
-    // TODO: again figure this out
      events::global_dispatcher_.unsubscribe(E::get_static_type(), handler->get_type());
 } 
 
@@ -27,3 +28,4 @@ inline void queue_event(std::unique_ptr<events::event>& event){
 inline void add_delayed_event(std::unique_ptr<events::event>& event){
     events::global_dispatcher_.add_delayed_event(event);
 }
+#endif

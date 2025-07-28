@@ -1,3 +1,5 @@
+#ifndef OCTREE_H
+#define OCTREE_H
 
 // std includes
 #include <vector>
@@ -242,3 +244,4 @@ namespace tree{
         }
     };
 }
+#endif

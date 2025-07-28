@@ -1,3 +1,5 @@
+#ifndef MANAGERS_H
+#define MANAGERS_H
 // includes, should make use of event should not be needed by entities
 // std lib includes
 
@@ -8,6 +10,8 @@
 
 // a manager is how events are generated, so a collision maanger generates
 // collision events
+
+// THIS IS A MEDIATOR PATTERN ? 
 namespace managers{     
     class collision_manager{
         public:
@@ -44,3 +48,4 @@ namespace managers{
     }; 
     // etc.
 }
+#endif
