@@ -46,11 +46,12 @@ namespace events{
 	class test_event : event{
 	protected:
 	public:
+		~test_event() = default;
 		test_event()
 		: event(event_types::test){};
 
 		static const int get_static_event_type(){
-			event_types::test;
+			return event_types::test;
 		}
 
 	};
@@ -79,7 +80,12 @@ namespace events{
 		~event_handler() override = default;
 		event_handler() = default;
 		void call_event(const event& e) override{
-			//TODO: implement
+			// check if event and handler template match, because you're doing a static 
+			// cast
+			if(e.get_type() == E::get_static_event_type()){
+				// trigger the event stored in the handler
+				handler_(static_cast<const E&>(e));
+			}
 			return;
 		}
 		const int get_type() override{
@@ -110,10 +116,10 @@ namespace events{
 		// for storing and processing events
 		std::queue<std::unique_ptr<event>> event_queue_;
 		std::vector<std::unique_ptr<event>> delayed_events_;
-		// pairs arn event id with instances of event handlers listening for the event
+		// pairs an event id with instances of event handlers listening for the event
 		std::unordered_map<int, std::vector<std::unique_ptr<event_handler_interface>>> subscriber_map_;
 	};
 
-	extern event_dispatcher dispatch_;
+	extern event_dispatcher global_dispatcher_;
 
 }

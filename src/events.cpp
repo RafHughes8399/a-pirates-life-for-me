@@ -1,5 +1,4 @@
 #include "events.h"
-//TODO: implement
 void events::event_dispatcher::subscribe(int event_key, std::unique_ptr<event_handler_interface>& handler_value){
     auto event = subscriber_map_.find(event_key);
     // if the event does not exist yet in subscribes, add it as a key
@@ -47,8 +46,8 @@ void events::event_dispatcher::queue_event(std::unique_ptr<event>& event){
     return;
 }
 
-void events::event_dispatcher::add_delayed_event(std::unique_ptr<event>& events){
-
+void events::event_dispatcher::add_delayed_event(std::unique_ptr<event>& event){
+    delayed_events_.push_back(std::move(event));
     return;
 }
 void events::event_dispatcher::dispatch(float delta){

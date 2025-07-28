@@ -58,7 +58,6 @@ namespace tree{
         o_node* find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         entities::entity* find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         
-        // TODO: object retrieval
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree);
         
         template<typename UnaryPred>

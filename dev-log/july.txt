@@ -57,3 +57,29 @@ TODO
 -> so you trigger an event somewhere
 -> when triggered, it finds all subscribers of the event and calls on_event
 -> subscribers are instances of the event handler that are found throughout the code
+
+
+
+
+28 / 07
+-> fix that problem you identified with the method call
+-> setup tests for events
+-> integrate into the game
+-> setup collision events 
+
+-> the player decouple
+-> documentation
+
+
+
+this is how the event stuff works:
+in a class (entity, player, world, etc) you define a method
+on_eventE that takes a const reference to eventE and a handler member
+which is given the eventE as the template argument
+
+in the class constructor you subscribe 
+in the class destructor you unsubscribe
+on_eventE is what happens to the class when the event E is called
+
+then elsewhere in the code you trigger the event, i.e 
+two entities intersect, you trigger a collision event
