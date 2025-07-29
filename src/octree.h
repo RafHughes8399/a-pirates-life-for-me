@@ -1,3 +1,5 @@
+#ifndef OCTREE_H
+#define OCTREE_H
 
 // std includes
 #include <vector>
@@ -58,10 +60,9 @@ namespace tree{
         o_node* find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         entities::entity* find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         
-        // TODO: object retrieval
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree);
         
-        template<class UnaryPred>
+        template<typename UnaryPred>
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree, UnaryPred p){
             // pass the object to the predicate
             auto predicate_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};
@@ -98,6 +99,21 @@ namespace tree{
         
         // update and render
         void render(std::unique_ptr<o_node>& tree);
+
+        template<typename UnaryPred>
+        void render(std::unique_ptr<o_node>& tree, UnaryPred p){
+            if(not tree){
+                return;
+            }
+            for(auto & entity : tree->objects_){
+                if(p(entity)){
+                    entity->render();
+                }
+            }
+            for(auto & child : tree->children_){
+                render(child, p);
+            }
+        }
         public:
         // CONSTRUCTORS
         ~octree() = default;
@@ -172,8 +188,11 @@ namespace tree{
         void render(){
             render(root_);
         }
-
         
+        template<typename UnaryPred>
+        void render(UnaryPred p){
+            render(root_, p);
+        }
         std::unique_ptr<o_node>& get_root() {
             return root_;
         }
@@ -225,3 +244,4 @@ namespace tree{
         }
     };
 }
+#endif

@@ -1,3 +1,6 @@
+
+#ifndef RENDERING_H
+#define RENDERING_H
 #include <cmath>
 #include "config.h"
 
@@ -14,7 +17,7 @@ namespace rendering{
         plane(Vector3 point, Vector3 normal)
         : normal_(normal), distance_(Vector3DotProduct(normal, point)){}
 
-        float signed_distance_to_plane(Vector3& point);
+        float signed_distance_to_plane(Vector3& point) const;
     };
 
     class frustrum{
@@ -45,7 +48,7 @@ namespace rendering{
             
             frustrum& operator=(frustrum&& other);
             
-            bool contains(BoundingBox& object_box);
+            bool contains(BoundingBox& object_box) const;
             
             private:
             plane top_;
@@ -58,3 +61,4 @@ namespace rendering{
             plane far_;
     };
 }
+#endif

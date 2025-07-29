@@ -90,7 +90,6 @@ void Sail::set_wind(float direction, float speed){
 }
 
 Vector2& Sail::get_wind(){
-	// TODO: insert return statement here
 	return wind_;
 }
 

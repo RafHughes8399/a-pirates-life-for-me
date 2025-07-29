@@ -162,7 +162,6 @@ void tree::octree::insert(std::unique_ptr<o_node>& tree, std::unique_ptr<entitie
 void tree::octree::insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<entities::entity>>& objects){
     // quite similar logic to before, just goes with a list of objects instead, level by level, less overall
     // traversal cost than inserting one by one
-
     //TODO: implement
     (void) tree;
     (void) objects;

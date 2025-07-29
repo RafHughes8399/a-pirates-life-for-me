@@ -2,7 +2,6 @@
 #include "../lib/raylib/src/raylib.h"
 
 // game models and textures
-// TODO: sort out the CWD for the model and texture paths
 // CWD is build
 #define PIRATE_SHIP_MODEL "../models/medium_ship_brown.glb"
 #define PIRATE_SHIP_TEXTURE "../textures/pirate-textures/pirate_ship_texture.png"

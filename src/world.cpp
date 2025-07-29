@@ -42,10 +42,6 @@ void environment::world::build_world(wind& wind, player::player& player){
 }
 void environment::world::generate_islands(){
 	// for now, just generate the underlying terrain for all the islands in the game 
-	// TODO: position them
-	// TODO: calculate their bounding boxes
-	// TODO: texture them
-
 	// the object constructor is, i think size and density can go, they seem not so necessary
 	// obj type,
 	// position
@@ -121,8 +117,8 @@ void environment::world::build_frustrum_test_world(){
 			std::unique_ptr<entities::entity> cube = std::make_unique<entities::test_entity>(
 				TestType::get_instance(),
 				Vector3{i, 5, j},
-				Vector3{i - 2.5, 0, j - 2.5},
-				Vector3{i + 2.5, 0, j + 2.5},
+				Vector3{i - 2.5f, 0.0f, j - 2.5f},
+				Vector3{i + 2.5f, 0.0f, j + 2.5f},
 				world_entities_.get_next_id()
 			);
 			world_entities_.insert(cube);
@@ -130,10 +126,9 @@ void environment::world::build_frustrum_test_world(){
 	}
 }
 
-void environment::world::update(){
+void environment::world::update(float delta){
 	// based on player position, update based on simulation distance
 	// check for interactions 
-	auto delta = GetFrameTime();
 	world_entities_.update(delta);
 
 	// randomise the wind every 90 seconds ? 
@@ -141,22 +136,18 @@ void environment::world::update(){
 }
 
 void environment::world::render(rendering::frustrum& rendering_frustrum) {
-	// TODO: frustrum culling, for now just render everything in the tree 
-	// pass the frustrum in, check objects against it
 	auto num_rendered = 0;
-	// this is ineffective, figure out another way
-	auto w_entities = world_entities_.get_objects();
-	for(auto & entity : w_entities){
-		// check if the entitiy
-		if(rendering_frustrum.contains(entity.get()->get_bounding_box())){
-			entity.get()->render();
+	// entity is std::unique_ptr<entities::entity>
+	auto frustrum_predicate = [rendering_frustrum, &num_rendered](auto & entity)-> bool{
+		if(rendering_frustrum.contains(entity->get_bounding_box())){
 			num_rendered++;
+			return true;
 		}
-
-	}
+		return false;
+	};
+	world_entities_.render(frustrum_predicate);
 	// quick debug to check if this is working, i think not because its rendering everything
 	// do some more debug printing here
-	
-	
-	std::cout << "total objects: " << w_entities.size() << " || objects rendered: " << num_rendered << std::endl;
+	// debug
+	std::cout << "total objects: " << world_entities_.size() << " || objects rendered: " << num_rendered << std::endl;
 }

@@ -1,4 +1,5 @@
-
+#ifndef ENVIRONMENT_H
+#define ENVIRONMENT_H
 // std lib includes
 #include <vector>
 #include <memory>
@@ -82,7 +83,7 @@ class world {
 		world& operator=(const world& other);
 		world& operator= (const world && other);
 		
-		void update();
+		void update(float delta);
 		void render(rendering::frustrum& rendering_frustrum);
 		
 		void populate_test_objects();
@@ -95,3 +96,4 @@ class world {
 		
 	};
 }
+#endif

@@ -98,7 +98,6 @@ void entities::ship::steer_left(float delta){
 	direction_ = std::fmod((direction_ + turn), ( 2 * PI));
 	
 	// rotate the model, yaw
-	// TODO: update the sail direction too with the same offest
 	sail_.move_sail_left(turn);
 
 	Vector3 rotate = { 0.0f, direction_, 0.0f };
@@ -111,7 +110,6 @@ void entities::ship::steer_right(float delta){
 	direction_ = std::fmod((direction_ - turn), ( 2 * PI));
 	if (direction_ < 0.0) { direction_ += 2 * PI; }
 
-	// TODO: update the sail direction too with the same offest, here direction is decreasing
 	sail_.move_sail_right(turn);
 	
 	Vector3 rotate = {  0.0f,  direction_,  0.0f };

@@ -51,3 +51,80 @@ TODO
 
 -> frustrum testing 
 -> generate test world, shrink the objects {2, 2, 2}, make a test player, a free form camera, not tied to anything
+
+-> event handle
+
+-> so you trigger an event somewhere
+-> when triggered, it finds all subscribers of the event and calls on_event
+-> subscribers are instances of the event handler that are found throughout the code
+
+
+
+
+28 / 07
+-> fix that problem you identified with the method call
+-> setup tests for events
+-> integrate into the game
+-> setup collision events 
+
+-> the player decouple
+-> documentation
+
+
+
+this is how the event stuff works:
+in a class (entity, player, world, etc) you define a method
+on_eventE that takes a const reference to eventE and a handler member
+which is given the eventE as the template argument
+
+in the class constructor you subscribe 
+in the class destructor you unsubscribe
+on_eventE is what happens to the class when the event E is called
+
+then elsewhere in the code you trigger the event, i.e 
+two entities intersect, you trigger a collision event
+
+
+events need entities 
+entities need the events
+ 
+// a collision event takes two entities and processes 
+// what happens when those two entities collide
+// entities needs events 
+// events need entities
+
+// unless, the world handles collisions
+// or there is a separate collision manager
+// use an intermediate class between event and entities to 
+// manage the collision, it is abridge between the two
+// then the game or the world has the collision manager
+// the game would have the system, access the entities through the world
+// there's a design pattern for that right, let's have a look
+
+
+ok so 
+
+the collision manager is where the the collision events are triggered
+it has the collision handler and different on collision events 
+(i.e movable to static)
+(i.e movable moveable)
+
+when the world detects a collision it passes the information to the collision manager
+which then handles the specific collision event
+
+essentially the collision manager is an interface between events and the world d
+
+in order of things
+-> the game updates the world, that generates events
+-> then the events are processed
+
+
+the issue is not circular includes
+its that because of the include setups game could have defined entities more 
+than once for example
+
+first things first do a  test event 
+then move onto player and collision (separate branches for them)
+
+test immediate events
+test delayed events

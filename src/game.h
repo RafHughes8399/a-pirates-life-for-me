@@ -1,3 +1,5 @@
+#ifndef GAME_H
+#define GAME_H
 
 // std lib includes 
 #include <utility>
@@ -7,8 +9,7 @@
 // project includes
 #include "environment.h" // has player, and object, and raylib, and config
 #include "config.h"
-
-// currently world, player and hud
+#include "managers.h" // has events
 // events too maybe 
 
 namespace game{
@@ -58,14 +59,14 @@ namespace game{
 		environment::world& world_;
 		player::player& player_;
 		// Hud hud_;
-
 	};
 
 class test_game {
 	public:
 		~test_game() = default;
 		test_game(environment::world& world, player::test_player& player)
-			: world_(world), player_(player) {
+			: world_(world), player_(player), 
+			test_manager_(managers::event_manager<events::test_event>()) {
 			// here in the test_game, add event listeners basewd on what you want to listen to
 		}
 		test_game(const test_game& other)
@@ -104,7 +105,9 @@ class test_game {
 	private:
 		environment::world& world_;
 		player::test_player& player_;
+		managers::event_manager<events::test_event> test_manager_;
 		// Hud hud_;
 
 	};
 }
+#endif
