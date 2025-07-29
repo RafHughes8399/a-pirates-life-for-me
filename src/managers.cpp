@@ -1,5 +1,19 @@
 #include "managers.h"
 
+
+void managers::event_map::on_event(const events::event& e){
+    // call the on event function for the event id provided
+    auto on_event = on_event_map_[e.get_type()];
+    on_event(e);
+
+    return;
+
+}
+
+void managers::event_map::on_test_event(const events::test_event& test){
+    std::cout << test.get_event_time() << std::endl;
+    // TODO something
+}
 //TODO implement
 void managers::collision_manager::on_collision_event(const events::collision_event& collision){
     (void) collision;

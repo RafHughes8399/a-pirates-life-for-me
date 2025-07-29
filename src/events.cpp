@@ -1,4 +1,9 @@
 #include "events.h"
+
+// defining the dispatcher
+events::event_dispatcher events::global_dispatcher_;
+
+
 void events::event_dispatcher::subscribe(int event_key, std::unique_ptr<event_handler_interface>& handler_value){
     auto event = subscriber_map_.find(event_key);
     // if the event does not exist yet in subscribes, add it as a key

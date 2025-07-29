@@ -7,7 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
-
+#include <ctime>
 // project includes
 #include "entities.h" // will need to change the build order ? 
 
@@ -36,8 +36,8 @@ namespace events{
 		// can take palce 10s after another,
 	public:
 		virtual ~event() = default;	
-		event(int id)
-		: type_(id), handled_(false){};
+		event(int id, float delay=0.0f)
+		: type_(id), handled_(false), delay_(delay){};
 		
 		event(event&& other) = default;
 		event& operator=(event&& other) = default;
@@ -54,29 +54,34 @@ namespace events{
 		}
 	};
 
-	class test_event : event{
+	class test_event : public  event{
 	protected:
 	public:
 		~test_event() = default;
-		test_event()
-		: event(event_types::test){};
+		test_event(float delay=0.0f)
+		: event(event_types::test, delay), time_(std::time(nullptr)){};
 
-		static const int get_static_event_type(){
+		static const int get_static_type(){
 			return event_types::test;
 		}
+		char* get_event_time() const{
+			return std::asctime(std::localtime(&time_));
+		}
+		private:
+		std::time_t time_;
 
 	};
 	
 	// define event subclasses
-	
+	//TODO add delay tp constructor
 	/// @brief event to manage collisions between two entities
-	class collision_event : event{
+	class collision_event :  public event{
 	public:
 		~collision_event() = default;
 		collision_event(entities::entity& a, entities::entity& b)
 		: event(event_types::collision), a_(a), b_(b){};
 
-		static const int get_static_event_type(){
+		static const int get_static_type(){
 			return event_types::collision;
 		}
 	private:
@@ -100,14 +105,14 @@ namespace events{
 		// there's a design pattern for that right, let's have a look
 	};
 
-	class key_input_event : event{
+	class key_input_event : public event{
 	public:
 		~key_input_event() = default;
 		key_input_event(int key)
 		: event(event_types::key_input), key_(key){};
 		// somewhere there would need to be a key, function stored
 		// like a player_controls class or something
-		static const int get_static_event_type(){
+		static const int get_static_type(){
 			return event_types::key_input;
 		}
 	private:
@@ -117,13 +122,13 @@ namespace events{
 	};
 	
 	// mainly used to recalcualte the frustrum when the camera moves
-	class camera_move_event : event{
+	class camera_move_event : public event{
 	public:
 		~camera_move_event() = default;
 		camera_move_event(Vector3& position)
 		:event(event_types::camera_movement), camera_position_(position){};
 
-		static const int get_static_event_type(){
+		static const int get_static_type(){
 			return event_types::camera_movement;
 		}
 	private: 
@@ -139,27 +144,28 @@ namespace events{
 		void execute(const event& e){
 			call_event(e);
 		}
-		virtual const int get_type() = 0;
+		virtual const int get_type() const = 0;
 		private:
 		virtual void call_event(const event& e) = 0;
 
 	};
 	
 	template<typename E> // E for event
-	class event_handler : event_handler_interface{
+	class event_handler : public event_handler_interface{
 	public:
 		~event_handler() override = default;
-		event_handler() = default;
+		event_handler(std::function<void(const E& e)> handle)
+			: handler_type_(E::get_static_type()), handler_(handle){};
 		void call_event(const event& e) override{
 			// check if event and handler template match, because you're doing a static 
 			// cast
-			if(e.get_type() == E::get_static_event_type()){
+			if(e.get_type() == E::get_static_type()){
 				// trigger the event stored in the handler
 				handler_(static_cast<const E&>(e));
 			}
 			return;
 		}
-		const int get_type() override{
+		const int get_type() const override{
 			return handler_type_;
 		}
 		bool operator==(const event_handler& other){

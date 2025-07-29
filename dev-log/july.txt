@@ -122,3 +122,9 @@ in order of things
 the issue is not circular includes
 its that because of the include setups game could have defined entities more 
 than once for example
+
+first things first do a  test event 
+then move onto player and collision (separate branches for them)
+
+test immediate events
+test delayed events
