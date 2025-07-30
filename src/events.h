@@ -19,7 +19,8 @@ namespace events{
 		test = 0,
 		collision = 1, // for example
 		key_input = 2,
-		camera_movement = 3
+		camera_movement = 3,
+		num_types = 4 // update as needed
 		/**
 		 * types of events:
 		 * 	-> collision

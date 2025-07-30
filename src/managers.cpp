@@ -3,9 +3,7 @@
 
 void managers::event_map::on_event(const events::event& e){
     // call the on event function for the event id provided
-    auto on_event = on_event_map_[e.get_type()];
-    on_event(e);
-
+    on_event_list_[e.get_type()](e);
     return;
 
 }

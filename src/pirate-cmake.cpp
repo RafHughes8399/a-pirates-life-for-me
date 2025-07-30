@@ -39,9 +39,7 @@ int main(){
 	SetTargetFPS(FPS);
 	// adjust the current working directory
 
-	std::cout << "pre game loop" <<std::endl;
 	while (!WindowShouldClose()) {
-		std::cout << "in game loop" <<std::endl;
 		tick(game);
 		render(game);
 	}

@@ -128,3 +128,6 @@ then move onto player and collision (separate branches for them)
 
 test immediate events
 test delayed events
+
+-> change it to an array for instant lookup
+-> player input events

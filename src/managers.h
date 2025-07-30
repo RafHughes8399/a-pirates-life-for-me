@@ -41,11 +41,14 @@ namespace managers{
     private:
         ~event_map() = default;
         event_map(){    
-            on_event_map_[events::event_types::test] = [this](const events::event& e){
+            // initiaise the array
+            on_event_list_[events::event_types::test] = [this](const events::event& e){
                 on_test_event(static_cast<const events::test_event&>(e));
             };
+            
+            //TODO init other events as defined
         }
-            std::map<int, std::function<void(const events::event& e)>> on_event_map_;
+        std::function<void(const events::event& e)> on_event_list_[events::event_types::num_types];
     };
 
     // so the event manager has the on event and the handler
