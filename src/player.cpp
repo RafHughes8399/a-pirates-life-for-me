@@ -2,12 +2,12 @@
 
 // player is updated after the objects so this should wok
 void player::player::update(float delta) {
+	// check for key inputs, generate any events if they are pressed (or held down)
 	check_key_input(delta);
 	auto ship_position = ship_->get_position();
 	auto target_difference = Vector3Subtract(ship_position, camera_.target);
 	
 	move_camera(camera_mode_, target_difference);
-	
 	// recalculate the frustrum if the camera has moved()
 }
 void player::player::render() {
@@ -21,6 +21,7 @@ Camera3D& player::player::get_camera(){
 rendering::frustrum& player::player::get_frustrum(){
 	return camera_frustrum_;
 }
+
 void player::player::move_camera(int mode, Vector3& difference){
 	Vector2 delta_mouse = GetMouseDelta();
 	auto delta_time = GetFrameTime();
@@ -47,27 +48,35 @@ void player::player::move_camera(int mode, Vector3& difference){
 	// then allow for camera rotation
 	CameraYaw(&camera_, -delta_mouse.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotate_around_target);
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
+
+	// create an event to update the frustrum
+	camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);	
 }
 
-entities::ship* player::player::get_ship(){
+entities::player_ship* player::player::get_ship(){
 	return ship_;
 }
 
-void player::player::set_ship(entities::ship* ship){
-	ship_ = ship;
+void player::player::set_ship(entities::player_ship* player_ship){
+	ship_ = player_ship;
 }
 
 void player::player::check_key_input(float delta){
 	// iterate through both key maps
 
-
 	for (auto& input : key_down_inputs_) {
 		if (IsKeyDown(input.first)) {
+			// create and queue the event
+			std::unique_ptr<events::event> input_event = std::make_unique<events::player_input_event>(input.first);
+			events::global_dispatcher_.queue_event(input_event);
 			input.second(delta);
 		}
 	}
 	for (auto& input : key_pressed_inputs_) {
 		if (IsKeyPressed(input.first)) {
+			// create and queue the event 
+			std::unique_ptr<events::event> input_event = std::make_unique<events::player_input_event>(input.first);
+			events::global_dispatcher_.queue_event(input_event);
 			input.second();
 		}
 	}

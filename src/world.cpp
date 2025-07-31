@@ -21,7 +21,7 @@ void environment::world::build_world(wind& wind, player::player& player){
 	);
 	world_entities_.insert(ocean);
 	// build the ship
-	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::ship>(
+	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::player_ship>(
 		ShipType::get_instance(),
 		SHIP_START,
 		Vector3{SHIP_START.x -1.0f ,SHIP_START.y, SHIP_START.z -1.0f},
@@ -30,7 +30,7 @@ void environment::world::build_world(wind& wind, player::player& player){
 	);
 
 	//let the player ship subscribe to the wind to listen for updates 
-	auto player_ship_ptr = static_cast<entities::ship*>(player_ship.get());
+	auto player_ship_ptr = static_cast<entities::player_ship*>(player_ship.get());
 	wind_.add_ship_subscriber(player_ship_ptr);
 	//then set the player ship pointer, so it can be tracked
 	player.set_ship(player_ship_ptr);

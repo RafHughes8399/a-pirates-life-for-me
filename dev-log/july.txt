@@ -131,3 +131,37 @@ test delayed events
 
 -> change it to an array for instant lookup
 -> player input events
+
+no what should actually happen is that the ship reacts to the key input events
+the player should react to camera move events triggered by ship moving 
+
+
+so for example, the key input takes a key and a ship,
+takes the ship function paired with the key and calls it
+the ship listens to key events  
+
+and when the player moves, it should cue an event to move the camera, and recalcualte the frustrum
+the player is the camera, 
+
+the camera move event does not make as much sense because it's all contained within one class, more or less
+
+this will decouple the two as you are intending
+
+
+so then the ship has a input mananger to listen to input events which are added to the event queue 
+by the player when a button is pressed 
+
+
+hmm no there is the inclusion circle
+
+
+ok so maybe the event just takes in the deatils (Like the mmebers instead of the whole classes
+so like instead of the ship it takes a std function and 
+
+like how camera move doesnt take the player but rather uses references to the player's member
+you feel
+
+
+
+but the ship thing makes sense
+it has a manager for player input events 

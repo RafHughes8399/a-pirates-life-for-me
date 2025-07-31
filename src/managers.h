@@ -4,7 +4,7 @@
 // std lib includes
 #include <map>
 #include <functional>
-
+#include <iostream>
 // project includes
 #include "events_interface.h"
 /// @brief the essence of managers is to bridge the event system with 
@@ -19,6 +19,8 @@
 // then in the general on_event defined in the class template, you call the function 
 // stored at event 
 // map event id to on_event thing ig
+
+// managers handle the sub and unsub for an event listener
 namespace managers{    
     // map events to their on_event function
     class event_map{
@@ -31,13 +33,16 @@ namespace managers{
         event_map& operator=(event_map&& other) = delete;
 
         static event_map& get_instance(){
-            static event_map instance;
+            static event_map instance; 
             return instance;
         }
         // accessing on_x_event functions 
         void on_event(const events::event& e);
         // on_x_event functions
         void on_test_event(const events::test_event& test);
+        void on_collision_event(const events::collision_event& collision);
+        void on_key_input_event(const events::player_input_event& key_input);
+        void on_camera_move_event(const events::camera_move_event& camera_move);
     private:
         ~event_map() = default;
         event_map(){    
@@ -46,6 +51,15 @@ namespace managers{
                 on_test_event(static_cast<const events::test_event&>(e));
             };
             
+            on_event_list_[events::event_types::collision] = [this](const events::event& e){
+                on_collision_event(static_cast<const events::collision_event&>(e));
+            };
+            on_event_list_[events::event_types::key_input] = [this](const events::event& e){
+                on_key_input_event(static_cast<const events::player_input_event&>(e));
+            };
+            on_event_list_[events::event_types::camera_movement] = [this](const events::event& e){
+                on_camera_move_event(static_cast<const events::camera_move_event&>(e));
+            };    
             //TODO init other events as defined
         }
         std::function<void(const events::event& e)> on_event_list_[events::event_types::num_types];
@@ -103,12 +117,12 @@ namespace managers{
         //TODO on a camerea move event, recalculate the frustrum
         void on_camera_move_event(const events::camera_move_event& camera_move);
         // TODO on a key input event, call the function mapped to it
-        void on_key_input_event(const events::key_input_event& key_input);
+        void on_key_input_event(const events::player_input_event& key_input);
         
         private:
         // has the handler for both
         events::event_handler<events::camera_move_event> camera_move_handler_;
-        events::event_handler<events::key_input_event> key_input_handler_;
+        events::event_handler<events::player_input_event> key_input_handler_;
     }; 
     // etc.
 }

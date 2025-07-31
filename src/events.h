@@ -9,8 +9,9 @@
 #include <queue>
 #include <ctime>
 // project includes
-#include "entities.h" // will need to change the build order ? 
-
+//#include "entities.h" // will need to change the build order ? 
+//#include "player.h"
+#include "rendering.h"
 // other includes
 
 namespace events{
@@ -79,15 +80,14 @@ namespace events{
 	class collision_event :  public event{
 	public:
 		~collision_event() = default;
-		collision_event(entities::entity& a, entities::entity& b)
-		: event(event_types::collision), a_(a), b_(b){};
+		collision_event() = default;
 
 		static const int get_static_type(){
 			return event_types::collision;
 		}
 	private:
-		entities::entity& a_;
-		entities::entity& b_;
+		//entities::entity& a_;
+		//entities::entity& b_;
 
 		// a collision event takes two entities and processes 
 		// what happens when those two entities collide
@@ -106,34 +106,39 @@ namespace events{
 		// there's a design pattern for that right, let's have a look
 	};
 
-	class key_input_event : public event{
+	class player_input_event : public event{
 	public:
-		~key_input_event() = default;
-		key_input_event(int key)
+		~player_input_event() = default;
+		player_input_event(int key)
 		: event(event_types::key_input), key_(key){};
 		// somewhere there would need to be a key, function stored
 		// like a player_controls class or something
 		static const int get_static_type(){
 			return event_types::key_input;
 		}
+		int get_key() const{
+			return key_;
+		}
 	private:
 		int key_;
 		// something along the lines of:
-		// player_controls& control_scheme -> maps keys to functions 
 	};
 	
 	// mainly used to recalcualte the frustrum when the camera moves
 	class camera_move_event : public event{
 	public:
 		~camera_move_event() = default;
-		camera_move_event(Vector3& position)
-		:event(event_types::camera_movement), camera_position_(position){};
+		camera_move_event(Vector3& position, Camera3D& camera, rendering::frustrum& frustrum)
+		:event(event_types::camera_movement), new_position_(position), camera_(camera),
+		frustrum_(frustrum){};
 
 		static const int get_static_type(){
 			return event_types::camera_movement;
 		}
-	private: 
-		Vector3 camera_position_;
+	private:
+		Vector3& new_position_;
+		Camera3D& camera_;
+		rendering::frustrum& frustrum_;
 	};
 
 	// handler is templated for event types, there 

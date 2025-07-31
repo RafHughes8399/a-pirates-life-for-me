@@ -5,11 +5,13 @@
 #include <cmath>
 #include <iostream>
 
-#include "singleton_flyweight.h"
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
+
+#include "singleton_flyweight.h"
 #include "ship_components.h"
 #include "config.h"
+#include "managers.h"
 namespace entities{
 
 	class entity {
@@ -85,25 +87,26 @@ moveable_entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 
 	float direction_; // in radians
 };
 
-
-class ship : public moveable_entity {
+// TODO potential rename to distinguish between player_ships and npc_ships, that is how you differentiate
+// yet for a later day
+class player_ship : public moveable_entity {
 public:
-ship(ShipType& ship_type, Vector3 position, Vector3 min, Vector3 max, int id, Vector3 velocity = Vector3Zero(), float direction = 0.0f)
-		: moveable_entity(ship_type, position, min, max, id, velocity, direction), sail_(Sail(direction, 4.2f)), anchor_(Anchor()){
-
-	};
+	player_ship(ShipType& ship_type, Vector3 position, Vector3 min, Vector3 max, int id, Vector3 velocity = Vector3Zero(), float direction = 0.0f)
+			: moveable_entity(ship_type, position, min, max, id, velocity, direction),
+			 sail_(Sail(direction, 4.2f)), anchor_(Anchor()), player_input_manager_(managers::event_manager<events::player_input_event>()){
+		};
 	
-	ship(const ship& other)
+	player_ship(const player_ship& other)
 		: moveable_entity(other), sail_(other.sail_), anchor_(other.anchor_){
 
 		};
 
-	ship(ship&& other)
+	player_ship(player_ship&& other)
 		: moveable_entity(other), sail_(std::move(other.sail_)), anchor_(std::move(other.anchor_)){
 	};
 	
-	ship& operator=(const ship& ohter);
-	ship& operator= (const ship&& other);
+	player_ship& operator=(const player_ship& ohter);
+	player_ship& operator= (const player_ship&& other);
 	
 	void update(float delta) override;
 	void render() override;
@@ -126,8 +129,9 @@ ship(ShipType& ship_type, Vector3 position, Vector3 min, Vector3 max, int id, Ve
 	void turn_sail_right(float delta);
 	void update_sail_wind(float direction, float speed);
 private:
-Sail sail_;
-Anchor anchor_;
+	Sail sail_;
+	Anchor anchor_;
+	managers::event_manager<events::player_input_event> player_input_manager_;
 
 };
 

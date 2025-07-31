@@ -7,6 +7,7 @@
 #include "entities.h"
 #include "config.h"
 #include "rendering.h"
+#include "events_interface.h"
 
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
@@ -15,7 +16,7 @@ namespace player{
 	// class inventory{}
 
 	
-	//TODO: figure out a more elegant way to track the ship, maybe a mediator 
+	//TODO: figure out a more elegant way to track the player_ship, maybe a mediator 
 	// TODO: a control map for key and mouse inputs to functions in the game
 	class control_scheme{
 	public:
@@ -24,7 +25,7 @@ namespace player{
 		// std::map<int, event ?>
 		// or maybe std::map<int, std::function>
 	};
-	// a reference the ship's position 
+	// a reference the player_ship's position 
 	class player {
 		public:
 		~player() = default;
@@ -59,10 +60,9 @@ namespace player{
 		void render();
 			
 		Camera3D& get_camera();
-		std::pair<int, int>& get_chunk();
 		void move_camera(int mode, Vector3& new_position);
-		entities::ship* get_ship();
-		void set_ship(entities::ship* ship);
+		entities::player_ship* get_ship();
+		void set_ship(entities::player_ship* player_ship);
 
 		rendering::frustrum& get_frustrum();
 		private:
@@ -72,7 +72,7 @@ namespace player{
 			rendering::frustrum camera_frustrum_;
 			int camera_mode_;
 			
-			entities::ship* ship_;
+			entities::player_ship* ship_;
 		
 			std::map<int, std::function<void(float)>> key_down_inputs_;
 			std::map<int, std::function<void()>> key_pressed_inputs_;
