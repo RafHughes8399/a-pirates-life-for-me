@@ -165,3 +165,30 @@ you feel
 
 but the ship thing makes sense
 it has a manager for player input events 
+
+
+lets rethink controls, first things first, defines a map that has 
+key input, function 
+
+there must be a way to change the keys though
+but the player needs to know what keys are mapped
+so those must be defined externally,
+
+
+ok ok make a controls class, that allows you to set the controls, change them, etc 
+and then in player you check if any of the controls have been pressed
+if so you send an event
+
+the ship  defines a map based on controls
+mapping a key input to a ship function 
+
+
+ok for next time:
+    -> implement singleton controls 
+    -> have player check if any controls are preseed or down, then create an event
+    -> define a ship controls that maps a control to a function
+    -> then define on_event to call that function
+    -> merge steer left and steer right into one 
+    -> merge sail up and sail down into on
+    -> change anchor to be the same mechanic as sail and steer
+    -> then test yay

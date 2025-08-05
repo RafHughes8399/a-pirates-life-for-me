@@ -38,5 +38,12 @@ void managers::event_map::on_key_input_event(const events::player_input_event& k
     // and the control map, then call the function 
     // ok the player manager is going to need the player
     std::cout << "pressed key " << key_input.get_key() << std::endl;
+    // do something to the ship 
+    // but how do i know what the ship is yk
     return;
 }
+
+// i think i scrap managers ?
+// i dont know how else to pass in the ship function without defining on_key_event in ship
+// because the handling of the event is up to the listener, the event should just provide the basic information 
+// like just the key, in this case

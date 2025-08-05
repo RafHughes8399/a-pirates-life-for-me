@@ -14,7 +14,6 @@
 #include "../lib/raylib/src/rcamera.h"
 namespace player{
 	// class inventory{}
-
 	
 	//TODO: figure out a more elegant way to track the player_ship, maybe a mediator 
 	// TODO: a control map for key and mouse inputs to functions in the game

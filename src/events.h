@@ -162,6 +162,8 @@ namespace events{
 		~event_handler() override = default;
 		event_handler(std::function<void(const E& e)> handle)
 			: handler_type_(E::get_static_type()), handler_(handle){};
+		event_handler(const event_handler& other) = default;
+		event_handler(event_handler&& other) = default;
 		void call_event(const event& e) override{
 			// check if event and handler template match, because you're doing a static 
 			// cast

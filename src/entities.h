@@ -16,6 +16,7 @@ namespace entities{
 
 	class entity {
 		public:
+		virtual ~entity() = default;
 		entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id)
 			: object_type_(object_type),position_(position), bounding_box_(BoundingBox{min, max}), id_(id){
 			// generate the bounding box, min and max
@@ -61,7 +62,8 @@ namespace entities{
 
 class moveable_entity : public entity {
 public:	
-moveable_entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id,  Vector3 velocity, float direction)
+	moveable_entity() = default;
+	moveable_entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id,  Vector3 velocity, float direction)
 		: entity(object_type, position, min, max,  id), velocity_(velocity), direction_(direction) {
 			acceleration_ = Vector3{ 0.0,0.0,0.0 };
 	};
@@ -91,18 +93,27 @@ moveable_entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 
 // yet for a later day
 class player_ship : public moveable_entity {
 public:
+	~player_ship(){
+		// unsubscribe
+		event_interface::unsubscribe<events::player_input_event>(player_input_handler_);
+	}
+	// init the handler and subscribe
 	player_ship(ShipType& ship_type, Vector3 position, Vector3 min, Vector3 max, int id, Vector3 velocity = Vector3Zero(), float direction = 0.0f)
 			: moveable_entity(ship_type, position, min, max, id, velocity, direction),
-			 sail_(Sail(direction, 4.2f)), anchor_(Anchor()), player_input_manager_(managers::event_manager<events::player_input_event>()){
-		};
+			 sail_(components::sail(direction, 4.2f)), anchor_(components::anchor()),
+			player_input_handler_([this](const events::player_input_event& event){on_player_input_event(event);}){
+		
+		event_interface::subscribe<events::player_input_event>(player_input_handler_);
+	};
 	
 	player_ship(const player_ship& other)
-		: moveable_entity(other), sail_(other.sail_), anchor_(other.anchor_){
-
+		: moveable_entity(other), sail_(other.sail_), anchor_(other.anchor_), 
+		player_input_handler_(other.player_input_handler_){
 		};
 
 	player_ship(player_ship&& other)
-		: moveable_entity(other), sail_(std::move(other.sail_)), anchor_(std::move(other.anchor_)){
+		: moveable_entity(other), sail_(std::move(other.sail_)), anchor_(std::move(other.anchor_)), 
+		player_input_handler_(std::move(other.player_input_handler_)){
 	};
 	
 	player_ship& operator=(const player_ship& ohter);
@@ -115,10 +126,11 @@ public:
 	
 
 	Vector3 get_position();
-	Sail get_sail();
-	Anchor get_anchor();
+	components::sail get_sail();
+	components::anchor get_anchor();
+
+	void on_player_input_event(const events::player_input_event& event);
 	void move_anchor();
-	
 	void steer_left(float delta);
 	void steer_right(float delta);
 	
@@ -128,10 +140,11 @@ public:
 	void turn_sail_left(float delta);
 	void turn_sail_right(float delta);
 	void update_sail_wind(float direction, float speed);
+
 private:
-	Sail sail_;
-	Anchor anchor_;
-	managers::event_manager<events::player_input_event> player_input_manager_;
+	components::sail sail_;
+	components::anchor anchor_;
+	events::event_handler<events::player_input_event> player_input_handler_;
 
 };
 

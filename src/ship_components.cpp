@@ -1,24 +1,24 @@
 ﻿#include "ship_components.h"
 #include "utility_functions.h"
 #include <iostream>
-float Sail::get_sail_direction(){
+float components::sail::get_sail_direction(){
 	return direction_;
 }
 
-float Sail::get_sail_length(){
+float components::sail::get_sail_length(){
 	return length_;
 }
 
-float Sail::get_width(){
+float components::sail::get_width(){
 	return width_;
 }
 
-Vector3 Sail::get_force(){
+Vector3 components::sail::get_force(){
 	return force_;
 }
 
 
-void Sail::sail_left(float& ship_direction, float delta) {
+void components::sail::sail_left(float& ship_direction, float delta) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
 	
@@ -40,7 +40,7 @@ void Sail::sail_left(float& ship_direction, float delta) {
 	calculate_force();
 }
 
-void Sail::sail_right(float& ship_direction, float delta) {
+void components::sail::sail_right(float& ship_direction, float delta) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
 
@@ -62,40 +62,40 @@ void Sail::sail_right(float& ship_direction, float delta) {
 }
 
 // these are for when the sail is being moved along with the ship
-void Sail::move_sail_left(float rad){
+void components::sail::move_sail_left(float rad){
 	direction_ = std::fmod(direction_ + rad, 2 *PI);
 	calculate_force();
 }
-void Sail::move_sail_right(float rad) {
+void components::sail::move_sail_right(float rad) {
 	direction_ = std::fmod(direction_ - rad, 2 *PI);
 	calculate_force();
 }
 
-void Sail::raise_sail(float length) {
+void components::sail::raise_sail(float length) {
 	// 0 <=
 	length_ = std::max(0.0f, (length_ - length));
 	calculate_force();
 }
 
-void Sail::lower_sail(float length){
+void components::sail::lower_sail(float length){
 	// <= 1
 	length_ = std::min(1.0f, (length_ + length));
 	calculate_force();
 
 }
 
-void Sail::set_wind(float direction, float speed){
+void components::sail::set_wind(float direction, float speed){
 	wind_.x = direction;
 	wind_.y = speed;
 }
 
-Vector2& Sail::get_wind(){
+Vector2& components::sail::get_wind(){
 	return wind_;
 }
 
 
 /**  this needs some attention */
-void Sail::calculate_force(){
+void components::sail::calculate_force(){
 
 	// get the upper and lower bounds of the sail
 	auto left = std::fmod(direction_ + length_ / 2 , PI2);
@@ -111,16 +111,16 @@ void Sail::calculate_force(){
 	force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion }, force_);
 	// scale the force by th length of the sail
 	force_ = Vector3Scale(force_, length_);
-	DrawText(TextFormat("Sail force: (%06.3f, %06.3f, %06.3f)", force_.x, force_.y, force_.z), 810, 120, 10, BLACK);
+	DrawText(TextFormat("components::sail force: (%06.3f, %06.3f, %06.3f)", force_.x, force_.y, force_.z), 810, 120, 10, BLACK);
 
 }
 
-void Anchor::move(){
+void components::anchor::move(){
 	state_->move(this);
 	// move the anchor, calculate the force coeff.
 }
 
-void Anchor::update() {
+void components::anchor::update() {
 	// update the depth 
 	if (get_speed() < 0) {
 		depth_ = std::max(0.0f, depth_ + get_speed());
@@ -132,19 +132,19 @@ void Anchor::update() {
 	}
 }
 
-Vector3 Anchor::get_force(){
+Vector3 components::anchor::get_force(){
 	return force_coefficient_;
 }
 
-float Anchor::get_depth(){
+float components::anchor::get_depth(){
 	return depth_;
 }
 
-float Anchor::get_speed(){
+float components::anchor::get_speed(){
 	return state_->get_speed();
 }
 
-void Anchor::calculate_force(){
+void components::anchor::calculate_force(){
 	if (depth_ == 0.0f) {
 		force_coefficient_ = Vector3{ 1.0f, 1.0f, 1.0f };
 	}
@@ -163,12 +163,12 @@ void Anchor::calculate_force(){
 
 // it is about changing the state, the state has the speed
 
-float Anchor::AnchorState::get_speed()
+float components::anchor::AnchorState::get_speed()
 {
 	return speed_;
 }
 
-void Anchor::StationaryState::move(Anchor* anchor){
+void components::anchor::StationaryState::move(components::anchor* anchor){
 	// start moving the anchor, depending on the depth
 	if (anchor->depth_ == 0.0f) {
 		anchor->state_.reset(new MovingState(ANCHOR_DROP_SPEED));
@@ -178,7 +178,7 @@ void Anchor::StationaryState::move(Anchor* anchor){
 	}
 }
 
-void Anchor::MovingState::move(Anchor* anchor) {
+void components::anchor::MovingState::move(components::anchor* anchor) {
 	// change the direction of the anchor
 	if (0.0f < anchor->depth_ and anchor->depth_ < ANCHOR_MAX_DEPTH) {
 		// change direction

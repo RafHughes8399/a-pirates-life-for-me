@@ -79,14 +79,22 @@ Vector3 entities::player_ship::get_position(){
 	return position_;
 }
 
-Sail entities::player_ship::get_sail(){
+components::sail entities::player_ship::get_sail(){
 	return sail_;
 }
 
-Anchor entities::player_ship::get_anchor(){
+components::anchor entities::player_ship::get_anchor(){
 	return anchor_;
 }
 
+
+void entities::player_ship::on_player_input_event(const events::player_input_event& event){
+	// first print the key info
+	std::cout << event.get_key() << " pressed ya heard" << std::endl;
+	// something something 
+	// ship_controls[key]
+	// for controsl
+}
 void entities::player_ship::move_anchor(){
 	// either drop or raise depending on the state
 	// change the anchor stuff to move 

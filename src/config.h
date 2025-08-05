@@ -57,8 +57,6 @@
 #define CHUNK_SIZE WORLD_X / NUM_CHUNKS
 
 
-
-
 // wind properties
 #define NO_WIND 4.2f
 #define WIND_SPEED_MIN	8.3f - NO_WIND
@@ -82,6 +80,9 @@
 #define ANCHOR_LOWERED_FORCE {0.0f, 0.0f, 0.0f}
 
 
+
+// ship controls- immuatable for now, 
+// TODO: make controls mutable
 
 // locations 
 #define SHIP_START Vector3 {5, 0, 5}
