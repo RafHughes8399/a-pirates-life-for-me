@@ -91,16 +91,37 @@ components::anchor entities::player_ship::get_anchor(){
 void entities::player_ship::on_player_input_event(const events::player_input_event& event){
 	// first print the key info
 	std::cout << event.get_key() << " pressed ya heard" << std::endl;
+	// i need a delta
 	// something something 
 	// ship_controls[key]
 	// for controsl
+	auto delta = GetFrameTime();
+	auto ship_control = control_map_[event.get_key()];
+	ship_control(delta);
 }
 void entities::player_ship::move_anchor(){
 	// either drop or raise depending on the state
 	// change the anchor stuff to move 
 	anchor_.move();
 }
+//TODO: implement
+void entities::player_ship::steer_ship(float delta, int direction){
+	(void) delta;
+	(void) direction;
+	return;
+}
 
+void entities::player_ship::move_sail(float delta, int direction){
+	(void) delta;
+	(void) direction;
+	return;
+}
+
+void entities::player_ship::move_anchor(float delta, int direction){
+	(void) delta;
+	(void) direction;
+	return;
+}
 void entities::player_ship::steer_left(float delta){
 	auto turn = SHIP_TURN_SPEED * delta;
 	direction_ = std::fmod((direction_ + turn), ( 2 * PI));
@@ -148,3 +169,31 @@ void entities::player_ship::update_sail_wind(float direction, float speed){
 
 }
 
+
+void entities::player_ship::init_control_map(){
+	auto control_list = controls::ship_controls::get_instance().get_controls();
+	control_map_[control_list[TURN_LEFT]] = [this](float delta){
+			steer_ship(delta, 1);
+	};
+	control_map_[control_list[TURN_RIGHT]] = [this](float delta){
+		steer_ship(delta, - 1);
+	};
+	// TODO refactor sail movement in sail
+	control_map_[control_list[SAIL_UP]] = [this](float delta){
+		move_sail(delta, -1);
+	};
+	
+	control_map_[control_list[SAIL_DOWN]] = [this](float delta){
+		move_sail(delta, 1);
+	};
+
+	//TODO controls for anchor, requires anchor refactor
+	control_map_[control_list[ANCHOR_UP]] = [this](float delta){
+		move_anchor(delta, -1);
+	};
+
+	control_map_[control_list[ANCHOR_DOWN]] = [this](float delta){
+		move_anchor(delta, 1);
+	};
+
+}

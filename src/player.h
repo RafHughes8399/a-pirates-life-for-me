@@ -8,6 +8,7 @@
 #include "config.h"
 #include "rendering.h"
 #include "events_interface.h"
+#include "controls.h"
 
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
@@ -17,13 +18,6 @@ namespace player{
 	
 	//TODO: figure out a more elegant way to track the player_ship, maybe a mediator 
 	// TODO: a control map for key and mouse inputs to functions in the game
-	class control_scheme{
-	public:
-		// TODO: methods that can be used by the event manager
-	private:
-		// std::map<int, event ?>
-		// or maybe std::map<int, std::function>
-	};
 	// a reference the player_ship's position 
 	class player {
 		public:
@@ -37,14 +31,13 @@ namespace player{
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
 			camera_.fovy = FOV;
 			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
-			set_default_key_map();
 		}
 		player(const player& other)
-			: camera_(other.camera_), ship_(other.ship_), camera_mode_(other.camera_mode_), key_pressed_inputs_(other.key_pressed_inputs_),
-			key_down_inputs_(other.key_down_inputs_), camera_frustrum_(other.camera_frustrum_){
+			: camera_(other.camera_), ship_(other.ship_), camera_mode_(other.camera_mode_), 
+			camera_frustrum_(other.camera_frustrum_){
 		};
 				
-		player(player&& other);
+		player(player&& other) = default;
 
 		player& operator=(const player& other) {
 			camera_ = other.camera_;
@@ -66,15 +59,11 @@ namespace player{
 		rendering::frustrum& get_frustrum();
 		private:
 			void check_key_input(float delta);
-			void set_default_key_map();
 			Camera3D camera_;
 			rendering::frustrum camera_frustrum_;
 			int camera_mode_;
 			
 			entities::player_ship* ship_;
-		
-			std::map<int, std::function<void(float)>> key_down_inputs_;
-			std::map<int, std::function<void()>> key_pressed_inputs_;
 	};
 	
 	class test_player{

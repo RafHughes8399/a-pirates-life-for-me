@@ -21,6 +21,9 @@ namespace controls{
         }
         //TODO implement 
         void update_control(int key);
+        std::vector<int>& get_controls(){
+            return controls_;
+        }
         private:
         ~ship_controls() = default;
         ship_controls(){

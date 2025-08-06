@@ -63,40 +63,12 @@ void player::player::set_ship(entities::player_ship* player_ship){
 
 void player::player::check_key_input(float delta){
 	// iterate through both key maps
-
-	for (auto& input : key_down_inputs_) {
-		if (IsKeyDown(input.first)) {
-			// create and queue the event
-			std::unique_ptr<events::event> input_event = std::make_unique<events::player_input_event>(input.first);
-			events::global_dispatcher_.queue_event(input_event);
-			input.second(delta);
+	for(auto& input : controls::ship_controls::get_instance().get_controls()){
+		if(IsKeyDown(input)){
+			std::unique_ptr<events::event> key_down = std::make_unique<events::player_input_event>(input);
+			events::global_dispatcher_.queue_event(key_down);
 		}
 	}
-	for (auto& input : key_pressed_inputs_) {
-		if (IsKeyPressed(input.first)) {
-			// create and queue the event 
-			std::unique_ptr<events::event> input_event = std::make_unique<events::player_input_event>(input.first);
-			events::global_dispatcher_.queue_event(input_event);
-			input.second();
-		}
-	}
-}
-
-void player::player::set_default_key_map(){
-	// fill the control maps, figure out how to e
-
-	key_down_inputs_[KEY_A] = [this](float delta) { ship_->steer_left(delta); };
-	key_down_inputs_[KEY_D] = [this](float delta) { ship_->steer_right(delta); };
-
-
-	key_down_inputs_[KEY_W] = [this](float delta) { ship_->raise_sail(delta); };
-	key_down_inputs_[KEY_S] = [this](float delta) { ship_->lower_sail(delta); };
-
-	key_down_inputs_[KEY_Q] = [this](float delta) { ship_->turn_sail_left(delta); };
-	key_down_inputs_[KEY_E] = [this](float delta) { ship_->turn_sail_right(delta); };
-
-	key_pressed_inputs_[KEY_R] = [this]() { ship_->move_anchor(); }; // adjust the function call, it should not be raise/lower anchor but rather 
-	// something that changes the movement of the anchor . this is placeholder
 }
 
 void player::test_player::update(float delta){

@@ -1,0 +1,12 @@
+
+ok for next time:
+    -> implement singleton controls  x 
+    -> have player check if any controls are preseed or down, then create an event x 
+    -> define a ship controls that maps a control to a function x 
+    -> then define on_event to call that function x 
+
+
+    -> merge steer left and steer right into one 
+    -> merge sail up and sail down into on 
+    -> change anchor to be the same mechanic as sail and steer
+    -> then test yay

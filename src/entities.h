@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <map>
 
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
@@ -12,6 +13,14 @@
 #include "ship_components.h"
 #include "config.h"
 #include "managers.h"
+#include "controls.h"
+
+#define TURN_LEFT 0
+#define TURN_RIGHT 1
+#define SAIL_UP 2
+#define SAIL_DOWN 3 
+#define ANCHOR_UP 4
+#define ANCHOR_DOWN 5
 namespace entities{
 
 	class entity {
@@ -103,12 +112,14 @@ public:
 			 sail_(components::sail(direction, 4.2f)), anchor_(components::anchor()),
 			player_input_handler_([this](const events::player_input_event& event){on_player_input_event(event);}){
 		
-		event_interface::subscribe<events::player_input_event>(player_input_handler_);
+			init_control_map();
+			event_interface::subscribe<events::player_input_event>(player_input_handler_);
+
 	};
 	
 	player_ship(const player_ship& other)
 		: moveable_entity(other), sail_(other.sail_), anchor_(other.anchor_), 
-		player_input_handler_(other.player_input_handler_){
+		player_input_handler_(other.player_input_handler_), control_map_(other.control_map_){
 		};
 
 	player_ship(player_ship&& other)
@@ -131,6 +142,10 @@ public:
 
 	void on_player_input_event(const events::player_input_event& event);
 	void move_anchor();
+
+	void steer_ship(float delta, int direction);
+	void move_sail(float delta, int direction);
+	void move_anchor(float delta, int direction);
 	void steer_left(float delta);
 	void steer_right(float delta);
 	
@@ -142,10 +157,12 @@ public:
 	void update_sail_wind(float direction, float speed);
 
 private:
+	void init_control_map();
 	components::sail sail_;
 	components::anchor anchor_;
 	events::event_handler<events::player_input_event> player_input_handler_;
 
+	std::map<int, std::function<void(float delta)>> control_map_;
 };
 
 
