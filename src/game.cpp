@@ -6,11 +6,6 @@ void game::game::update(){
 	player_.update(delta);
 	world_.update(delta);
 
-	// then process events
-	// make a test event, and queue it
-
-	std::unique_ptr<events::event> test_event = std::make_unique<events::test_event>();
-	events::global_dispatcher_.queue_event(test_event);
 	events::global_dispatcher_.process_events(delta);
 
 }

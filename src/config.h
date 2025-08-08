@@ -31,6 +31,7 @@
 #define LAND_DENSITY 9.8f
 
 // camera properties
+#define CAMERA_START Vector3{0.0f, 3.5f, 0.0f}
 #define CAMERA_MOVE_SPEED 5.4f       // Units per second
 #define CAMERA_ROTATION_SPEED 0.03f
 #define CAMERA_PAN_SPEED 0.2f
@@ -86,4 +87,4 @@
 // TODO: make controls mutable
 
 // locations 
-#define SHIP_START Vector3 {5, 0, 5}
+#define SHIP_START Vector3{2.5f, 1.0f, 2.5f}

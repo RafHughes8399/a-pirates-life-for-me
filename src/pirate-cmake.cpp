@@ -101,8 +101,6 @@ void debug(Camera3D& camera, game::game& game) {
 	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", player_ship->get_velocity().x, player_ship->get_velocity().y, player_ship->get_velocity().z), 210, text_y += 17, 10, BLACK);
 
 	auto ship_position = player_ship->get_position();
-	auto chunk = utility::position_to_chunk(ship_position);
-	DrawText(TextFormat("Chunk: [%d, %d]",chunk.first, chunk.second), 210, text_y += 17, 10, BLACK);
 
 	// world debug info
 	text_y = 15;

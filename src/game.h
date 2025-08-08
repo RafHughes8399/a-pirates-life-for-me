@@ -30,20 +30,8 @@ namespace game{
 			: world_(other.world_), player_(other.player_) {
 		}
 
-		game& operator=(const game& other) {
-			if (this != &other) {
-				world_ = other.world_;
-				player_ = other.player_;
-			}
-			return *this;
-		}
-		game& operator=(game&& other) noexcept {
-			if (this != &other) {
-				world_ = std::move(other.world_);
-				player_ = std::move(other.player_);
-			}
-			return *this;
-		}
+		game& operator=(const game& other) = default;
+		game& operator=(game&& other) noexcept = default;
 		// temp until events
 		void update();
 		void render();

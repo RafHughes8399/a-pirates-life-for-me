@@ -10,3 +10,15 @@ ok for next time:
     -> merge sail up and sail down into on 
     -> change anchor to be the same mechanic as sail and steer
     -> then test yay
+
+
+bugs to fix
+-> ship is not rendered 
+-> ship does not move
+-> anchor moves the wrong way
+
+-> ship turning is funky 
+
+
+ok camera bug because the target is not changing as the camera moves
+lets start simple 

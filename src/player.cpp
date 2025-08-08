@@ -1,14 +1,10 @@
-#include "game.h"
+#include "player.h"
 
 // player is updated after the objects so this should wok
 void player::player::update(float delta) {
 	// check for key inputs, generate any events if they are pressed (or held down)
 	check_key_input(delta);
-	auto ship_position = ship_->get_position();
-	auto target_difference = Vector3Subtract(ship_position, camera_.target);
-	
-	move_camera(camera_mode_, target_difference);
-	// recalculate the frustrum if the camera has moved()
+	//move_camera(camera_mode_, current_camera_position);
 }
 void player::player::render() {
 	//this is where the hud will be drawn and other components
@@ -40,8 +36,8 @@ void player::player::move_camera(int mode, Vector3& difference){
 	float camera_orbital_speed = CAMERA_ORBITAL_SPEED * delta_time;
 
 	// move the camera to the new position
-	camera_.position = Vector3Add(camera_.position, difference);
-	camera_.target = Vector3Add(camera_.target, difference);
+	//camera_.position = Vector3Add(camera_.position, difference);
+	//camera_.target = Vector3Add(camera_.target, difference);
 
 	// stop the camera from moving below the water level
 	camera_.position.y = std::max(camera_.position.y, CAMERA_MIN_LEVEL);
@@ -49,6 +45,9 @@ void player::player::move_camera(int mode, Vector3& difference){
 	CameraYaw(&camera_, -delta_mouse.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotate_around_target);
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
 
+	auto new_position = camera_.position;
+	std::cout << "new camera position: " << new_position.x << ", " << new_position.y << ", " 
+	<< new_position.z << std::endl;
 	// create an event to update the frustrum
 	camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);	
 }

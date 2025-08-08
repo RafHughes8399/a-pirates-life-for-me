@@ -144,7 +144,6 @@ public:
 
 	void on_player_input_event(const events::player_input_event& event);
 	void move_anchor();
-
 	void steer_ship(float delta, int direction);
 	void move_sail(float delta, int direction);
 	void turn_sail(float delta, int turn_direction);

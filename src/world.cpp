@@ -28,7 +28,14 @@ void environment::world::build_world(wind& wind, player::player& player){
 		Vector3{SHIP_START.x + 1.6f, SHIP_START.y + 2.8f, SHIP_START.z + 1.6f},
 		world_entities_.get_next_id()
 	);
-
+	std::unique_ptr<entities::entity> player_ship_2 = std::make_unique<entities::player_ship>(
+		ShipType::get_instance(),
+		Vector3{10.0f, 1.0f, 10.0f},
+		Vector3{10 -1.0f ,1.0, 10.0 -1.0f},
+		Vector3{10.0 + 1.6f, 1 + 2.8f, 10.0f + 1.6f},
+		world_entities_.get_next_id()
+	);
+	world_entities_.insert(player_ship_2);
 	//let the player ship subscribe to the wind to listen for updates 
 	auto player_ship_ptr = static_cast<entities::player_ship*>(player_ship.get());
 	wind_.add_ship_subscriber(player_ship_ptr);
@@ -136,11 +143,9 @@ void environment::world::update(float delta){
 }
 
 void environment::world::render(rendering::frustrum& rendering_frustrum) {
-	auto num_rendered = 0;
 	// entity is std::unique_ptr<entities::entity>
-	auto frustrum_predicate = [rendering_frustrum, &num_rendered](auto & entity)-> bool{
+	auto frustrum_predicate = [rendering_frustrum](auto & entity)-> bool{
 		if(rendering_frustrum.contains(entity->get_bounding_box())){
-			num_rendered++;
 			return true;
 		}
 		return false;
@@ -149,5 +154,4 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// quick debug to check if this is working, i think not because its rendering everything
 	// do some more debug printing here
 	// debug
-	std::cout << "total objects: " << world_entities_.size() << " || objects rendered: " << num_rendered << std::endl;
 }

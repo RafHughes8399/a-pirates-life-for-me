@@ -99,6 +99,7 @@ link_libraries(octree)
 
 add_library(rendering src/rendering.cpp)
 link_libraries(rendering)
+
 add_library(player src/player.cpp)
 link_libraries(player)
 
