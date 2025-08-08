@@ -104,22 +104,31 @@ void entities::player_ship::move_anchor(){
 	// change the anchor stuff to move 
 	anchor_.move();
 }
-//TODO: implement
 void entities::player_ship::steer_ship(float delta, int direction){
-	(void) delta;
-	(void) direction;
-	return;
+	auto turn = SHIP_TURN_SPEED * delta * direction;
+	direction_ = std::fmod((direction + turn), PI2);
+	
+	turn_sail(delta, direction);
+	auto rotate_vector = Vector3 {0.0f, direction_, 0.0f};
+	object_type_.get_model().transform = MatrixRotateXYZ(rotate_vector);
 }
 
+//TODO: implement
 void entities::player_ship::move_sail(float delta, int direction){
-	(void) delta;
-	(void) direction;
-	return;
+	float move = LOWER_RAISE_SPEED * delta;
+	sail_.move(move, direction);
 }
 
+//TODO implement
+void entities::player_ship::turn_sail(float delta, int turn_direction){
+	sail_.turn(delta, direction_, turn_direction);
+	return;
+}
 void entities::player_ship::move_anchor(float delta, int direction){
 	(void) delta;
 	(void) direction;
+	auto move = delta * ANCHOR_MOVE_SPEED;
+	// anchor_.move(delta, direction);
 	return;
 }
 void entities::player_ship::steer_left(float delta){
@@ -169,7 +178,6 @@ void entities::player_ship::update_sail_wind(float direction, float speed){
 
 }
 
-
 void entities::player_ship::init_control_map(){
 	auto control_list = controls::ship_controls::get_instance().get_controls();
 	control_map_[control_list[TURN_LEFT]] = [this](float delta){
@@ -187,6 +195,13 @@ void entities::player_ship::init_control_map(){
 		move_sail(delta, 1);
 	};
 
+	// TODO refactor sail turning
+	control_map_[control_list[SAIL_LEFT]] = [this](float delta){
+		turn_sail(delta, 1);
+	};
+	control_map_[control_list[SAIL_RIGHT]] = [this](float delta){
+		turn_sail(delta, -1);
+	};
 	//TODO controls for anchor, requires anchor refactor
 	control_map_[control_list[ANCHOR_UP]] = [this](float delta){
 		move_anchor(delta, -1);

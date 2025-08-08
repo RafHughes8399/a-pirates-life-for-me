@@ -34,12 +34,15 @@ namespace components{
 		float get_width();
 		Vector3 get_force();
 		
+		void turn(float delta, float  ship_direction, int turn_direction);
 		void sail_left(float& ship_direction, float delta);
 		void sail_right(float& ship_direction, float delta);
 		
+
 		void move_sail_left(float rad);
 		void move_sail_right(float rad);
 		
+		void move(float length, int direction);
 		void raise_sail(float length);
 		void lower_sail(float length);
 		
@@ -77,7 +80,8 @@ namespace components{
 			anchor(anchor&& other)
 			: state_(std::move(other.state_)), depth_(other.depth_), force_coefficient_(std::move(other.force_coefficient_)) {
 			};
-			
+		
+		void move(float depth, int direciton);
 		void move();
 		void update();
 		Vector3 get_force(); // to apply to the ship

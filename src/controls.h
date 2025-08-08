@@ -31,10 +31,15 @@ namespace controls{
             // steering 
             controls_.push_back(KEY_A);
             controls_.push_back(KEY_D);
-            // sail movement
+
+            // sail raise / lower
             controls_.push_back(KEY_W);
             controls_.push_back(KEY_S);
             
+            // sail turn 
+            controls_.push_back(KEY_Q);
+            controls_.push_back(KEY_E);
+
             // anchor movement
             controls_.push_back(KEY_R);
             controls_.push_back(KEY_T);

@@ -73,6 +73,7 @@
 #define SAIL_TURN_SPEED (2* PI * 0.15)
 
 // anchor properties
+#define ANCHOR_MOVE_SPEED 0.75f
 #define ANCHOR_DROP_SPEED 0.75f // how quick the anchor drops in seconds
 #define ANCHOR_STATIC_SPEED 0.0f
 #define ANCHOR_MAX_DEPTH 32.6f 

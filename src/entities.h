@@ -19,8 +19,10 @@
 #define TURN_RIGHT 1
 #define SAIL_UP 2
 #define SAIL_DOWN 3 
-#define ANCHOR_UP 4
-#define ANCHOR_DOWN 5
+#define SAIL_LEFT 4
+#define SAIL_RIGHT 5
+#define ANCHOR_UP 6
+#define ANCHOR_DOWN 7
 namespace entities{
 
 	class entity {
@@ -145,7 +147,9 @@ public:
 
 	void steer_ship(float delta, int direction);
 	void move_sail(float delta, int direction);
+	void turn_sail(float delta, int turn_direction);
 	void move_anchor(float delta, int direction);
+
 	void steer_left(float delta);
 	void steer_right(float delta);
 	

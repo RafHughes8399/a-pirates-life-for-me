@@ -17,7 +17,20 @@ Vector3 components::sail::get_force(){
 	return force_;
 }
 
+// TODO implement
+void components::sail::turn(float delta, float ship_direction, int turn_direction){
+	(void) delta;
+	(void) ship_direction;
+	(void) turn_direction;
+	return;
+}
 
+//TODO implement
+void components::sail::move(float length, int direction){
+	(void) length;
+	(void) direction;
+	return;
+}
 void components::sail::sail_left(float& ship_direction, float delta) {
 	auto left_bound = ship_direction + (PI / 2);
 	auto right_bound = ship_direction - (PI / 2);
@@ -115,6 +128,11 @@ void components::sail::calculate_force(){
 
 }
 
+void components::anchor::move(float depth, int direction){
+	(void) depth;
+	(void) direction;
+	return;
+}
 void components::anchor::move(){
 	state_->move(this);
 	// move the anchor, calculate the force coeff.
