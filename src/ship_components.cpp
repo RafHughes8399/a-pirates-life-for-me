@@ -22,80 +22,31 @@ void components::sail::turn(float delta, float ship_direction, int turn_directio
 	(void) delta;
 	(void) ship_direction;
 	(void) turn_direction;
+
+	auto left_bound = std::fmod(ship_direction + (PI /2), PI2);
+	auto right_bound = std::fmod(ship_direction - (PI / 2), PI2);
+
+	auto turn = SAIL_TURN_SPEED * delta * turn_direction;
+	auto new_direction = std::fmod(direction_ + turn, PI2);
+	direction_ = new_direction;
+	calculate_force();
 	return;
 }
 
 //TODO implement
 void components::sail::move(float length, int direction){
-	(void) length;
-	(void) direction;
-	return;
-}
-void components::sail::sail_left(float& ship_direction, float delta) {
-	auto left_bound = ship_direction + (PI / 2);
-	auto right_bound = ship_direction - (PI / 2);
+	auto move = length * direction;
+	auto new_length = length_ + move;
 	
-	auto turn = SAIL_TURN_SPEED * delta;
-	auto new_dir = direction_ + turn;
-	if (right_bound < left_bound) {
-		// business as usual, turn left
-		if (not (right_bound < new_dir and new_dir < left_bound)) {
-			new_dir = left_bound;
-		}
-	}
-	else if (left_bound < right_bound) {
-		if (left_bound < new_dir and new_dir < right_bound) {
-			new_dir = left_bound;
-		}
+	// ensure length is within bounds 
 
-	}
-	direction_ = new_dir;
-	calculate_force();
-}
-
-void components::sail::sail_right(float& ship_direction, float delta) {
-	auto left_bound = ship_direction + (PI / 2);
-	auto right_bound = ship_direction - (PI / 2);
-
-	auto turn = SAIL_TURN_SPEED * delta;
-	auto new_dir = direction_ - turn;
-	if (right_bound < left_bound) {
-		if (not (right_bound < new_dir and new_dir < left_bound)) {
-			new_dir = right_bound;
-		}
-	}
-	else if (left_bound < right_bound) {
-		if (left_bound < new_dir and new_dir < right_bound) {
-			new_dir = right_bound;
-		}
-
-	}
-	direction_ = new_dir;
-	calculate_force();
+	// if new length would be < 0
+	length_ = std::max(0.0f, new_length);
+	// if new length would be > 0
+	length_ = std::min(new_length, 1.0f);
 }
 
 // these are for when the sail is being moved along with the ship
-void components::sail::move_sail_left(float rad){
-	direction_ = std::fmod(direction_ + rad, 2 *PI);
-	calculate_force();
-}
-void components::sail::move_sail_right(float rad) {
-	direction_ = std::fmod(direction_ - rad, 2 *PI);
-	calculate_force();
-}
-
-void components::sail::raise_sail(float length) {
-	// 0 <=
-	length_ = std::max(0.0f, (length_ - length));
-	calculate_force();
-}
-
-void components::sail::lower_sail(float length){
-	// <= 1
-	length_ = std::min(1.0f, (length_ + length));
-	calculate_force();
-
-}
 
 void components::sail::set_wind(float direction, float speed){
 	wind_.x = direction;
@@ -106,8 +57,6 @@ Vector2& components::sail::get_wind(){
 	return wind_;
 }
 
-
-/**  this needs some attention */
 void components::sail::calculate_force(){
 
 	// get the upper and lower bounds of the sail
@@ -129,27 +78,17 @@ void components::sail::calculate_force(){
 }
 
 void components::anchor::move(float depth, int direction){
-	(void) depth;
-	(void) direction;
-	return;
-}
-void components::anchor::move(){
-	state_->move(this);
-	// move the anchor, calculate the force coeff.
-}
+	auto move = depth * direction;
+	auto new_depth = depth_ + move;
+	
+	// ensure depth is within bounds 
 
-void components::anchor::update() {
-	// update the depth 
-	if (get_speed() < 0) {
-		depth_ = std::max(0.0f, depth_ + get_speed());
-		calculate_force();
-	}
-	else if (get_speed() > 0) {
-		depth_ = std::min(ANCHOR_MAX_DEPTH, depth_ + get_speed());
-		calculate_force();
-	}
+	// if new depth would be < 0
+	depth_ = std::max(0.0f, new_depth);
+	// if new depth would be > 0
+	depth_ = std::min(new_depth, 1.0f);
+	calculate_force();
 }
-
 Vector3 components::anchor::get_force(){
 	return force_coefficient_;
 }
@@ -158,53 +97,8 @@ float components::anchor::get_depth(){
 	return depth_;
 }
 
-float components::anchor::get_speed(){
-	return state_->get_speed();
-}
 
 void components::anchor::calculate_force(){
-	if (depth_ == 0.0f) {
-		force_coefficient_ = Vector3{ 1.0f, 1.0f, 1.0f };
-	}
-	else if (depth_ == ANCHOR_MAX_DEPTH) {
-		force_coefficient_ = Vector3{ 0.0f, 1.0f, 0.0f };
-	}
-	else {
-		// a function of the depth as the depth increases
-		// the force moves closer to 0
-		// the numbers might change
-		auto depth_ratio = depth_ / ANCHOR_MAX_DEPTH;
-		force_coefficient_ = Vector3{ 1.0f * depth_ratio, 1.0f, 1.0f * depth_ratio };
-	}
-}
-
-
-// it is about changing the state, the state has the speed
-
-float components::anchor::AnchorState::get_speed()
-{
-	return speed_;
-}
-
-void components::anchor::StationaryState::move(components::anchor* anchor){
-	// start moving the anchor, depending on the depth
-	if (anchor->depth_ == 0.0f) {
-		anchor->state_.reset(new MovingState(ANCHOR_DROP_SPEED));
-	}
-	else if (anchor->depth_ == ANCHOR_MAX_DEPTH) {
-		anchor->state_.reset(new MovingState(-ANCHOR_DROP_SPEED));
-	}
-}
-
-void components::anchor::MovingState::move(components::anchor* anchor) {
-	// change the direction of the anchor
-	if (0.0f < anchor->depth_ and anchor->depth_ < ANCHOR_MAX_DEPTH) {
-		// change direction
-		speed_ *= -1;
-	}
-	else {
-		// the anchor is stationary
-		anchor->state_.reset(new StationaryState(0.0f));
-	}
-
+	auto depth_ratio = 1 * (depth_ / ANCHOR_MAX_DEPTH);
+	force_coefficient_ = Vector3{1.0f - depth_ratio, 1.0f, 1.0f - depth_ratio};
 }

@@ -3,9 +3,7 @@
 void entities::player_ship::update(float delta){
 	//MoveableObject::update(delta);
 	// update the anchor
-	anchor_.update();
 	// apply gravity
-	
 	acceleration_.y += GRAVITY;
 
 	// this calculates the veloctuty for a given frame
@@ -99,11 +97,6 @@ void entities::player_ship::on_player_input_event(const events::player_input_eve
 	auto ship_control = control_map_[event.get_key()];
 	ship_control(delta);
 }
-void entities::player_ship::move_anchor(){
-	// either drop or raise depending on the state
-	// change the anchor stuff to move 
-	anchor_.move();
-}
 void entities::player_ship::steer_ship(float delta, int direction){
 	auto turn = SHIP_TURN_SPEED * delta * direction;
 	direction_ = std::fmod((direction + turn), PI2);
@@ -125,52 +118,11 @@ void entities::player_ship::turn_sail(float delta, int turn_direction){
 	return;
 }
 void entities::player_ship::move_anchor(float delta, int direction){
-	(void) delta;
-	(void) direction;
 	auto move = delta * ANCHOR_MOVE_SPEED;
-	// anchor_.move(delta, direction);
+	anchor_.move(delta, direction);
 	return;
 }
-void entities::player_ship::steer_left(float delta){
-	auto turn = SHIP_TURN_SPEED * delta;
-	direction_ = std::fmod((direction_ + turn), ( 2 * PI));
-	
-	// rotate the model, yaw
-	sail_.move_sail_left(turn);
 
-	Vector3 rotate = { 0.0f, direction_, 0.0f };
-	object_type_.get_model().transform = MatrixRotateXYZ(rotate);
-}
-
-void entities::player_ship::steer_right(float delta){
-	// change player_ship direction to the right
-	auto turn = SHIP_TURN_SPEED * delta;
-	direction_ = std::fmod((direction_ - turn), ( 2 * PI));
-	if (direction_ < 0.0) { direction_ += 2 * PI; }
-
-	sail_.move_sail_right(turn);
-	
-	Vector3 rotate = {  0.0f,  direction_,  0.0f };
-	object_type_.get_model().transform = MatrixRotateXYZ(rotate);
-}
-
-void entities::player_ship::raise_sail(float delta){
-	auto raise = LOWER_RAISE_SPEED * delta;
-	sail_.raise_sail(raise);
-}
-
-void entities::player_ship::lower_sail(float delta){
-	auto lower = LOWER_RAISE_SPEED * delta;
-	sail_.lower_sail(lower);
-}
-
-void entities::player_ship::turn_sail_left(float delta){
-	sail_.sail_left(direction_, delta);
-}
-
-void entities::player_ship::turn_sail_right(float delta) {
-	sail_.sail_right(direction_, delta);
-}
 
 void entities::player_ship::update_sail_wind(float direction, float speed){
 

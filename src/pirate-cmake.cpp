@@ -97,7 +97,6 @@ void debug(Camera3D& camera, game::game& game) {
 	DrawText(TextFormat("Sail Angle: %06.3f", player_ship->get_sail().get_sail_direction()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Sail Length: %06.3f", player_ship->get_sail().get_sail_length()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Anchor Depth: %06.3f", player_ship->get_anchor().get_depth()), 210, text_y += 17, 10, BLACK);
-	DrawText(TextFormat("Anchor Speed: %06.3f", player_ship->get_anchor().get_speed()), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Acceleration: (%06.3f, %06.3f, %06.3f)", player_ship->get_acceleration().x, player_ship->get_acceleration().y, player_ship->get_acceleration().z), 210, text_y += 17, 10, BLACK);
 	DrawText(TextFormat("Velocity: (%06.3f, %06.3f, %06.3f)", player_ship->get_velocity().x, player_ship->get_velocity().y, player_ship->get_velocity().z), 210, text_y += 17, 10, BLACK);
 

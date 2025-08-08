@@ -18,16 +18,8 @@ namespace components{
 			: direction_(direction), width_(width), wind_(Vector2Zero()), length_(0.0f), force_(Vector3{1.0f, 1.0f, 1.0f}) {
 			calculate_force();
 		};
-		sail(const sail& other)
-			: direction_(other.direction_), length_(other.length_), width_(other.width_), 
-			wind_(other.wind_), force_(other.force_) {
-			calculate_force();
-		};
-		sail(const sail&& other)
-			:direction_(std::move(other.direction_)), length_(std::move(other.length_)), width_(std::move(other.width_)),
-			wind_(std::move(other.wind_)) {
-			calculate_force();
-		};
+		sail(const sail& other) = default;
+		sail(sail&& other) = default;
 		
 		float get_sail_direction();
 		float get_sail_length();
@@ -35,13 +27,6 @@ namespace components{
 		Vector3 get_force();
 		
 		void turn(float delta, float  ship_direction, int turn_direction);
-		void sail_left(float& ship_direction, float delta);
-		void sail_right(float& ship_direction, float delta);
-		
-
-		void move_sail_left(float rad);
-		void move_sail_right(float rad);
-		
 		void move(float length, int direction);
 		void raise_sail(float length);
 		void lower_sail(float length);
@@ -62,64 +47,17 @@ namespace components{
 	class anchor{
 	public:
 
-	~anchor() = default;
-	anchor()
-			:state_(std::make_shared<StationaryState>(StationaryState(0.0f))), depth_(0.0f), force_coefficient_(Vector3{ 1.0f, 1.0f, 1.0f }){
-		};
-		anchor(const anchor& other)
-			: state_(nullptr), depth_(other.depth_), force_coefficient_(other.force_coefficient_) {
-
-				// Need to create a new state object based on the type of other.state_, temp implementation
-				if (auto* raised = dynamic_cast<StationaryState*>(other.state_.get())) {
-					state_ = std::make_shared<StationaryState>(*raised);
-				}
-				else if (auto* lowered = dynamic_cast<MovingState*>(other.state_.get())) {
-					state_ = std::make_shared<MovingState>(*lowered);
-				}
-			};
-			anchor(anchor&& other)
-			: state_(std::move(other.state_)), depth_(other.depth_), force_coefficient_(std::move(other.force_coefficient_)) {
-			};
-		
-		void move(float depth, int direciton);
-		void move();
-		void update();
+		~anchor() = default;
+		anchor() 
+			:depth_(0.0f), force_coefficient_(Vector3{ 1.0f, 1.0f, 1.0f }){}
+		anchor(const anchor& other) = default;
+		anchor(anchor&& other) = default;
+			
+		void move(float lenght, int direciton);
 		Vector3 get_force(); // to apply to the ship
 		float get_depth();
-		float get_speed();
-		private:
-		
-		class AnchorState {
-			public:
-			virtual ~AnchorState() = default;
-			AnchorState(float speed)
-			: speed_(speed){
-			};
-			virtual void move(anchor* anchor) = 0;
-			float get_speed();
-			protected:
-			float speed_; // changes with the state
-		};
-		class StationaryState : public AnchorState {
-			public:
-			StationaryState(float speed)
-			: AnchorState(speed) {};
-			virtual void move(anchor* anchor) override;
-			private:
-			
-		};
-		class MovingState : public AnchorState {
-			public:
-			MovingState(float speed)
-			: AnchorState(speed) {
-			};
-			virtual void move(anchor* anchor) override;
-			private:
-			
-		};
-		
+	private:
 		void calculate_force();
-		std::shared_ptr<AnchorState> state_;
 		float depth_;
 		Vector3 force_coefficient_; // that is currently applied to the ship, depends on state
 	};

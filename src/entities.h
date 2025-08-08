@@ -150,14 +150,6 @@ public:
 	void turn_sail(float delta, int turn_direction);
 	void move_anchor(float delta, int direction);
 
-	void steer_left(float delta);
-	void steer_right(float delta);
-	
-	void raise_sail(float delta);
-	void lower_sail(float delta);
-
-	void turn_sail_left(float delta);
-	void turn_sail_right(float delta);
 	void update_sail_wind(float direction, float speed);
 
 private:
