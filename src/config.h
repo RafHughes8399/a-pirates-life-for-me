@@ -1,6 +1,9 @@
 #include <numbers>
 #include "../lib/raylib/src/raylib.h"
 
+// locations
+#define SHIP_START Vector3{5.0f, 1.0f, 5.0f}
+
 // game models and textures
 // CWD is build
 #define PIRATE_SHIP_MODEL "../models/medium_ship_brown.glb"
@@ -31,7 +34,8 @@
 #define LAND_DENSITY 9.8f
 
 // camera properties
-#define CAMERA_START Vector3{0.0f, 3.5f, 0.0f}
+#define CAMERA_START Vector3{0.0f, 5.0f, 0.0f}
+#define TARGET_START Vector3{2.5, 2.5, 2.5};
 #define CAMERA_MOVE_SPEED 5.4f       // Units per second
 #define CAMERA_ROTATION_SPEED 0.03f
 #define CAMERA_PAN_SPEED 0.2f
@@ -87,4 +91,3 @@
 // TODO: make controls mutable
 
 // locations 
-#define SHIP_START Vector3{2.5f, 1.0f, 2.5f}

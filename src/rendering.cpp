@@ -12,14 +12,14 @@ void rendering::frustrum::update_frustrum(Camera3D& camera, float aspect, float 
     auto camera_right = Vector3CrossProduct(camera_front, camera.up);
     auto front_mult_far = Vector3Scale(camera_front, z_far);
                 
-            // planes are constructed with a point on the plane and a normal vector
+    // planes are constructed with a point on the plane and a normal vector
     near_  = plane{Vector3Add(camera.position, Vector3Scale(camera_front, z_near)), camera_front};
     far_  = plane{Vector3Add(camera.position, front_mult_far), camera_front};
      
-     right_  = plane{camera.position, Vector3CrossProduct(Vector3Subtract(front_mult_far, Vector3Scale(camera_right, half_h_side)), camera.up)};
-     left_  = plane{camera.position, Vector3CrossProduct(camera.up, Vector3Add(front_mult_far, Vector3Scale(camera_right, half_h_side)))};
-     top_  = plane{camera.position, Vector3CrossProduct(camera_right, Vector3Subtract(front_mult_far, Vector3Scale(camera.up, half_v_side)))};
-     bottom_  = plane{camera.position, Vector3CrossProduct(Vector3Add(front_mult_far, Vector3Scale(camera.up, half_v_side)), camera_right)};
+    right_  = plane{camera.position, Vector3CrossProduct(Vector3Subtract(front_mult_far, Vector3Scale(camera_right, half_h_side)), camera.up)};
+    left_  = plane{camera.position, Vector3CrossProduct(camera.up, Vector3Add(front_mult_far, Vector3Scale(camera_right, half_h_side)))};
+    top_  = plane{camera.position, Vector3CrossProduct(camera_right, Vector3Subtract(front_mult_far, Vector3Scale(camera.up, half_v_side)))};
+    bottom_  = plane{camera.position, Vector3CrossProduct(Vector3Add(front_mult_far, Vector3Scale(camera.up, half_v_side)), camera_right)};
 }
 rendering::frustrum& rendering::frustrum::operator=(const frustrum& other){
     near_ = other.near_;

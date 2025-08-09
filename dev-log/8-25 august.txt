@@ -22,3 +22,15 @@ bugs to fix
 
 ok camera bug because the target is not changing as the camera moves
 lets start simple 
+
+
+thought process is that because the ship is the target it 
+does not get rendered, so make the target slightly behind the ship instead
+
+check the values of the frustrum
+
+	// issue with the frustrum, it is rendering everything
+	// double check the test game and double check the numbers
+
+    and check the ocean texture tooo, its not darawin
+    

@@ -4,7 +4,9 @@
 void player::player::update(float delta) {
 	// check for key inputs, generate any events if they are pressed (or held down)
 	check_key_input(delta);
-	//move_camera(camera_mode_, current_camera_position);
+	move_camera(camera_mode_);
+	//camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);	
+
 }
 void player::player::render() {
 	//this is where the hud will be drawn and other components
@@ -18,7 +20,7 @@ rendering::frustrum& player::player::get_frustrum(){
 	return camera_frustrum_;
 }
 
-void player::player::move_camera(int mode, Vector3& difference){
+void player::player::move_camera(int mode){
 	Vector2 delta_mouse = GetMouseDelta();
 	auto delta_time = GetFrameTime();
 	// my version of camera update
@@ -41,15 +43,12 @@ void player::player::move_camera(int mode, Vector3& difference){
 
 	// stop the camera from moving below the water level
 	camera_.position.y = std::max(camera_.position.y, CAMERA_MIN_LEVEL);
+
 	// then allow for camera rotation
 	CameraYaw(&camera_, -delta_mouse.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotate_around_target);
 	CameraPitch(&camera_, -delta_mouse.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lock_view, rotate_around_target, rotate_up);
 
-	auto new_position = camera_.position;
-	std::cout << "new camera position: " << new_position.x << ", " << new_position.y << ", " 
-	<< new_position.z << std::endl;
 	// create an event to update the frustrum
-	camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);	
 }
 
 entities::player_ship* player::player::get_ship(){

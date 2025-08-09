@@ -102,12 +102,14 @@ namespace tree{
 
         template<typename UnaryPred>
         void render(std::unique_ptr<o_node>& tree, UnaryPred p){
+        
             if(not tree){
                 return;
             }
             for(auto & entity : tree->objects_){
                 if(p(entity)){
                     entity->render();
+                    std::cout << " render object " << entity->get_id() << std::endl;
                 }
             }
             for(auto & child : tree->children_){

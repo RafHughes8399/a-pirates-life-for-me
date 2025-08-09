@@ -32,7 +32,7 @@ namespace player{
 		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)){
 			std::cout << "build player" << std::endl;
 			camera_.position = CAMERA_START;
-			camera_.target = SHIP_START;// the camera looks at the cube, slightly above sea level
+			camera_.target = TARGET_START;// the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
 			camera_.fovy = FOV;
 			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
@@ -47,7 +47,7 @@ namespace player{
 		void render();
 			
 		Camera3D& get_camera();
-		void move_camera(int mode, Vector3& new_position);
+		void move_camera(int mode);
 		entities::player_ship* get_ship();
 		void set_ship(entities::player_ship* player_ship);
 
