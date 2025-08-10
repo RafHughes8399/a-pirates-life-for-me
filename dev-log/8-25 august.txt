@@ -40,3 +40,8 @@ rendering seems under control bugs to fix:
 -> fixing ship turning 
 -> double check wind works
 -> ocean rendering
+
+
+-> sail turning 
+-> check wind and ship movement
+-> ocean rendering 
