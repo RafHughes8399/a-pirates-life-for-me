@@ -21,11 +21,20 @@ Vector3 components::sail::get_force(){
 void components::sail::turn(float delta, float ship_direction, int turn_direction){
 	// i need to make sure these values are on the same page, i.e not negative
 	auto left_bound = std::fmod(ship_direction + (PI /2), PI2);
+	left_bound = left_bound < 0 ? left_bound + PI2 : left_bound;
 	auto right_bound = std::fmod(ship_direction - (PI / 2), PI2);
+	right_bound = right_bound < 0 ? right_bound + PI2 : right_bound;
 
+	// two cases interetsingly 
+	// left bound < right bound
+	
+	// left_bound > right bound, consider both
 	auto turn = SAIL_TURN_SPEED * delta * turn_direction;
 	auto new_direction = std::fmod(direction_ + turn, PI2);
-	direction_ = new_direction;
+	// make sure the value doesnt become negative
+	direction_ = new_direction < 0 ? new_direction + PI2 : new_direction;
+	// then clamp it based on the left bound right bound relationship
+	direction_ = left_bound < right_bound ? Clamp(direction_, left_bound, right_bound) : Clamp(direction_, right_bound, left_bound);
 	calculate_force();
 	return;
 }
