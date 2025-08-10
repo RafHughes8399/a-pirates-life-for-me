@@ -99,20 +99,22 @@ void entities::player_ship::on_player_input_event(const events::player_input_eve
 }
 void entities::player_ship::steer_ship(float delta, int direction){
 	auto turn = SHIP_TURN_SPEED * delta * direction;
-	direction_ = std::fmod((direction + turn), PI2);
+	// TODO make sure this doesn't become negative
+	auto new_direction = std::fmod(direction_ + turn, PI2);
 	
+	// if the value were to become negative, instead add 2PI?, yes shorty
+	direction_ = new_direction < 0 ? new_direction + PI2 : new_direction;
+
 	turn_sail(delta, direction);
 	auto rotate_vector = Vector3 {0.0f, direction_, 0.0f};
 	object_type_.get_model().transform = MatrixRotateXYZ(rotate_vector);
 }
 
-//TODO: implement
 void entities::player_ship::move_sail(float delta, int direction){
 	float move = LOWER_RAISE_SPEED * delta;
 	sail_.move(move, direction);
 }
 
-//TODO implement
 void entities::player_ship::turn_sail(float delta, int turn_direction){
 	sail_.turn(delta, direction_, turn_direction);
 	return;

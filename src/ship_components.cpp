@@ -17,12 +17,9 @@ Vector3 components::sail::get_force(){
 	return force_;
 }
 
-// TODO implement
+// TODO fix
 void components::sail::turn(float delta, float ship_direction, int turn_direction){
-	(void) delta;
-	(void) ship_direction;
-	(void) turn_direction;
-
+	// i need to make sure these values are on the same page, i.e not negative
 	auto left_bound = std::fmod(ship_direction + (PI /2), PI2);
 	auto right_bound = std::fmod(ship_direction - (PI / 2), PI2);
 
@@ -33,17 +30,9 @@ void components::sail::turn(float delta, float ship_direction, int turn_directio
 	return;
 }
 
-//TODO implement
 void components::sail::move(float length, int direction){
-	auto move = length * direction;
-	auto new_length = length_ + move;
-	
-	// ensure length is within bounds 
-
-	// if new length would be < 0
-	length_ = std::max(0.0f, new_length);
-	// if new length would be > 0
-	length_ = std::min(new_length, 1.0f);
+	length_ += (length * direction);
+	length_ = Clamp(length_, 0, 1);
 }
 
 // these are for when the sail is being moved along with the ship
@@ -77,16 +66,10 @@ void components::sail::calculate_force(){
 
 }
 
-void components::anchor::move(float depth, int direction){
-	auto move = depth * direction;
-	auto new_depth = depth_ + move;
-	
+void components::anchor::move(float depth, int direction){	
 	// ensure depth is within bounds 
-
-	// if new depth would be < 0
-	depth_ = std::max(0.0f, new_depth);
-	// if new depth would be > 0
-	depth_ = std::min(new_depth, 1.0f);
+	depth_ += (depth * direction);
+	depth_ = Clamp(depth_, 0.0f, ANCHOR_MAX_DEPTH);
 	calculate_force();
 }
 Vector3 components::anchor::get_force(){

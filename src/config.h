@@ -79,11 +79,10 @@
 
 // anchor properties
 #define ANCHOR_MOVE_SPEED 0.75f
-#define ANCHOR_DROP_SPEED 0.75f // how quick the anchor drops in seconds
 #define ANCHOR_STATIC_SPEED 0.0f
-#define ANCHOR_MAX_DEPTH 32.6f 
-#define ANCHOR_RAISED_FORCE {1.0f, 0.0f, 1.0f}
-#define ANCHOR_LOWERED_FORCE {0.0f, 0.0f, 0.0f}
+#define ANCHOR_MAX_DEPTH 1.5f 
+#define ANCHOR_RAISED_FORCE Vector3{1.0f, 0.0f, 1.0f}
+#define ANCHOR_LOWERED_FORCE Vector3{0.0f, 0.0f, 0.0f}
 
 
 

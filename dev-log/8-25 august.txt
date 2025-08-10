@@ -33,3 +33,10 @@ check the values of the frustrum
 // double check the test game and double check the numbers
 
 and check the ocean texture tooo, its not darawin
+
+
+rendering seems under control bugs to fix:
+-> clamping anchor and sail values
+-> fixing ship turning 
+-> double check wind works
+-> ocean rendering
