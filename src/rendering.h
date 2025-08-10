@@ -2,10 +2,12 @@
 #ifndef RENDERING_H
 #define RENDERING_H
 #include <cmath>
+#include <iostream>
 #include "config.h"
 
 #include "../lib/raylib/src/raymath.h"
 #include "../lib/raylib/src/raylib.h"
+#include "../lib/raylib/src/rcamera.h"
 namespace rendering{
     struct plane {
         Vector3 normal_;
@@ -50,7 +52,9 @@ namespace rendering{
             
             bool contains(BoundingBox& object_box) const;
             
+            void print_frustrum() const;
             private:
+            
             plane top_;
             plane bottom_;
 

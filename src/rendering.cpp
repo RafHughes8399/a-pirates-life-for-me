@@ -1,25 +1,54 @@
 #include "rendering.h"
 
 
+void print_plane(rendering::plane p){
+    std::cout << p.normal_.x << ", " << p.normal_.y << ", " << 
+    p.normal_.z << std::endl;
+}
+
 float rendering::plane::signed_distance_to_plane(Vector3& point) const{
     return Vector3DotProduct(normal_, point) - distance_; 
 }
 
 void rendering::frustrum::update_frustrum(Camera3D& camera, float aspect, float fov_y, float z_near, float z_far){
+    
+    std::cout << "======================CALCULATE FRUSTRUM=================================" << std::endl;
+     
     float half_v_side = z_far * tanf(fov_y * 0.5f);
     float half_h_side = half_v_side * aspect;
-    auto camera_front = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
-    auto camera_right = Vector3CrossProduct(camera_front, camera.up);
+    auto camera_front = GetCameraForward(&camera);
+    auto camera_right = GetCameraRight(&camera);
+    auto camera_up = GetCameraUp(&camera);
     auto front_mult_far = Vector3Scale(camera_front, z_far);
-                
-    // planes are constructed with a point on the plane and a normal vector
-    near_  = plane{Vector3Add(camera.position, Vector3Scale(camera_front, z_near)), camera_front};
-    far_  = plane{Vector3Add(camera.position, front_mult_far), camera_front};
-     
-    right_  = plane{camera.position, Vector3CrossProduct(Vector3Subtract(front_mult_far, Vector3Scale(camera_right, half_h_side)), camera.up)};
-    left_  = plane{camera.position, Vector3CrossProduct(camera.up, Vector3Add(front_mult_far, Vector3Scale(camera_right, half_h_side)))};
-    top_  = plane{camera.position, Vector3CrossProduct(camera_right, Vector3Subtract(front_mult_far, Vector3Scale(camera.up, half_v_side)))};
-    bottom_  = plane{camera.position, Vector3CrossProduct(Vector3Add(front_mult_far, Vector3Scale(camera.up, half_v_side)), camera_right)};
+    
+
+
+    Vector3 near_point = Vector3Add(camera.position, Vector3Scale(camera_front, z_near));
+    Vector3 near_normal = camera_front;
+    near_ = {near_point, near_normal};
+
+    Vector3 far_point = Vector3Add(camera.position, front_mult_far);
+    Vector3 far_normal = Vector3Scale(camera_front, -1);
+    far_ = {far_point, far_normal};
+
+    Vector3 top_cross = Vector3Subtract(front_mult_far, Vector3Scale(camera_up, half_v_side));
+    Vector3 top_normal = Vector3CrossProduct(camera_right, top_cross);
+    top_ = {camera.position, top_normal};
+
+    Vector3 bottom_cross = Vector3Add(front_mult_far, Vector3Scale(camera_up, half_v_side));
+    Vector3 bottom_normal = Vector3CrossProduct(bottom_cross, camera_right);
+    bottom_ = {camera.position, bottom_normal};
+
+    Vector3 left_cross = Vector3Add(front_mult_far, Vector3Scale(camera_right, half_h_side));
+    Vector3 left_normal = Vector3CrossProduct(camera_up, left_cross);
+    left_ = {camera.position, left_normal};
+
+    Vector3 right_cross = Vector3Subtract(front_mult_far, Vector3Scale(camera_right, half_h_side));
+    Vector3 right_normal = Vector3CrossProduct(right_cross, camera_up);
+    right_ =  {camera.position, right_normal};
+
+    print_frustrum();
+    std::cout << "======================END CALCULATE FRUSTRUM=================================" << std::endl;
 }
 rendering::frustrum& rendering::frustrum::operator=(const frustrum& other){
     near_ = other.near_;
@@ -55,7 +84,23 @@ bool on_in_front_plane(BoundingBox& box, const rendering::plane& plane){
     return -r <= plane.signed_distance_to_plane(centre);
 }
 
+void rendering::frustrum::print_frustrum() const{
+    std::cout << "NEAR: ";
+    print_plane(near_);
+    std::cout << "FAR: ";
+    print_plane(far_);
+    std::cout << "TOP: ";
+    print_plane(top_);
+    std::cout << "BOTTOM: ";
+    print_plane(bottom_);
+    std::cout << "LEFT: ";
+    print_plane(left_);
+    std::cout << "RIGHT: ";
+    print_plane(right_);
+}
+
 bool rendering::frustrum::contains(BoundingBox& box) const{
+    std::cout << "check contains" << std::endl;
     return on_in_front_plane(box, near_)
     and on_in_front_plane(box, far_)
     and on_in_front_plane(box, top_)

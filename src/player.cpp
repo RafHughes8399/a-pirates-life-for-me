@@ -5,7 +5,7 @@ void player::player::update(float delta) {
 	// check for key inputs, generate any events if they are pressed (or held down)
 	check_key_input(delta);
 	move_camera(camera_mode_);
-	//camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);	
+	camera_frustrum_.update_frustrum(camera_, ASPECT_RATIO, FOV, NEAR, FAR);	
 
 }
 void player::player::render() {

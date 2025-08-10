@@ -16,7 +16,6 @@ void entities::ocean::interact(entities::entity* other) {
 
 void entities::ocean::render() {
 	DrawModel(object_type_.get_model(), position_, 1.0f, Fade(BLUE, 0.75));
-	DrawBoundingBox(bounding_box_, RED);
 }
 
 

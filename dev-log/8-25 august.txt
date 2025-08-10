@@ -29,8 +29,7 @@ does not get rendered, so make the target slightly behind the ship instead
 
 check the values of the frustrum
 
-	// issue with the frustrum, it is rendering everything
-	// double check the test game and double check the numbers
+// issue with the frustrum, it is rendering everything
+// double check the test game and double check the numbers
 
-    and check the ocean texture tooo, its not darawin
-    
+and check the ocean texture tooo, its not darawin

@@ -149,15 +149,22 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// TODO: 
 	// issue with the frustrum, it is rendering everything
 	// double check the test game and double check the numbers
+	std::cout << "==================FRUSTRUM================================= "<< std::endl;
+	rendering_frustrum.print_frustrum();
+	std::cout << "==================END FRUSTRUM=================================" << std::endl;
 	std::cout << "================= RENDER =====================" << std::endl;
-	auto frustrum_predicate = [rendering_frustrum](auto & entity)-> bool{
+
+	auto num_rendered = 0;
+	auto frustrum_predicate = [rendering_frustrum, &num_rendered](auto & entity)-> bool{
 		if(rendering_frustrum.contains(entity->get_bounding_box())){
 			return true;
+			++num_rendered;
 		}
 		return false;
 	};
 	world_entities_.render(frustrum_predicate);
 	std::cout << "================= END RENDER=====================" << std::endl;
+	std::cout << "rendered: " << num_rendered << " total: " << world_entities_.size() << std::endl;
 	// quick debug to check if this is working, i think not because its rendering everything
 	// do some more debug printing here
 	// debug
