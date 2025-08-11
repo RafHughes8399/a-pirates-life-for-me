@@ -380,39 +380,20 @@ void tree::octree::traverse_tree(std::unique_ptr<o_node>& tree){
 }
 
 
-void tree::octree::update(double delta){
-    // check the lifespan of the node
-    // update objects within the node, tag ones that have been moved
 
-    // this is more game logic
-/*     auto moved_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};     // for now is empty, pending game implementation
-    for(auto& obj : root_->objects_){
-        // this depends on obj implementation 
-        if(obj->update(delta) == MOVED){
-            moved_objects.push_back(obj);
-            }
-           (void) obj;
-        }
-        // reinsert moved objects 
-    for(auto& m_obj : moved_objects){
-        auto current = &root_;
-        // while the current region does not contain the object, move up a level
-        auto box = m_obj.get()->get_bounding_box();
-        
-        while(not node_contains_object((*current)->bounds_, box)){
-            current = (*current)->parent_;
-        }
-        // once the parent is found, erase and then reinsert the object into it
-        print_box(current->get()->bounds_);  
-        //erase(m_obj.get());
-        insert(*current, m_obj.get());
-    } */
-    // prune dead objects from the tree
-    prune_leaves(delta);
-    // then look for collisions within the node, placeholder for now
-    // read the blog for a better implementation 
+void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
+    if(not tree) {return;}
+
+    for(auto& object : tree->objects_){
+        object->update(delta);
+    }
+    //TODO: move objects - refer to notes
+    
+    for(auto & child : tree->children_){
+        update(child, delta);
+    }
+    return;
 }
-
 void tree::octree::render(std::unique_ptr<o_node>& tree){
     // if null tree skip 
     if(not tree){

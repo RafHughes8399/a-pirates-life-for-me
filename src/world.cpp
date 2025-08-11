@@ -141,6 +141,9 @@ void environment::world::update(float delta){
 
 	// randomise the wind every 90 seconds ? 
 	wind_.update(GetTime());
+
+	world_entities_.update(delta);
+	world_entities_.prune_leaves(delta);
 }
 
 void environment::world::render(rendering::frustrum& rendering_frustrum) {

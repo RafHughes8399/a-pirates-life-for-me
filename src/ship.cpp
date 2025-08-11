@@ -35,7 +35,6 @@ void entities::player_ship::update(float delta){
 	// update pos
 	velocity_ = Vector3Scale(velocity_, delta);
 	position_ = Vector3Add(position_, velocity_);
-
 	
 	// reset accel 
 	acceleration_ = Vector3Zero();

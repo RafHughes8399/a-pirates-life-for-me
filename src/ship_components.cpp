@@ -33,6 +33,7 @@ void components::sail::turn(float delta, float ship_direction, int turn_directio
 	auto new_direction = std::fmod(direction_ + turn, PI2);
 	// make sure the value doesnt become negative
 	new_direction = new_direction < 0 ? new_direction + PI2 : new_direction;
+
 	// problem is simple when left > right, clamp between them
 	if(left_bound > right_bound){
 		direction_ = Clamp(new_direction, right_bound, left_bound);
@@ -41,7 +42,7 @@ void components::sail::turn(float delta, float ship_direction, int turn_directio
 	// i want it to be within 340 and 180
 	else{
 		bool in_forbidden = (new_direction > left_bound and new_direction < right_bound);
-		if( not in_forbidden){
+		if(not in_forbidden){
 			direction_ = new_direction;
 		}
 		else{

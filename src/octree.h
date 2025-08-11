@@ -98,6 +98,7 @@ namespace tree{
         void prune_leaves(std::unique_ptr<o_node>& tree, double delta);
         
         // update and render
+        void update(std::unique_ptr<o_node>& tree, float delta);
         void render(std::unique_ptr<o_node>& tree);
 
         template<typename UnaryPred>
@@ -184,7 +185,9 @@ namespace tree{
         }
         
         // update and render
-        void update(double delta);
+        void update(double delta){
+            update(root_, delta);
+        }
 
         // render the tree within a certain bounding box, default is the whole tree
         void render(){
