@@ -27,6 +27,10 @@ player::player& game::game::get_player() {
 }
 
 
+entities::entity* game::game::get_object(int id){
+	return world_.get_entity(id);
+}
+
 void game::test_game::update(){
 	auto delta = GetFrameTime();
 	player_.update(delta);

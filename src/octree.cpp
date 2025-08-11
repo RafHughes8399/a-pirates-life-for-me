@@ -223,14 +223,18 @@ tree::octree::o_node* tree::octree::find_object_node(std::unique_ptr<o_node>& tr
     return nullptr;
 }
 
-entities::entity* tree::octree::find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object) {
+entities::entity* tree::octree::find_object(std::unique_ptr<o_node>& tree, int id) {
     if (!tree) return nullptr;
 
     // Check if object is in current o_node
-
+    for(auto& object : tree->objects_){
+        if(object->get_id() == id){
+            return object.get();
+        }
+    }
     // Recursively search children
     for (auto& child : tree->children_) {
-        auto result = find_object(child, object);
+        auto result = find_object(child, id);
         if (result != nullptr) {
             return result;
         }

@@ -10,8 +10,6 @@
 #define ISLE Vector3{-275, -0.3f, -280}
 void environment::world::build_world(wind& wind, player::player& player){
 	// build the ocean
-
-	std::cout << "building the world " << std::endl;
 	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
 		OceanType::get_instance(),
 		WORLD_CENTRE,
@@ -32,7 +30,6 @@ void environment::world::build_world(wind& wind, player::player& player){
 	auto player_ship_ptr = static_cast<entities::player_ship*>(player_ship.get());
 	wind_.add_ship_subscriber(player_ship_ptr);
 	//then set the player ship pointer, so it can be tracked
-	player.set_ship(player_ship_ptr);
 
 	world_entities_.insert(player_ship);
 
@@ -115,6 +112,10 @@ void environment::world::generate_islands(){
 	// make the bay
 }
 
+
+entities::entity* environment::world::get_entity(int id){
+	return world_entities_.find_object(id);
+}
 void environment::world::build_frustrum_test_world(){
 	
 	std::cout << "building the world " << std::endl;

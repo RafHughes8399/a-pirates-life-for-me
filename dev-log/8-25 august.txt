@@ -82,3 +82,12 @@ void tree::octree::update(double delta){
     // then look for collisions within the node, placeholder for now
     // read the blog for a better implementation 
 }
+
+
+
+-> ocean rendering
+-> ocean and island textures
+-> removing ship from player 
+
+
+-> for the player thing

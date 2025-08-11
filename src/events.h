@@ -124,21 +124,26 @@ namespace events{
 		// something along the lines of:
 	};
 	
-	// mainly used to recalcualte the frustrum when the camera moves
+	// this event should provide the player with
+	// the new position of the ship so that it can adjust the camera
+	// position and target accordingly
+
+	// the player would listen to such events
+	// the ship moving would create such an event
 	class camera_move_event : public event{
 	public:
 		~camera_move_event() = default;
-		camera_move_event(Vector3& position, Camera3D& camera, rendering::frustrum& frustrum)
-		:event(event_types::camera_movement), new_position_(position), camera_(camera),
-		frustrum_(frustrum){};
-
+		camera_move_event(Vector3& position_change)
+		:event(event_types::camera_movement), position_change_(position_change){}
+		
+		Vector3 get_position() const{
+			return position_change_;
+		}
 		static const int get_static_type(){
 			return event_types::camera_movement;
 		}
 	private:
-		Vector3& new_position_;
-		Camera3D& camera_;
-		rendering::frustrum& frustrum_;
+		Vector3& position_change_; // describes how the player ship has changed on each axis
 	};
 
 	// handler is templated for event types, there 

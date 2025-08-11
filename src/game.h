@@ -40,6 +40,7 @@ namespace game{
 
 		player::player& get_player();
 
+		entities::entity* get_object(int id);
 
 
 		// and define what happens on those events

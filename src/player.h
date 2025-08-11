@@ -26,16 +26,23 @@ namespace player{
 	// a reference the player_ship's position 
 	class player {
 		public:
-		~player() = default;
+		~player(){
+			event_interface::unsubscribe<events::camera_move_event>(camera_movement_handler_);
+		}
 		player()
-		:camera_(Camera3D{}), ship_(nullptr), camera_mode_(CAMERA_THIRD_PERSON),
-		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)){
-			std::cout << "build player" << std::endl;
+		:camera_(Camera3D{}), camera_mode_(CAMERA_THIRD_PERSON),
+		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), 
+		 camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)),
+		 camera_movement_handler_([this](const events::camera_move_event& event){ on_camera_move_event(event);}){
 			camera_.position = CAMERA_START;
 			camera_.target = TARGET_START;// the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
 			camera_.fovy = FOV;
-			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ? 
+			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
+			
+			
+			// subscribe 
+			event_interface::subscribe<events::camera_move_event>(camera_movement_handler_);
 		}
 		player(const player& other) = default;
 		player(player&& other) = default;
@@ -48,9 +55,8 @@ namespace player{
 			
 		Camera3D& get_camera();
 		void move_camera(int mode);
-		entities::player_ship* get_ship();
-		void set_ship(entities::player_ship* player_ship);
 
+		void on_camera_move_event(const events::camera_move_event& event);
 		rendering::frustrum& get_frustrum();
 		private:
 			void check_key_input(float delta);
@@ -58,7 +64,7 @@ namespace player{
 			Camera3D camera_;
 			const Vector3 camera_target_distance_;
 			rendering::frustrum camera_frustrum_;
-			entities::player_ship* ship_;
+			events::event_handler<events::camera_move_event> camera_movement_handler_;
 	};
 	
 	class test_player{

@@ -4,7 +4,7 @@ void entities::player_ship::update(float delta){
 	//MoveableObject::update(delta);
 	// update the anchor
 	// apply gravity
-	acceleration_.y += GRAVITY;
+	//acceleration_.y += GRAVITY;
 
 	// this calculates the veloctuty for a given frame
 	// apply the sail movement coeffieicts
@@ -36,6 +36,9 @@ void entities::player_ship::update(float delta){
 	velocity_ = Vector3Scale(velocity_, delta);
 	position_ = Vector3Add(position_, velocity_);
 	
+	// create an event 
+	std::unique_ptr<events::event> ship_moved_event = std::make_unique<events::camera_move_event>(velocity_);
+	event_interface::queue_event(ship_moved_event);
 	// reset accel 
 	acceleration_ = Vector3Zero();
 

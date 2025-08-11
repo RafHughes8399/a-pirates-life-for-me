@@ -58,7 +58,7 @@ namespace tree{
         void clear(std::unique_ptr<o_node>& tree);
         // object lookup
         o_node* find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
-        entities::entity* find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
+        entities::entity* find_object(std::unique_ptr<o_node>& tree, int id);
         
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree);
         
@@ -173,8 +173,8 @@ namespace tree{
             return find_object_node(root_, obj);
         }
         
-        entities::entity* find_object(std::unique_ptr<entities::entity>& obj) {
-            return find_object(root_, obj);
+        entities::entity* find_object(int id) {
+            return find_object(root_, id);
         }
         template<typename UnaryPred>
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(UnaryPred p){

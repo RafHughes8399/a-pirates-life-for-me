@@ -86,6 +86,7 @@ class world {
 		void update(float delta);
 		void render(rendering::frustrum& rendering_frustrum);
 		
+		entities::entity* get_entity(int id);
 		void populate_test_objects();
 	private:
 		void generate_islands();

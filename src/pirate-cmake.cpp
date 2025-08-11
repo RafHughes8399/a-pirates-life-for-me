@@ -83,7 +83,8 @@ void render(game::test_game& game) {
 
 void debug(Camera3D& camera, game::game& game) {
 
-	auto player_ship = game.get_player().get_ship();
+	auto ship = game.get_object(1);
+	auto player_ship = static_cast<entities::player_ship*>(ship);
 	// FPS Counter
 	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
 
@@ -131,8 +132,6 @@ void debug(Camera3D& camera, game::game& game) {
 	DrawText(TextFormat("- Position: (%06.3f, %06.3f, %06.3f)", camera.position.x, camera.position.y, camera.position.z), 610, 60, 10, BLACK);
 	DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", camera.target.x, camera.target.y, camera.target.z), 610, 75, 10, BLACK);
 	DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", camera.up.x, camera.up.y, camera.up.z), 610, 90, 10, BLACK);
-
-
 }
 
 void debug(Camera3D& camera, game::test_game& game){
