@@ -128,3 +128,67 @@ then move onto player and collision (separate branches for them)
 
 test immediate events
 test delayed events
+
+-> change it to an array for instant lookup
+-> player input events
+
+no what should actually happen is that the ship reacts to the key input events
+the player should react to camera move events triggered by ship moving 
+
+
+so for example, the key input takes a key and a ship,
+takes the ship function paired with the key and calls it
+the ship listens to key events  
+
+and when the player moves, it should cue an event to move the camera, and recalcualte the frustrum
+the player is the camera, 
+
+the camera move event does not make as much sense because it's all contained within one class, more or less
+
+this will decouple the two as you are intending
+
+
+so then the ship has a input mananger to listen to input events which are added to the event queue 
+by the player when a button is pressed 
+
+
+hmm no there is the inclusion circle
+
+
+ok so maybe the event just takes in the deatils (Like the mmebers instead of the whole classes
+so like instead of the ship it takes a std function and 
+
+like how camera move doesnt take the player but rather uses references to the player's member
+you feel
+
+
+
+but the ship thing makes sense
+it has a manager for player input events 
+
+
+lets rethink controls, first things first, defines a map that has 
+key input, function 
+
+there must be a way to change the keys though
+but the player needs to know what keys are mapped
+so those must be defined externally,
+
+
+ok ok make a controls class, that allows you to set the controls, change them, etc 
+and then in player you check if any of the controls have been pressed
+if so you send an event
+
+the ship  defines a map based on controls
+mapping a key input to a ship function 
+
+
+ok for next time:
+    -> implement singleton controls 
+    -> have player check if any controls are preseed or down, then create an event
+    -> define a ship controls that maps a control to a function
+    -> then define on_event to call that function
+    -> merge steer left and steer right into one 
+    -> merge sail up and sail down into on
+    -> change anchor to be the same mechanic as sail and steer
+    -> then test yay

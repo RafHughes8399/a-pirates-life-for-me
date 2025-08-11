@@ -52,13 +52,13 @@ class wind {
 		void update(double time);
 		Vector3 get_direction_coefficient();
 
-		void add_ship_subscriber(entities::ship* & ship);
-		void remove_ship_subscriber(entities::ship* & ship);
+		void add_ship_subscriber(entities::player_ship* & player_ship);
+		void remove_ship_subscriber(entities::player_ship* & player_ship);
 		void notify_ships();
 		void notify_ship(size_t ship_);
 
 	private:
-		std::vector<entities::ship*> ship_subscribers_;
+		std::vector<entities::player_ship*> ship_subscribers_;
 		float direction_;
 		float speed_; 
 		double time_randomised_ = WIND_CHANGE_TIME;
@@ -86,6 +86,7 @@ class world {
 		void update(float delta);
 		void render(rendering::frustrum& rendering_frustrum);
 		
+		entities::entity* get_entity(int id);
 		void populate_test_objects();
 	private:
 		void generate_islands();

@@ -10,8 +10,6 @@
 #define ISLE Vector3{-275, -0.3f, -280}
 void environment::world::build_world(wind& wind, player::player& player){
 	// build the ocean
-
-	std::cout << "building the world " << std::endl;
 	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
 		OceanType::get_instance(),
 		WORLD_CENTRE,
@@ -21,21 +19,28 @@ void environment::world::build_world(wind& wind, player::player& player){
 	);
 	world_entities_.insert(ocean);
 	// build the ship
-	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::ship>(
+	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::player_ship>(
 		ShipType::get_instance(),
 		SHIP_START,
 		Vector3{SHIP_START.x -1.0f ,SHIP_START.y, SHIP_START.z -1.0f},
 		Vector3{SHIP_START.x + 1.6f, SHIP_START.y + 2.8f, SHIP_START.z + 1.6f},
 		world_entities_.get_next_id()
 	);
-
 	//let the player ship subscribe to the wind to listen for updates 
-	auto player_ship_ptr = static_cast<entities::ship*>(player_ship.get());
+	auto player_ship_ptr = static_cast<entities::player_ship*>(player_ship.get());
 	wind_.add_ship_subscriber(player_ship_ptr);
 	//then set the player ship pointer, so it can be tracked
-	player.set_ship(player_ship_ptr);
 
 	world_entities_.insert(player_ship);
+
+		std::unique_ptr<entities::entity> player_ship_2 = std::make_unique<entities::player_ship>(
+		ShipType::get_instance(),
+		Vector3{10.0f, 1.0f, 10.0f},
+		Vector3{10 -1.0f ,1.0, 10.0 -1.0f},
+		Vector3{10.0 + 1.6f, 1 + 2.8f, 10.0f + 1.6f},
+		world_entities_.get_next_id()
+	);
+	world_entities_.insert(player_ship_2);
 	// build the islands
 
 	generate_islands();
@@ -56,7 +61,8 @@ void environment::world::generate_islands(){
 		Vector3{HUB.x + 75.0f, HUB.y + 14, HUB.z + 25.0f},
 		world_entities_.get_next_id()		
 	));
-
+	world_entities_.insert(hub);
+	
 	std::unique_ptr<entities::entity> lagoon = std::make_unique<entities::terrain>(entities::terrain(
 		LagoonType::get_instance(),
 		LAGOON,
@@ -64,7 +70,8 @@ void environment::world::generate_islands(){
 		Vector3{LAGOON.x + 80.0f, LAGOON.y + 14.2f, LAGOON.z + 70.0f},
 		world_entities_.get_next_id()
 	));
-
+	world_entities_.insert(lagoon);
+	
 	// make the reef
 	std::unique_ptr<entities::entity> reef = std::make_unique<entities::terrain>(entities::terrain(
 		ReefType::get_instance(),
@@ -73,6 +80,7 @@ void environment::world::generate_islands(){
 		Vector3{REEF.x + 39.0f, REEF.y + 4.5f, REEF.z + 100.0f},
 		world_entities_.get_next_id()
 	));
+	world_entities_.insert(reef);
 	std::unique_ptr<entities::entity> bay = std::make_unique<entities::terrain>(entities::terrain(
 		BayType::get_instance(),
 		BAY,
@@ -80,6 +88,7 @@ void environment::world::generate_islands(){
 		Vector3{BAY.x + 101.5f, BAY.y + 11.2f, BAY.z + 66.2f},
 		100
 	));
+	world_entities_.insert(bay);
 
 	std::unique_ptr<entities::entity> cove = std::make_unique<entities::terrain>(entities::terrain(
 		CoveType::get_instance(),
@@ -89,6 +98,7 @@ void environment::world::generate_islands(){
 		world_entities_.get_next_id()
 	));
 
+	world_entities_.insert(cove);
 	// make the isle
 	std::unique_ptr<entities::entity> isle = std::make_unique<entities::terrain>(entities::terrain(
 		IsleType::get_instance(),
@@ -97,16 +107,15 @@ void environment::world::generate_islands(){
 		Vector3{ISLE.x + 49.5f, ISLE.y + 8.2f, ISLE.z + 116.5f},
 		world_entities_.get_next_id()
 	));
+	world_entities_.insert(isle);
 
 	// make the bay
-	world_entities_.insert(hub);
-	world_entities_.insert(lagoon);
-	world_entities_.insert(reef);
-	world_entities_.insert(bay);
-	world_entities_.insert(isle);
-	world_entities_.insert(cove);
 }
 
+
+entities::entity* environment::world::get_entity(int id){
+	return world_entities_.find_object(id);
+}
 void environment::world::build_frustrum_test_world(){
 	
 	std::cout << "building the world " << std::endl;
@@ -133,21 +142,34 @@ void environment::world::update(float delta){
 
 	// randomise the wind every 90 seconds ? 
 	wind_.update(GetTime());
+
+	world_entities_.update(delta);
+	world_entities_.prune_leaves(delta);
 }
 
 void environment::world::render(rendering::frustrum& rendering_frustrum) {
-	auto num_rendered = 0;
 	// entity is std::unique_ptr<entities::entity>
+
+	// TODO: 
+	// issue with the frustrum, it is rendering everything
+	// double check the test game and double check the numbers
+	std::cout << "==================FRUSTRUM================================= "<< std::endl;
+	rendering_frustrum.print_frustrum();
+	std::cout << "==================END FRUSTRUM=================================" << std::endl;
+	std::cout << "================= RENDER =====================" << std::endl;
+
+	auto num_rendered = 0;
 	auto frustrum_predicate = [rendering_frustrum, &num_rendered](auto & entity)-> bool{
 		if(rendering_frustrum.contains(entity->get_bounding_box())){
-			num_rendered++;
 			return true;
+			++num_rendered;
 		}
 		return false;
 	};
 	world_entities_.render(frustrum_predicate);
+	std::cout << "================= END RENDER=====================" << std::endl;
+	std::cout << "rendered: " << num_rendered << " total: " << world_entities_.size() << std::endl;
 	// quick debug to check if this is working, i think not because its rendering everything
 	// do some more debug printing here
 	// debug
-	std::cout << "total objects: " << world_entities_.size() << " || objects rendered: " << num_rendered << std::endl;
 }

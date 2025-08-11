@@ -1,0 +1,93 @@
+
+ok for next time:
+    -> implement singleton controls  x 
+    -> have player check if any controls are preseed or down, then create an event x 
+    -> define a ship controls that maps a control to a function x 
+    -> then define on_event to call that function x 
+
+
+    -> merge steer left and steer right into one 
+    -> merge sail up and sail down into on 
+    -> change anchor to be the same mechanic as sail and steer
+    -> then test yay
+
+
+bugs to fix
+-> ship is not rendered 
+-> ship does not move
+-> anchor moves the wrong way
+
+-> ship turning is funky 
+
+
+ok camera bug because the target is not changing as the camera moves
+lets start simple 
+
+
+thought process is that because the ship is the target it 
+does not get rendered, so make the target slightly behind the ship instead
+
+check the values of the frustrum
+
+// issue with the frustrum, it is rendering everything
+// double check the test game and double check the numbers
+
+and check the ocean texture tooo, its not darawin
+
+
+rendering seems under control bugs to fix:
+-> clamping anchor and sail values
+-> fixing ship turning 
+-> double check wind works
+-> ocean rendering
+
+
+-> sail turning 
+
+
+-> check wind and ship movement
+-> ocean rendering 
+-> island 
+
+/
+void tree::octree::update(double delta){
+    // check the lifespan of the node
+    // update objects within the node, tag ones that have been moved
+
+    // this is more game logic
+/*     auto moved_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};     // for now is empty, pending game implementation
+    for(auto& obj : root_->objects_){
+        // this depends on obj implementation 
+        if(obj->update(delta) == MOVED){
+            moved_objects.push_back(obj);
+            }
+           (void) obj;
+        }
+        // reinsert moved objects 
+    for(auto& m_obj : moved_objects){
+        auto current = &root_;
+        // while the current region does not contain the object, move up a level
+        auto box = m_obj.get()->get_bounding_box();
+        
+        while(not node_contains_object((*current)->bounds_, box)){
+            current = (*current)->parent_;
+        }
+        // once the parent is found, erase and then reinsert the object into it
+        print_box(current->get()->bounds_);  
+        //erase(m_obj.get());
+        insert(*current, m_obj.get());
+    } */
+    // prune dead objects from the tree
+    prune_leaves(delta);
+    // then look for collisions within the node, placeholder for now
+    // read the blog for a better implementation 
+}
+
+
+
+-> ocean rendering
+-> ocean and island textures
+-> removing ship from player 
+
+
+-> for the player thing

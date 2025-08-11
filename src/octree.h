@@ -58,7 +58,7 @@ namespace tree{
         void clear(std::unique_ptr<o_node>& tree);
         // object lookup
         o_node* find_object_node(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
-        entities::entity* find_object(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
+        entities::entity* find_object(std::unique_ptr<o_node>& tree, int id);
         
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(std::unique_ptr<o_node>& tree);
         
@@ -98,16 +98,19 @@ namespace tree{
         void prune_leaves(std::unique_ptr<o_node>& tree, double delta);
         
         // update and render
+        void update(std::unique_ptr<o_node>& tree, float delta);
         void render(std::unique_ptr<o_node>& tree);
 
         template<typename UnaryPred>
         void render(std::unique_ptr<o_node>& tree, UnaryPred p){
+        
             if(not tree){
                 return;
             }
             for(auto & entity : tree->objects_){
                 if(p(entity)){
                     entity->render();
+                    std::cout << " render object " << entity->get_id() << std::endl;
                 }
             }
             for(auto & child : tree->children_){
@@ -170,8 +173,8 @@ namespace tree{
             return find_object_node(root_, obj);
         }
         
-        entities::entity* find_object(std::unique_ptr<entities::entity>& obj) {
-            return find_object(root_, obj);
+        entities::entity* find_object(int id) {
+            return find_object(root_, id);
         }
         template<typename UnaryPred>
         std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>> get_objects(UnaryPred p){
@@ -182,7 +185,9 @@ namespace tree{
         }
         
         // update and render
-        void update(double delta);
+        void update(double delta){
+            update(root_, delta);
+        }
 
         // render the tree within a certain bounding box, default is the whole tree
         void render(){

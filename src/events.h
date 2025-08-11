@@ -9,8 +9,9 @@
 #include <queue>
 #include <ctime>
 // project includes
-#include "entities.h" // will need to change the build order ? 
-
+//#include "entities.h" // will need to change the build order ? 
+//#include "player.h"
+#include "rendering.h"
 // other includes
 
 namespace events{
@@ -19,7 +20,8 @@ namespace events{
 		test = 0,
 		collision = 1, // for example
 		key_input = 2,
-		camera_movement = 3
+		camera_movement = 3,
+		num_types = 4 // update as needed
 		/**
 		 * types of events:
 		 * 	-> collision
@@ -78,15 +80,14 @@ namespace events{
 	class collision_event :  public event{
 	public:
 		~collision_event() = default;
-		collision_event(entities::entity& a, entities::entity& b)
-		: event(event_types::collision), a_(a), b_(b){};
+		collision_event() = default;
 
 		static const int get_static_type(){
 			return event_types::collision;
 		}
 	private:
-		entities::entity& a_;
-		entities::entity& b_;
+		//entities::entity& a_;
+		//entities::entity& b_;
 
 		// a collision event takes two entities and processes 
 		// what happens when those two entities collide
@@ -105,34 +106,44 @@ namespace events{
 		// there's a design pattern for that right, let's have a look
 	};
 
-	class key_input_event : public event{
+	class player_input_event : public event{
 	public:
-		~key_input_event() = default;
-		key_input_event(int key)
+		~player_input_event() = default;
+		player_input_event(int key)
 		: event(event_types::key_input), key_(key){};
 		// somewhere there would need to be a key, function stored
 		// like a player_controls class or something
 		static const int get_static_type(){
 			return event_types::key_input;
 		}
+		int get_key() const{
+			return key_;
+		}
 	private:
 		int key_;
 		// something along the lines of:
-		// player_controls& control_scheme -> maps keys to functions 
 	};
 	
-	// mainly used to recalcualte the frustrum when the camera moves
+	// this event should provide the player with
+	// the new position of the ship so that it can adjust the camera
+	// position and target accordingly
+
+	// the player would listen to such events
+	// the ship moving would create such an event
 	class camera_move_event : public event{
 	public:
 		~camera_move_event() = default;
-		camera_move_event(Vector3& position)
-		:event(event_types::camera_movement), camera_position_(position){};
-
+		camera_move_event(Vector3& position_change)
+		:event(event_types::camera_movement), position_change_(position_change){}
+		
+		Vector3 get_position() const{
+			return position_change_;
+		}
 		static const int get_static_type(){
 			return event_types::camera_movement;
 		}
-	private: 
-		Vector3 camera_position_;
+	private:
+		Vector3& position_change_; // describes how the player ship has changed on each axis
 	};
 
 	// handler is templated for event types, there 
@@ -156,6 +167,8 @@ namespace events{
 		~event_handler() override = default;
 		event_handler(std::function<void(const E& e)> handle)
 			: handler_type_(E::get_static_type()), handler_(handle){};
+		event_handler(const event_handler& other) = default;
+		event_handler(event_handler&& other) = default;
 		void call_event(const event& e) override{
 			// check if event and handler template match, because you're doing a static 
 			// cast

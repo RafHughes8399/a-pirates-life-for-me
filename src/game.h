@@ -9,7 +9,8 @@
 // project includes
 #include "environment.h" // has player, and object, and raylib, and config
 #include "config.h"
-#include "managers.h" // has events
+#include "events_interface.h"
+#include "managers.h"
 // events too maybe 
 
 namespace game{
@@ -19,7 +20,7 @@ namespace game{
 	public:
 		~game() = default;
 		game(environment::world& world, player::player& player)
-			: world_(world), player_(player) {
+			: world_(world), player_(player), test_event_manager_(managers::event_manager<events::test_event>()) {
 			// here in the game, add event listeners basewd on what you want to listen to
 		}
 		game(const game& other)
@@ -29,20 +30,8 @@ namespace game{
 			: world_(other.world_), player_(other.player_) {
 		}
 
-		game& operator=(const game& other) {
-			if (this != &other) {
-				world_ = other.world_;
-				player_ = other.player_;
-			}
-			return *this;
-		}
-		game& operator=(game&& other) noexcept {
-			if (this != &other) {
-				world_ = std::move(other.world_);
-				player_ = std::move(other.player_);
-			}
-			return *this;
-		}
+		game& operator=(const game& other) = default;
+		game& operator=(game&& other) noexcept = default;
 		// temp until events
 		void update();
 		void render();
@@ -51,6 +40,7 @@ namespace game{
 
 		player::player& get_player();
 
+		entities::entity* get_object(int id);
 
 
 		// and define what happens on those events
@@ -58,6 +48,7 @@ namespace game{
 	private:
 		environment::world& world_;
 		player::player& player_;
+		managers::event_manager<events::test_event> test_event_manager_;
 		// Hud hud_;
 	};
 
@@ -65,8 +56,7 @@ class test_game {
 	public:
 		~test_game() = default;
 		test_game(environment::world& world, player::test_player& player)
-			: world_(world), player_(player), 
-			test_manager_(managers::event_manager<events::test_event>()) {
+			: world_(world), player_(player){
 			// here in the test_game, add event listeners basewd on what you want to listen to
 		}
 		test_game(const test_game& other)
@@ -105,7 +95,6 @@ class test_game {
 	private:
 		environment::world& world_;
 		player::test_player& player_;
-		managers::event_manager<events::test_event> test_manager_;
 		// Hud hud_;
 
 	};

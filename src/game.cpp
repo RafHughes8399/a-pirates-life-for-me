@@ -6,10 +6,6 @@ void game::game::update(){
 	player_.update(delta);
 	world_.update(delta);
 
-	// then process events
-	// make a test event, and queue it
-	std::unique_ptr<events::event> test_event = std::make_unique<events::test_event>();
-	events::global_dispatcher_.queue_event(test_event);
 	events::global_dispatcher_.process_events(delta);
 
 }
@@ -30,6 +26,10 @@ player::player& game::game::get_player() {
 	return player_;
 }
 
+
+entities::entity* game::game::get_object(int id){
+	return world_.get_entity(id);
+}
 
 void game::test_game::update(){
 	auto delta = GetFrameTime();

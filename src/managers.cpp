@@ -3,9 +3,7 @@
 
 void managers::event_map::on_event(const events::event& e){
     // call the on event function for the event id provided
-    auto on_event = on_event_map_[e.get_type()];
-    on_event(e);
-
+    on_event_list_[e.get_type()](e);
     return;
 
 }
@@ -14,8 +12,10 @@ void managers::event_map::on_test_event(const events::test_event& test){
     std::cout << test.get_event_time() << std::endl;
     // TODO something
 }
+
+
 //TODO implement
-void managers::collision_manager::on_collision_event(const events::collision_event& collision){
+void managers::event_map::on_collision_event(const events::collision_event& collision){
     (void) collision;
     // ok so take  the two entities in the collision event and 
     // process them here
@@ -24,7 +24,7 @@ void managers::collision_manager::on_collision_event(const events::collision_eve
 }
 // i think these two will be more simple
 //TODO implement
-void managers::player_manager::on_camera_move_event(const events::camera_move_event& camera_movement){
+void managers::event_map::on_camera_move_event(const events::camera_move_event& camera_movement){
     (void) camera_movement;
     // ok take the camera position
     // update the position and recalc the frustrum 
@@ -32,10 +32,18 @@ void managers::player_manager::on_camera_move_event(const events::camera_move_ev
     return; 
 }
 // TODO implement
-void managers::player_manager::on_key_input_event(const events::key_input_event& key_input){
+void managers::event_map::on_key_input_event(const events::player_input_event& key_input){
     (void) key_input;
     // take the key input in the event
     // and the control map, then call the function 
     // ok the player manager is going to need the player
+    std::cout << "pressed key " << key_input.get_key() << std::endl;
+    // do something to the ship 
+    // but how do i know what the ship is yk
     return;
 }
+
+// i think i scrap managers ?
+// i dont know how else to pass in the ship function without defining on_key_event in ship
+// because the handling of the event is up to the listener, the event should just provide the basic information 
+// like just the key, in this case
