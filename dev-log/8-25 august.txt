@@ -91,3 +91,23 @@ void tree::octree::update(double delta){
 
 
 -> for the player thing
+
+
+
+-> ocean rendering
+-> ocean and island texturing 
+
+-> then octree update (moving entities around)
+-> then UI stuff and the sky
+-> then collision and hitboxecs
+
+-> then inventory
+
+-> the ocean is not being i
+
+
+
+-> island texturing 
+-> the sky 
+-> camera rotate clamping 
+-> octree update

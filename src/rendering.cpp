@@ -100,7 +100,6 @@ void rendering::frustrum::print_frustrum() const{
 }
 
 bool rendering::frustrum::contains(BoundingBox& box) const{
-    std::cout << "check contains" << std::endl;
     return on_in_front_plane(box, near_)
     and on_in_front_plane(box, far_)
     and on_in_front_plane(box, top_)

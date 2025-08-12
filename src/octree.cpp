@@ -3,8 +3,8 @@
 // containment checks
 bool tree::octree::node_contains_object(BoundingBox& node, BoundingBox& object){
     // compare the bounding box of the node and the object
-    return (object.min.x > node.min.x and object.min.y > node.min.y and object.min.z > node.min.z)
-    and (object.max.x < node.max.x and object.max.y < node.max.y and object.max.z < node.max.z);
+    return (object.min.x >= node.min.x and object.min.y >= node.min.y and object.min.z >= node.min.z)
+    and (object.max.x <= node.max.x and object.max.y <= node.max.y and object.max.z <= node.max.z);
 }
 // return the child "index" that the object can fit into, if -1 then no child can fit the object
 int tree::octree::object_contained_by_child(BoundingBox& node, BoundingBox& object){

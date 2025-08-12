@@ -57,9 +57,7 @@
 #define WORLD_X 1524.0f
 #define WORLD_Y 128.0f
 #define WORLD_Z 1524.0f
-
-#define NUM_CHUNKS 25
-#define CHUNK_SIZE WORLD_X / NUM_CHUNKS
+#define ORIGIN Vector3Zero()
 
 
 // wind properties
