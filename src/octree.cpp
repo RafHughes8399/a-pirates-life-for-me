@@ -194,6 +194,29 @@ void tree::octree::erase(std::unique_ptr<o_node>& tree, size_t object_id){
     }
 }
 
+std::unique_ptr<entities::entity> tree::octree::extract(std::unique_ptr<o_node>& tree, size_t object_id){
+    if(not tree){return nullptr;}
+    // find them remove
+    auto entity = std::find_if(tree->objects_.begin(), tree->objects_.end(),
+        [object_id](auto& obj) -> bool{
+            if(object_id == obj->get_id()){
+                return true;
+            }
+            return false;
+        });
+    // not in this node - keep looking
+    if(entity != tree->objects_.end()){
+        auto extracted = std::move(*entity);
+        tree->objects_.erase(entity);
+        return extracted;
+    }
+    // otherwise not in this node - keep looking 
+    else{
+        for(auto& child : tree->children_){
+            extract(child, object_id);
+        }
+    }
+}
 void tree::octree::clear(std::unique_ptr<o_node>& tree){
     tree->objects_.clear();
     for(auto& child : tree->children_){
@@ -387,12 +410,30 @@ void tree::octree::traverse_tree(std::unique_ptr<o_node>& tree){
 
 void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
     if(not tree) {return;}
+    auto moved_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};
 
     for(auto& object : tree->objects_){
-        object->update(delta);
+        auto update = object->update(delta);
+        switch (update){
+            case entities::status_codes::moved:
+                // if moved then append to moved objects
+                // check if moved out of the current node
+                
+                move_entity(tree, object);
+                //reprocess entity(tree, entity)
+                break;
+            case entities::status_codes::dead:
+                // TODO pending some form of combat implementation
+
+                // something along the lines of 
+                //erase(tree, object->get_id());
+                break;
+            default:
+                break;
+        }
     }
     //TODO: move objects - refer to notes
-    
+    // reinsert moved
     for(auto & child : tree->children_){
         update(child, delta);
     }
@@ -411,4 +452,29 @@ void tree::octree::render(std::unique_ptr<o_node>& tree){
     for(auto & child : tree->children_){
         render(child);
     }
+}
+
+void tree::octree::move_entity(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity){
+    // check the bounding box
+
+    // if not still
+    if(not node_contains_object(tree->bounds_, entity->get_bounding_box())){
+
+        // extract 
+        auto extracted_entity = extract(tree, entity->get_id());
+        // find the appropraite parent
+        auto new_parent = find_new_parent(tree, extracted_entity);
+        // and reinsert at the parent
+        insert(*new_parent, extracted_entity);
+    }
+    return;
+}
+
+std::unique_ptr<tree::octree::o_node>* tree::octree::find_new_parent(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity){
+    auto current = &tree;
+    auto entity_bounds = entity->get_bounding_box();
+    while(not node_contains_object((*current)->bounds_, entity_bounds)){
+        current = (*current)->parent_;
+    }
+    return current;
 }

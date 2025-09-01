@@ -38,6 +38,7 @@ void player::player::move_camera(int mode){
 
 	// move the camera to the new position
 	// stop the camera from moving below the water level
+	// clamp across all directions
 	camera_.position.y = Clamp(camera_.position.y, 0.0, WORLD_Y / 2);
 
 	// then allow for camera rotation

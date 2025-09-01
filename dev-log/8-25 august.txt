@@ -84,7 +84,11 @@ void tree::octree::update(double delta){
 }
 
 
-
+here are my thoughts
+- check for the object to be moved 
+- if so simply remove it from the tree based on the id
+- then reinsert
+- perhaps less efficient because what if it does not leave its own node
 -> ocean rendering
 -> ocean and island textures
 -> removing ship from player 

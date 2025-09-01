@@ -54,6 +54,7 @@ namespace tree{
         void insert(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         void insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<entities::entity>>& objects);
         void erase(std::unique_ptr<o_node>& tree, size_t object_id);
+        std::unique_ptr<entities::entity> extract(std::unique_ptr<o_node>& tree, size_t object_id);
         
         void clear(std::unique_ptr<o_node>& tree);
         // object lookup
@@ -101,6 +102,9 @@ namespace tree{
         void update(std::unique_ptr<o_node>& tree, float delta);
         void render(std::unique_ptr<o_node>& tree);
 
+
+        void move_entity(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity);
+        std::unique_ptr<o_node>* find_new_parent(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity);
         template<typename UnaryPred>
         void render(std::unique_ptr<o_node>& tree, UnaryPred p){
         
@@ -165,6 +169,9 @@ namespace tree{
         }
         void erase(size_t id){
             erase(root_, id);
+        }
+        std::unique_ptr<entities::entity> extract(size_t id){
+            return extract(root_, id);
         }
         void clear(){
             clear(root_);

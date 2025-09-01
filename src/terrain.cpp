@@ -1,7 +1,7 @@
 #include "entities.h"
 
-void entities::terrain::update(float delta){
-	return;
+int entities::terrain::update(float delta){
+	return entities::status_codes::nothing;
 }
 void entities::terrain::render() {
 	DrawModel(object_type_.get_model(), position_, 0.7, WHITE);

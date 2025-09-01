@@ -24,7 +24,13 @@
 #define ANCHOR_UP 6
 #define ANCHOR_DOWN 7
 namespace entities{
-
+	enum status_codes{
+		nothing = 0,
+		moved = 1,
+		dead = 2, 
+		//TODO: insert more as needed
+		other = 3,
+	};
 	class entity {
 		public:
 		virtual ~entity() = default;
@@ -36,7 +42,7 @@ namespace entities{
 		entity(const entity& other) = default;
 		entity(entity&& other) = default;
 		// a default update and render, the default update does nothing, render just draws the 
-		virtual void update(float delta);
+		virtual int update(float delta);
 		virtual void render();
 		virtual void interact(entity* other);
 		float get_height();
@@ -78,7 +84,7 @@ public:
 	moveable_entity(moveable_entity&& other)
 		: entity(other), velocity_(std::move(other.velocity_)), acceleration_(std::move(other.acceleration_)), direction_(std::move(other.direction_)) {
 	}
-	void update(float delta) override;
+	int update(float delta) override;
 	void render() override;
 	Vector3 get_acceleration();
 	Vector3 get_velocity();
@@ -125,7 +131,7 @@ public:
 	player_ship& operator=(const player_ship& ohter);
 	player_ship& operator= (const player_ship&& other);
 	
-	void update(float delta) override;
+	int update(float delta) override;
 	void render() override;
 	void interact(entity* other) override;
 	void set_position(Vector3 position);
@@ -184,7 +190,7 @@ class terrain : public entity {
 	: entity(other) {
 	};
 	
-	void update(float delta) override;
+	int update(float delta) override;
 	void render() override;
 	void interact(entity* other) override;
 	private:
@@ -203,7 +209,7 @@ class test_entity : public entity{
 	: entity(other) {
 	};
 	
-	void update(float delta) override;
+	int update(float delta) override;
 	void render() override;
 	void interact(entity* other) override;
 	private:

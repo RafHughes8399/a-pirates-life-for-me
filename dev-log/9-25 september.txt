@@ -14,5 +14,35 @@
 Monday the 1st
 sky is done 
 
-let's focus on the island texturing issues
-and then camera target and movement clamping
+let's focus on the island texturing issues (done)
+and then camera target and movement clamping (done)
+    -> couple of things 
+
+
+after entity update status return code (think like HTTP)
+    -> one for moved
+    -> one for dead
+    -> one for default
+
+then octree entity management based on update return code
+    -> the main idea is repositioning objects after they move
+    -> first check if an object has moved
+    -> tag it, and reinsert it 
+        ideas for reinsertion:
+            -> simply remove, and recall insert at the root of the tree
+            -> otherwise, first check if in or out of the current node
+            -> if still in the same node, no need to remove and reinsert
+            -> or instead of going all the way to the top of the tree, find the 
+            "highest" possible parent and then reinsert from there
+
+            -> ok let's do a bit of both
+                -> if an object moved, check if it still is contained 
+                by the current node
+                -> if not, remove it and then reproccess it
+                -> when reproccessing, find the "highest" possible parent
+                for the current entity, and then reinsert from there, instead of always
+                going from the root
+            -> 
+then collision
+
+then UI

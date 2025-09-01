@@ -1,8 +1,8 @@
 #include "entities.h"
 
-void entities::entity::update(float delta) {
+int entities::entity::update(float delta) {
 	// default does nothing
-	return;
+	return entities::status_codes::nothing;
 }
 
 void entities::entity::render(){
@@ -46,9 +46,9 @@ BoundingBox& entities::entity::get_bounding_box(){
 int entities::entity::get_id(){
 	return id_;
 }
-void entities::moveable_entity::update(float delta) {
+int entities::moveable_entity::update(float delta) {
 	(void) delta;
-	return;
+	return entities::status_codes::nothing;
 }
 
 void entities::moveable_entity::render(){
@@ -78,9 +78,9 @@ void entities::moveable_entity::adjust_acceleration(Vector3 acceleration){
 }
 
 
-void entities::test_entity::update(float delta ){
+int entities::test_entity::update(float delta ){
 	(void) delta;
-	return;
+	return entities::status_codes::nothing;
 }
 
 void entities::test_entity::render(){

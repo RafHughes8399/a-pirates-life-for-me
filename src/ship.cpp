@@ -1,6 +1,6 @@
 #include "entities.h"
 #include "config.h"
-void entities::player_ship::update(float delta){
+int entities::player_ship::update(float delta){
 	//MoveableObject::update(delta);
 	// update the anchor
 	// apply gravity
@@ -45,6 +45,13 @@ void entities::player_ship::update(float delta){
 	// update the bounding box 
 	bounding_box_.min = Vector3Add(bounding_box_.min, velocity_);
 	bounding_box_.max = Vector3Add(bounding_box_.max, velocity_);
+
+	if(not Vector3Equals(velocity_, Vector3Zeros)){
+		return entities::status_codes::moved;
+	}
+	else{
+		return entities::status_codes::nothing;
+	}
 }
 
 void entities::player_ship::render(){
