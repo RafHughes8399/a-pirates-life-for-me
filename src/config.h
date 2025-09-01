@@ -48,7 +48,8 @@
 #define NEAR 1 // start with 0.5, i think some work can be done in calculating the target of the camera
 #define FAR 350 // go for 100 units for now,
 
-
+// colours
+#define SKY_BLUE Color{19, 195, 235, 255}
 // angles
 #define ZERO 0.0f // in radians
 #define PI2 2 * std::numbers::pi_v<float>

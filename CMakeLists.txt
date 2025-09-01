@@ -85,6 +85,9 @@ link_libraries(terrain)
 add_library(ocean src/ocean.cpp)
 link_libraries(ocean)
 
+add_library(sky src/sky.cpp)
+link_libraries(sky)
+
 add_library(wind src/wind.cpp)
 link_libraries(wind)
 

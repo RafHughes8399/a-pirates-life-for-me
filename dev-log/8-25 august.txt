@@ -111,3 +111,10 @@ void tree::octree::update(double delta){
 -> the sky 
 -> camera rotate clamping 
 -> octree update
+
+-> sky and camera
+-> sky is 3 planes, draw first before the rest of the world
+-> bound the camera movement in all directions (left, right up, down)
+
+-> octree entity position updating from movement    
+-> change update to return a value 

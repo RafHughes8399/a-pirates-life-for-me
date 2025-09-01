@@ -33,15 +33,8 @@ namespace entities{
 			// generate the bounding box, min and max
 		};
 	
-		entity(const entity& other)
-			: object_type_(other.object_type_), position_(other.position_), bounding_box_(other.bounding_box_), id_(other.id_){
-			};
-		
-		entity(entity&& other)
-			: object_type_(other.object_type_), position_(std::move(other.position_)), bounding_box_(std::move(other.bounding_box_)), id_(std::move(other.id_)){
-			};
-		
-		
+		entity(const entity& other) = default;
+		entity(entity&& other) = default;
 		// a default update and render, the default update does nothing, render just draws the 
 		virtual void update(float delta);
 		virtual void render();

@@ -199,6 +199,63 @@ private:
     }
 };
 
+class SkyTopType : public ObjectType {
+public:
+    SkyTopType(const SkyTopType& other) = delete;
+    SkyTopType(SkyTopType&& other) = delete;
+    SkyTopType& operator=(const SkyTopType& other) = delete;
+    SkyTopType& operator=(SkyTopType&& other) = delete;
+
+    // Singleton getter
+    static SkyTopType& get_instance() {
+        static SkyTopType instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    SkyTopType()
+        : ObjectType(LoadModelFromMesh(GenMeshCube(WORLD_X,  0.1, WORLD_Z )), LoadTexture(WATER_TEXTURE)){
+    }
+};
+class SkyFrontBack : public ObjectType {
+public:
+    SkyFrontBack(const SkyFrontBack& other) = delete;
+    SkyFrontBack(SkyFrontBack&& other) = delete;
+    SkyFrontBack& operator=(const SkyFrontBack& other) = delete;
+    SkyFrontBack& operator=(SkyFrontBack&& other) = delete;
+
+    // Singleton getter
+    static SkyFrontBack& get_instance() {
+        static SkyFrontBack instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    SkyFrontBack()
+        : ObjectType(LoadModelFromMesh(GenMeshCube(WORLD_X, WORLD_Y, 0.1 )), LoadTexture(WATER_TEXTURE)) {
+    }
+};
+class SkyLeftRight : public ObjectType {
+public:
+    SkyLeftRight(const SkyLeftRight& other) = delete;
+    SkyLeftRight(SkyLeftRight&& other) = delete;
+    SkyLeftRight& operator=(const SkyLeftRight& other) = delete;
+    SkyLeftRight& operator=(SkyLeftRight&& other) = delete;
+
+    // Singleton getter
+    static SkyLeftRight& get_instance() {
+        static SkyLeftRight instance;
+        return instance;
+    }
+
+private:
+    // Private constructor
+    SkyLeftRight()
+        : ObjectType(LoadModelFromMesh(GenMeshCube(0.1, WORLD_Y, WORLD_Z)), LoadTexture(WATER_TEXTURE)) {
+    }
+};
 class TestType : public ObjectType {
 public:
     TestType(const TestType& other) = delete;

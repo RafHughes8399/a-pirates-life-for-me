@@ -39,17 +39,10 @@ void environment::world::build_world(wind& wind, player::player& player){
 
 	world_entities_.insert(player_ship);
 	// build the islands
-
 	generate_islands();
 }
+
 void environment::world::generate_islands(){
-	// for now, just generate the underlying terrain for all the islands in the game 
-	// the object constructor is, i think size and density can go, they seem not so necessary
-	// obj type,
-	// position
-	// min
-	// max
-	// id, which you know.
 	
 	std::unique_ptr<entities::entity> hub = std::make_unique<entities::terrain>(entities::terrain(
 		HubType::get_instance(),
@@ -163,6 +156,7 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 		}
 		return false;
 	};
+	sky_.render();
 	world_entities_.render(frustrum_predicate);
 	std::cout << "================= END RENDER=====================" << std::endl;
 	std::cout << "rendered: " << num_rendered << " total: " << world_entities_.size() << std::endl;
