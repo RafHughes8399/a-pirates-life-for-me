@@ -20,7 +20,7 @@
 // game textures 
 #define TEXTURE3B "../textures/pirate-textures/Texture_03_B.png"
 #define WATER_TEXTURE "../textures/environment-textures/Core/WaterNormals_01.png"
-#define SAND_TEXTURE "../textures/environment-textures/Core/Sand_Texture_01.png"
+#define SAND_TEXTURE "../textures/environment-textures/Terrain/Sand_Texture_01.png"
 
 
 // game properties
@@ -48,7 +48,8 @@
 #define NEAR 1 // start with 0.5, i think some work can be done in calculating the target of the camera
 #define FAR 350 // go for 100 units for now,
 
-
+// colours
+#define SKY_BLUE Color{19, 195, 235, 255}
 // angles
 #define ZERO 0.0f // in radians
 #define PI2 2 * std::numbers::pi_v<float>
@@ -57,9 +58,7 @@
 #define WORLD_X 1524.0f
 #define WORLD_Y 128.0f
 #define WORLD_Z 1524.0f
-
-#define NUM_CHUNKS 25
-#define CHUNK_SIZE WORLD_X / NUM_CHUNKS
+#define ORIGIN Vector3Zero()
 
 
 // wind properties

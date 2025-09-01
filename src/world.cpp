@@ -8,16 +8,22 @@
 #define BAY Vector3{300, -1.0f, 400}
 #define COVE Vector3{315, -1.4f, -350}
 #define ISLE Vector3{-275, -0.3f, -280}
+
 void environment::world::build_world(wind& wind, player::player& player){
 	// build the ocean
 	std::unique_ptr<entities::entity> ocean = std::make_unique<entities::ocean>(
 		OceanType::get_instance(),
-		WORLD_CENTRE,
-		WORLD_MIN,
-		WORLD_MAX,
+		Vector3{0.0f, WORLD_Y * -0.25, 0.0f},
+		Vector3Scale(Vector3{WORLD_X, WORLD_Y, WORLD_Z}, -0.5),
+		Vector3{WORLD_X * 0.5, -1.0f, WORLD_Z * 0.5},
 		world_entities_.get_next_id()
 	);
+	std::cout << "=========WORLD INSERT=====================" << std::endl;
+	std::cout << world_entities_.size() << std::endl;
+	std::cout << ocean->get_id() << std::endl;
 	world_entities_.insert(ocean);
+	std::cout << world_entities_.size() << std::endl;
+	std::cout << "========= END WORLD INSERT=====================" << std::endl;
 	// build the ship
 	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::player_ship>(
 		ShipType::get_instance(),
@@ -32,27 +38,11 @@ void environment::world::build_world(wind& wind, player::player& player){
 	//then set the player ship pointer, so it can be tracked
 
 	world_entities_.insert(player_ship);
-
-		std::unique_ptr<entities::entity> player_ship_2 = std::make_unique<entities::player_ship>(
-		ShipType::get_instance(),
-		Vector3{10.0f, 1.0f, 10.0f},
-		Vector3{10 -1.0f ,1.0, 10.0 -1.0f},
-		Vector3{10.0 + 1.6f, 1 + 2.8f, 10.0f + 1.6f},
-		world_entities_.get_next_id()
-	);
-	world_entities_.insert(player_ship_2);
 	// build the islands
-
 	generate_islands();
 }
+
 void environment::world::generate_islands(){
-	// for now, just generate the underlying terrain for all the islands in the game 
-	// the object constructor is, i think size and density can go, they seem not so necessary
-	// obj type,
-	// position
-	// min
-	// max
-	// id, which you know.
 	
 	std::unique_ptr<entities::entity> hub = std::make_unique<entities::terrain>(entities::terrain(
 		HubType::get_instance(),
@@ -166,6 +156,7 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 		}
 		return false;
 	};
+	sky_.render();
 	world_entities_.render(frustrum_predicate);
 	std::cout << "================= END RENDER=====================" << std::endl;
 	std::cout << "rendered: " << num_rendered << " total: " << world_entities_.size() << std::endl;

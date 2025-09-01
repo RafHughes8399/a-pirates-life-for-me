@@ -15,7 +15,14 @@ void entities::ocean::interact(entities::entity* other) {
 }
 
 void entities::ocean::render() {
-	DrawModel(object_type_.get_model(), position_, 1.0f, Fade(BLUE, 0.75));
+	std::cout << "======RENDER OCEAN========" << std::endl;
+	std::cout << IsModelValid(object_type_.get_model()) << std::endl;
+	std::cout << bounding_box_.min.x << ", " << bounding_box_.min.y << ", " << bounding_box_.min.z << std::endl;
+	std::cout << bounding_box_.max.x << ", " << bounding_box_.max.y << ", " << bounding_box_.max.z << std::endl;
+	DrawModel(object_type_.get_model(), position_, 1.0f, Fade(BLUE, 0.55));
+	DrawBoundingBox(bounding_box_, BLUE);
+
+	std::cout << "======END RENDER OCEAN========" << std::endl;
 }
 
 

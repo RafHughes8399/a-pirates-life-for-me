@@ -21,6 +21,7 @@
 
 #define WORLD_BOX BoundingBox{WORLD_MIN, WORLD_MAX}
 
+#define FACES 5
 
 
 namespace environment{
@@ -63,22 +64,47 @@ class wind {
 		float speed_; 
 		double time_randomised_ = WIND_CHANGE_TIME;
 	};
+class sky{
+	public:
+	~sky() = default;
+	sky(){
+		generate_sky_faces();
+	}
+	sky(const sky& other) = default;
+	sky(sky&& other) = default;
+
+
+	void render();
+	void generate_sky_faces();
+	private:
+	enum faces{
+		top = 0,
+		front = 1,
+		back = 2,
+		left = 3,
+		right = 4
+	};
+		// if you consider the world to be a cube, then there are 6 faces, or 6 places,
+		// the sky is drawn on all but one
+	// needs a length, height, resZ, resX
+
+	Model sky_models_[FACES];
+	Vector3 sky_positions_[FACES];
+};
 class world {
 	public:
 		// CONSTRUCTORS
 		world(player::player& player)
-		: wind_(wind()), world_entities_(tree::octree(WORLD_BOX)){
+		: wind_(wind()),sky_(sky()), world_entities_(tree::octree(WORLD_BOX)){
 			build_world(wind_, player);
 		}
 
 		world(player::test_player& player)
-		: wind_(wind()), world_entities_(tree::octree(WORLD_BOX)){
+		: wind_(wind()), sky_(sky()), world_entities_(tree::octree(WORLD_BOX)){
 			build_frustrum_test_world();
 		}
-		world(const world& other)
-		: wind_(other.wind_), world_entities_(other.world_entities_){};
-		
-		world(const world&& other);
+		world(const world& other) = default;		
+		world( world&& other) = default;
 		
 		world& operator=(const world& other);
 		world& operator= (const world && other);
@@ -92,6 +118,7 @@ class world {
 		void generate_islands();
 		void build_world(wind& wind, player::player& player);
 		void build_frustrum_test_world();
+		sky sky_;
 		wind wind_;
 		tree::octree world_entities_;
 		
