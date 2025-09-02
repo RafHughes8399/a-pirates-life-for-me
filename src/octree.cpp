@@ -410,7 +410,6 @@ void tree::octree::traverse_tree(std::unique_ptr<o_node>& tree){
 
 void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
     if(not tree) {return;}
-    auto moved_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};
 
     for(auto& object : tree->objects_){
         auto update = object->update(delta);
@@ -418,8 +417,9 @@ void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
             case entities::status_codes::moved:
                 // if moved then append to moved objects
                 // check if moved out of the current node
-                
+                std::cout << "=========== MOVE ENTITY=============" << std::endl;
                 move_entity(tree, object);
+                std::cout << "=========== END MOVE ENTITY=============" << std::endl;
                 //reprocess entity(tree, entity)
                 break;
             case entities::status_codes::dead:
@@ -459,22 +459,40 @@ void tree::octree::move_entity(std::unique_ptr<o_node>& tree, std::unique_ptr<en
 
     // if not still
     if(not node_contains_object(tree->bounds_, entity->get_bounding_box())){
-
         // extract 
+        std::cout << "============EXTRACT==============" << std::endl;
         auto extracted_entity = extract(tree, entity->get_id());
         // find the appropraite parent
+        std::cout << "============GET NEW PARENT==============" << std::endl;
         auto new_parent = find_new_parent(tree, extracted_entity);
         // and reinsert at the parent
+        std::cout << "============REINSERT==============" << std::endl;
+        std::cout << size()  << std::endl;
         insert(*new_parent, extracted_entity);
+        std::cout << size()  << std::endl;
+        std::cout << "============END REINSERT==============" << std::endl;
+    }
+    else{
+        // do nothing, it does not need to move node 
+        std::cout << "still in the same node " << std::endl;
     }
     return;
 }
 
 std::unique_ptr<tree::octree::o_node>* tree::octree::find_new_parent(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity){
     auto current = &tree;
+    std::cout << "new parent is (" << (*current)->bounds_.min.x << ", " << 
+    (*current)->bounds_.min.y << ", " << (*current)->bounds_.min.z << ") (" <<
+    (*current)->bounds_.max.x << ", " << (*current)->bounds_.max.y << ", " 
+    << (*current)->bounds_.max.z << std::endl; 
+
     auto entity_bounds = entity->get_bounding_box();
     while(not node_contains_object((*current)->bounds_, entity_bounds)){
         current = (*current)->parent_;
     }
+    std::cout << "new parent is (" << (*current)->bounds_.min.x << ", " << 
+    (*current)->bounds_.min.y << ", " << (*current)->bounds_.min.z << ") (" <<
+    (*current)->bounds_.max.x << ", " << (*current)->bounds_.max.y << ", " 
+    << (*current)->bounds_.max.z << std::endl; 
     return current;
 }

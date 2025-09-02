@@ -45,18 +45,20 @@ namespace entities{
 		virtual int update(float delta);
 		virtual void render();
 		virtual void interact(entity* other);
+
 		float get_height();
 		float get_width();
 		float get_length();
-		
 		int get_id();
 		
-		// getters and setters 
 		Model& get_model();
 		Vector3 get_position();
 		BoundingBox& get_bounding_box();
 		void update_bounding_box();
 		
+		void set_position(Vector3 position){
+			position_ = position;
+		}
 		// operator overloads
 		friend bool operator==(const entity& a, const entity& b){
 			return a.id_ == b.id_;
