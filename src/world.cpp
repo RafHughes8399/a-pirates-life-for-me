@@ -2,7 +2,7 @@
 #include "utility_functions.h"
 #include <algorithm>
 
-#define HUB Vector3{ -80.0f, -4.3f, 50.0f}
+#define HUB Vector3{ -80.0f, -5.0f, 50.0f}
 #define LAGOON Vector3{ -225.0f, -4.8f, 325.0f }
 #define REEF Vector3{75.0f, -1.2f, 500}
 #define BAY Vector3{300, -1.0f, 400}

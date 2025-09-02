@@ -2,7 +2,7 @@
 #include "../lib/raylib/src/raylib.h"
 
 // locations
-#define SHIP_START Vector3{5.0f, 1.0f, 5.0f}
+#define SHIP_START Vector3{5.0f, 0.05f, 5.0f}
 
 // game models and textures
 // CWD is build

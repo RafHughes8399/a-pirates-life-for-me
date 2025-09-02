@@ -43,7 +43,14 @@ then octree entity management based on update return code
                 for the current entity, and then reinsert from there, instead of always
                 going from the root
             -> 
+
 then collision and hitboxes
+    -> do basic collision interactions with just the bounding boxes
+    -> then more intricate, and accurate hitboxes
+
+
+    i know how to identify collisions or rather interactions but i dont know how to process them
+    i'm trying to avoid the is instance of thing 
 and object factories and builder
 
 then UI
