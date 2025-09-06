@@ -100,6 +100,7 @@ namespace tree{
         
         // update and render
         void update(std::unique_ptr<o_node>& tree, float delta);
+        void identify_collisions(std::unique_ptr<o_node>& tree, std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>& parent_entities);
         void render(std::unique_ptr<o_node>& tree);
 
 
@@ -195,6 +196,8 @@ namespace tree{
         // update and render
         void update(double delta){
             update(root_, delta);
+            auto parent_objects = std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>{};
+            identify_collisions(root_, parent_objects); // start with an empty list
         }
 
         // render the tree within a certain bounding box, default is the whole tree

@@ -50,7 +50,39 @@ then collision and hitboxes
 
 
     i know how to identify collisions or rather interactions but i dont know how to process them
-    i'm trying to avoid the is instance of thing 
+    i'm trying to avoid the is instance of thing; that is repetitive and naive 
+
+    ideas:
+        -> 
+        -> define interactions like events, so there is an interaction superclass and the subclasses define the specific interactions in the 
+        game and how to handle them (i.e )
+            -> but the thing is, all these really change is overloading the main interaction process method based on the interaction
+            -> and creating the interaction would still involve some form of instance of 
+
+        -> i think the interaction behaviour has to come from the entity itself ?
+        -> an interaction can be considered as one entity interacting with another, i.e the ocean interacts with the ship, the ship interacts with the island
+        -> it is one entity that "drives" the interaction and one that "recieves" it, like this_entity.interacts_with(other_entity)
+        -> i think simplifying to static and moveable is a good idea, it simplifies the number of cases  
+            -> regardless of the static object the ship interacts with, its going to be the same underlying idea of the 
+                ship's movement being blocked, or altered, all that changes is the force / mass / density / etc. of the specific entity
+            -> similar with moveable logic
+    
+        -> those interactions can then create events within the game (thinking forward to player interact key prompts)
+        -> apply the optimisation specified in the blog post to avoid redundant checks
+
+
+    the process for checking collisions is as follows
+        -> for each collision from the parent check against the objects in the current node 
+        -> then duplicate the list of objects
+        -> iterate while the dup list is not empty
+            -> then loop through the list
+                -> check if the object is itself
+
+        -> should objects have a stationary flag ? 
+
+    hitboxes don't complicate much, it just adds another step during the identification of a collision
+
+-> look at std for each or std transform 
 and object factories and builder
 
 then UI

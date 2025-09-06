@@ -418,9 +418,10 @@ void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
                 // if moved then append to moved objects
                 // check if moved out of the current node
                 std::cout << "=========== MOVE ENTITY=============" << std::endl;
-                move_entity(tree, object);
+                move_entity(tree, object); // moves the entity 
                 std::cout << "=========== END MOVE ENTITY=============" << std::endl;
-                //reprocess entity(tree, entity)
+                // my thoughts is here to do somthing along the lines of 
+                //check_collisions(object)
                 break;
             case entities::status_codes::dead:
                 // TODO pending some form of combat implementation
@@ -438,6 +439,36 @@ void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
         update(child, delta);
     }
     return;
+}
+void tree::octree::identify_collisions(std::unique_ptr<o_node>& tree , std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>& parent_entities){
+    if(not tree) {return;}
+    // check for collisions with objects from parent nodes
+    for(auto& parent_entity : parent_entities){
+        for(auto& entity : tree->objects_){
+            
+        }
+    }
+    // check within the node, avoid duplicate checks and self checks 
+    // so if object 1 is checked against 2 ,
+    // then it avoids checking object two against 1, and so on
+    for(auto i = 0; i < tree->objects_.size() - 1; ++i){
+        for(auto j = i + 1; j < tree->objects_.size(); ++j){
+
+            // check i collision of i and 
+        }
+    }
+
+    // then append this node into parent objects and pass to children
+    std::for_each(tree->objects_.begin(), tree->objects_.end(), 
+    [&parent_entities] (auto& entity) -> void {
+        parent_entities.push_back(entity);
+    });
+
+    // and recurse through the children
+    std::for_each(tree->children_.begin(), tree->children_.end(), 
+    [&parent_entities, this] (auto & child){
+        identify_collisions(child, parent_entities);
+    });
 }
 void tree::octree::render(std::unique_ptr<o_node>& tree){
     // if null tree skip 
