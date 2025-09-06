@@ -440,29 +440,44 @@ void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
     }
     return;
 }
-void tree::octree::identify_collisions(std::unique_ptr<o_node>& tree , std::vector<std::reference_wrapper<std::unique_ptr<entities::entity>>>& parent_entities){
+void tree::octree::identify_collisions(std::unique_ptr<o_node>& tree , std::vector<entities::entity*> parent_entities){
     if(not tree) {return;}
     // check for collisions with objects from parent nodes
+    // basic debugging for tests
+    std::cout << "parent entities: " << parent_entities.size() << std::endl;
+    std::cout << "compare parent and current entities " << std::endl;
     for(auto& parent_entity : parent_entities){
         for(auto& entity : tree->objects_){
-            
+            // check for collisions between parent entity and entity
+            if(CheckCollisionBoxes(parent_entity->get_bounding_box(), entity->get_bounding_box())){
+                // interact
+                std::cout << "interaction between " << parent_entity->get_id() << " and " << entity->get_id() << std::endl;
+                parent_entity->interact(*entity);             
+            }
         }
     }
     // check within the node, avoid duplicate checks and self checks 
     // so if object 1 is checked against 2 ,
     // then it avoids checking object two against 1, and so on
-    for(auto i = 0; i < tree->objects_.size() - 1; ++i){
-        for(auto j = i + 1; j < tree->objects_.size(); ++j){
-
-            // check i collision of i and 
+    std::cout << "check within node, there are  " << tree->objects_.size() << " entities  "<< std::endl;
+    if(tree->objects_.size() > 1 ){
+        for(auto i = 0; i < tree->objects_.size() - 1; ++i){
+            for(auto j = i + 1; j < tree->objects_.size(); ++j){
+                std::cout << "compare " << i << " and " << j << std::endl;
+                if(CheckCollisionBoxes(tree->objects_[i]->get_bounding_box(), tree->objects_[j]->get_bounding_box())){
+                    // interact
+                    std::cout << "interaction between " << tree->objects_[i]->get_id() << " and " << tree->objects_[j]->get_id() << std::endl;
+                    tree->objects_[i]->interact(*tree->objects_[j]);
+                }            
+            }
         }
     }
-
     // then append this node into parent objects and pass to children
     std::for_each(tree->objects_.begin(), tree->objects_.end(), 
     [&parent_entities] (auto& entity) -> void {
-        parent_entities.push_back(entity);
+        parent_entities.push_back(entity.get());
     });
+    std::cout << "parent entities: " << parent_entities.size() <<  std::endl;
 
     // and recurse through the children
     std::for_each(tree->children_.begin(), tree->children_.end(), 

@@ -8,6 +8,8 @@ void entities::terrain::render() {
 	DrawBoundingBox(bounding_box_, GREEN);
 }
 
-void entities::terrain::interact(entities::entity* other) {
+void entities::terrain::interact(entities::entity& other) {
+	(void) other;
 	return;
+
 }

@@ -82,7 +82,28 @@ then collision and hitboxes
 
     hitboxes don't complicate much, it just adds another step during the identification of a collision
 
+-> ok interaction record
+-> holds references to the two entities
+-> processing the interaction calls a.interact(b)
+-> the octree identifies interactions 
+-> after updating then the game processing the interactions
+-> an interaction rectod is creating through and event that is 
+made when 
+
+so octree identifies interaction -> calls event to create interaction record
+-> the list of interactions is processed each frame bu the game
+
+-> change from ref wrapper to raw ptr
+
+
+-> the interaction is identified
+-> message to the interaction list to create an interaction 
+
+
 -> look at std for each or std transform 
 and object factories and builder
+
+
+
 
 then UI

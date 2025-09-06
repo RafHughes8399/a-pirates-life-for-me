@@ -60,22 +60,9 @@ void entities::player_ship::render(){
 }
 
 
-void entities::player_ship::interact(entities::entity* other){
-	auto ocean = dynamic_cast<entities::ocean*>(other);
-	// cast to ocean
-	if (ocean != nullptr) {
-		
-		// buoyancy
-		auto buoynacy = Vector3{ 0.0f,-0.2f,0.0f };
-		auto submerged_height = 0.2f;
-		auto p = WATER_DENISTY;
-		auto g = GRAVITY;
-		auto v = get_width() * get_length() * submerged_height;
-		buoynacy.y += p * g * v * -1; // make it a better deeper
-		adjust_acceleration(buoynacy);
-	}
+void entities::player_ship::interact(entities::entity& other){
+	(void) other;
 	return;
-
 }
 
 void entities::player_ship::set_position(Vector3 position) {

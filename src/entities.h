@@ -12,8 +12,8 @@
 #include "singleton_flyweight.h"
 #include "ship_components.h"
 #include "config.h"
-#include "managers.h"
 #include "controls.h"
+#include "events_interface.h"
 
 #define TURN_LEFT 0
 #define TURN_RIGHT 1
@@ -44,8 +44,7 @@ namespace entities{
 		// a default update and render, the default update does nothing, render just draws the 
 		virtual int update(float delta);
 		virtual void render();
-		virtual void interact(entity* other);
-
+		virtual void interact(entity& other);
 		float get_height();
 		float get_width();
 		float get_length();
@@ -135,7 +134,7 @@ public:
 	
 	int update(float delta) override;
 	void render() override;
-	void interact(entity* other) override;
+	void interact(entity& other) override;
 	void set_position(Vector3 position);
 	
 
@@ -175,7 +174,7 @@ class ocean : public entity {
 	ocean(ocean&& other)
 	: entity(other){
 	};
-	void interact(entity* other) override;
+	void interact(entity& other) override;
 	void render() override;
 	private:
 };
@@ -194,7 +193,7 @@ class terrain : public entity {
 	
 	int update(float delta) override;
 	void render() override;
-	void interact(entity* other) override;
+	void interact(entity& other) override;
 	private:
 
 };
@@ -209,11 +208,11 @@ class test_entity : public entity{
 	};
 	test_entity (test_entity && other)
 	: entity(other) {
-	};
+	};   
 	
 	int update(float delta) override;
 	void render() override;
-	void interact(entity* other) override;
+	void interact(entity& other) override;
 	private:
 };
 }

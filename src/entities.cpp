@@ -13,7 +13,8 @@ void entities::entity::render(){
 	return;
 }
 
-void entities::entity::interact(entities::entity* other){
+void entities::entity::interact(entities::entity& other){
+	(void) other;
 	return;
 }
 
@@ -88,6 +89,7 @@ void entities::test_entity::render(){
 	return;
 }
 
-void entities::test_entity::interact(entity* other){
+void entities::test_entity::interact(entity& other){
+	(void) other;
 	return;
 }

@@ -1,7 +1,8 @@
 #include "entities.h"
 
-void entities::ocean::interact(entities::entity* other) {
-	auto player_ship = dynamic_cast<entities::player_ship*>(other);
+void entities::ocean::interact(entities::entity& other) {
+	(void) other;
+/* 	auto player_ship = dynamic_cast<entities::player_ship*>(other);
 	if (player_ship != nullptr) {
 		auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
 
@@ -11,7 +12,8 @@ void entities::ocean::interact(entities::entity* other) {
 		auto v = player_ship->get_width() * player_ship->get_length() * submerged_height;
 		buoynacy.y += p * g * v * -1;
 		player_ship->adjust_acceleration(buoynacy);
-	}
+	} */
+	return;
 }
 
 void entities::ocean::render() {

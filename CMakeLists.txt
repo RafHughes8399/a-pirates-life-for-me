@@ -70,6 +70,9 @@ add_subdirectory(lib/raylib)
 add_library(util src/utility_functions.cpp)
 link_libraries(util)
 
+add_library(interactions src/interactions.cpp)
+link_libraries(interactions)
+
 add_library(ship_components src/ship_components.cpp)
 link_libraries(ship_components)
 
@@ -93,9 +96,6 @@ link_libraries(wind)
 
 add_library(events src/events.cpp)
 link_libraries(events)
-
-add_library(managers src/managers.cpp)
-link_libraries(managers) 
 
 add_library(octree src/octree.cpp)
 link_libraries(octree)
