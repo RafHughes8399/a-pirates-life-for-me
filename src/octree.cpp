@@ -382,7 +382,7 @@ std::unique_ptr<tree::octree::o_node> tree::octree::copy_tree(o_node* tree, std:
     copy->parent_ = parent;
     // and then the objects, deep copy 
     for(auto & obj : tree->objects_){
-        copy->objects_.push_back(std::make_unique<entities::entity>(*obj));
+        copy->objects_.push_back(std::move(obj));
     }
     auto new_parent = &copy;
     for(auto & child : tree->children_){

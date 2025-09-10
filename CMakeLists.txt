@@ -70,9 +70,6 @@ add_subdirectory(lib/raylib)
 add_library(util src/utility_functions.cpp)
 link_libraries(util)
 
-add_library(interactions src/interactions.cpp)
-link_libraries(interactions)
-
 add_library(ship_components src/ship_components.cpp)
 link_libraries(ship_components)
 

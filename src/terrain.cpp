@@ -10,6 +10,16 @@ void entities::terrain::render() {
 
 void entities::terrain::interact(entities::entity& other) {
 	(void) other;
+	auto static_entity_ptr = dynamic_cast<entities::static_entity*>(&other);
+	if(static_entity_ptr){
+
+	}
+	else{
+		auto moveable_entity_ptr = dynamic_cast<entities::moveable_entity*>(&other);
+	}
 	return;
 
+}
+std::unique_ptr<entities::entity> entities::terrain::clone(){
+	return nullptr;
 }

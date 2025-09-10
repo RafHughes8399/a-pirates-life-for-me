@@ -5,7 +5,6 @@ int entities::player_ship::update(float delta){
 	// update the anchor
 	// apply gravity
 	//acceleration_.y += GRAVITY;
-
 	// this calculates the veloctuty for a given frame
 	// apply the sail movement coeffieicts
 	DrawRectangle(800, 5, 195, 170, Fade(SKYBLUE, 0.5f));
@@ -24,7 +23,6 @@ int entities::player_ship::update(float delta){
 	// apply acceleration to velocity
 	velocity_ = acceleration_;
 	DrawText(TextFormat("Velocity Post Delta: (%06.3f, %06.3f, %06.3f)", velocity_.x, velocity_.y, velocity_.z), 810, 90, 10, BLACK);
-
 
 	// apply the player_ship direction to the velocity, use sin and cos, other way around z is cos, sin is x
 	auto direction_coefficient = get_direction_coefficient();
@@ -61,10 +59,22 @@ void entities::player_ship::render(){
 
 
 void entities::player_ship::interact(entities::entity& other){
-	(void) other;
+	auto static_entity_ptr = dynamic_cast<entities::static_entity*>(&other);
+	if(static_entity_ptr){
+		// consider terrain
+	}
+	else{
+		auto moveable_entity_ptr = dynamic_cast<entities::moveable_entity*>(&other);
+		
+	}
+	// static objects include terrain
+
+	// moveable objects include other ships 
 	return;
 }
-
+std::unique_ptr<entities::entity> entities::player_ship::clone(){
+	return nullptr;
+}
 void entities::player_ship::set_position(Vector3 position) {
 	position_ = position;
 }

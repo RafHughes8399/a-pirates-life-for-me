@@ -4,18 +4,36 @@ void entities::ocean::interact(entities::entity& other) {
 	(void) other;
 /* 	auto player_ship = dynamic_cast<entities::player_ship*>(other);
 	if (player_ship != nullptr) {
-		auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
-
-		auto submerged_height = std::abs(0.0f - player_ship->get_position().y); // this is what is making it crash out
-		auto p = WATER_DENISTY;
-		auto g = GRAVITY;
-		auto v = player_ship->get_width() * player_ship->get_length() * submerged_height;
-		buoynacy.y += p * g * v * -1;
-		player_ship->adjust_acceleration(buoynacy);
+		
+	auto submerged_height = std::abs(0.0f - player_ship->get_position().y); // this is what is making it crash out
+	auto p = WATER_DENISTY;
+	auto g = GRAVITY;
+	auto v = player_ship->get_width() * player_ship->get_length() * submerged_height;
+	buoynacy.y += p * g * v * -1;
+	player_ship->adjust_acceleration(buoynacy);
 	} */
+
+// cast, 
+// then if static do nothing ? idk let it sink maybe 
+	// if movebale then determine sinking / floating
+	
+	// TODO buoyancy calculations
+	auto buoynacy = Vector3{ 0.0f,0.0f,0.0f };
+	auto static_entity_ptr = dynamic_cast<entities::static_entity*>(&other);
+	if(static_entity_ptr){
+		// sink that b
+	}
+	else{
+		// try to sink that b
+		auto moveable_entity_ptr = dynamic_cast<entities::moveable_entity*>(&other);
+
+		//moveable_entity_ptr->change_position(buoyancy);
+	}
 	return;
 }
-
+std::unique_ptr<entities::entity> entities::ocean::clone(){
+	return nullptr;
+}
 void entities::ocean::render() {
 	std::cout << "======RENDER OCEAN========" << std::endl;
 	std::cout << IsModelValid(object_type_.get_model()) << std::endl;

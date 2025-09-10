@@ -93,8 +93,7 @@ made when
 so octree identifies interaction -> calls event to create interaction record
 -> the list of interactions is processed each frame bu the game
 
--> change from ref wrapper to raw ptr
-
+-> change from ref wrapper to raw ptr, ref wrapper is uncessary
 
 -> the interaction is identified
 -> message to the interaction list to create an interaction 
@@ -105,5 +104,52 @@ and object factories and builder
 
 
 
+so let's consider interaction processing for a minute
+-> do i have to define it both ways
+-> you don't have to worry about double interactions 
 
-then UI
+if you can define a static entity and a moveable entity then 
+maybe a static and moveable collision strategy (oooo pattern w)
+the static collision strategy defines how the object would interact with moving objects as two static objects cannot interact
+the movable collision strategy would define how the object interacts with moving and static objects 
+this still requires some form of discerning between static and moveable objects, and doesn't solve the probelm of unique 
+interaction behaviours like for ocean 
+
+
+otherwise, you define a static_entity and a moveable_enity, maybe also a special one like interactable_entity 
+then provide some default behaviour which is overriden if necessary for sub_entities, like ocean 
+
+i like this idea. however,
+is it 
+        entity
+    /           \
+static          moveable
+
+in this case, entity would be an abstract class and static would provide some base behaviour 
+otherwise it could be 
+        static_entity
+            |
+            moveable_enity
+but a moveable entity is not a static entity so the inheritance structure makes less sense from like a higher level design perspective
+but static and moveable entities are entities, ya dig 
+
+-> ok so set up static entity
+-> define the interaction behaviours
+-> test them one by one 
+
+ones to do:
+moveable <-> static
+moveable <-> moveable
+
+ocean -> ship
+ocean -> terrain  ?? ? ? ? ? ? ? ? ? ? ?? ? ? ? ? ?? ? ? ? ? ? ? ?/
+ship <-> terrain
+
+-> clean up TODOs and print logs
+-> clone method to preserve tree copying
+
+then UI and Debugger
+then object factory to create stuff 
+then land exploration (interactables) and island decoration 
+then fishing points 
+then NPCs and quests
