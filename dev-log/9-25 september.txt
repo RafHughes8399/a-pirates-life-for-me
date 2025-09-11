@@ -142,13 +142,39 @@ moveable <-> static
 moveable <-> moveable
 
 ocean -> ship
-ocean -> terrain  ?? ? ? ? ? ? ? ? ? ? ?? ? ? ? ? ?? ? ? ? ? ? ? ?/
+
+ocean -> terrain  ?? ? ? ? ? ? ? ? ? ? ?? ? ? ? ? ?? ? ? ? ? ? ? ?
+// does nothing for now
 ship <-> terrain
+
+your main two at this moment in time are the ocean -> ship
+and ship <-> terrain
 
 -> clean up TODOs and print logs
 -> clone method to preserve tree copying
 
+
+
+ok i need to consider the maths i bit better and what actually needs to happen
+calcualte the buoyant force, 
+update the position, bounding box and the camera
+
+
+
+the flow of operations must be considered
+
+I think the changing of the position should remain in the update class and somehow the 
+ocean interaction should modify a value that is then proccessed during that update, 
+because the update already handles the changing of the camera and bounding boxes
+so reconsider that
+
+really what it does is change the velocity 
+
+
+let it affect accel not veloc. Accel is reset after updating the position
+then the ship can separately handle the chanign of the camera and bounding box
 then UI and Debugger
+hitboxes for more precise collision
 then object factory to create stuff 
 then land exploration (interactables) and island decoration 
 then fishing points 

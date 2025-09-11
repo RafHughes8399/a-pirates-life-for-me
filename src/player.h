@@ -73,7 +73,6 @@ namespace player{
 		test_player()
 		:camera_(Camera3D{}),  camera_mode_(CAMERA_THIRD_PERSON),
 		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR){
-			std::cout << "building test_player" << std::endl;
 			camera_.position = Vector3Zero();;
 			camera_.target = Vector3Zero(); // the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target

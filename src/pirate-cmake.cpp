@@ -59,9 +59,7 @@ void render(game::game& game) {
 	game.render();
 
 	EndMode3D();
-
-	debug(camera, game);
-
+	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
 	EndDrawing();
 }
 
@@ -86,7 +84,6 @@ void debug(Camera3D& camera, game::game& game) {
 	auto ship = game.get_object(1);
 	auto player_ship = static_cast<entities::player_ship*>(ship);
 	// FPS Counter
-	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
 
 	// player debug info
 	auto text_y = 15;
@@ -105,7 +102,7 @@ void debug(Camera3D& camera, game::game& game) {
 
 	// world debug info
 	text_y = 15;
-	auto world = game.get_world();
+	//auto world = game.get_world();
 	auto wind = player_ship->get_sail().get_wind();
 	DrawRectangle(400, 5, 195, 170, Fade(SKYBLUE, 0.5f));
 	DrawRectangleLines(400, 5, 195, 170, BLUE);
@@ -119,9 +116,6 @@ void debug(Camera3D& camera, game::game& game) {
 
 	DrawText(TextFormat("Sail Wind Lower %06.3f", player_ship->get_sail().get_sail_direction() - player_ship->get_sail().get_width() / 2), 410, 120, 10, BLACK);
 	DrawText(TextFormat("Sail Wind Upper %06.3f", player_ship->get_sail().get_sail_direction() + player_ship->get_sail().get_width() / 2), 410, 135, 10, BLACK);
-
-
-
 
 	// camera debug info
 	DrawRectangle(600, 5, 195, 100, Fade(SKYBLUE, 0.5f));

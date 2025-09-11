@@ -56,7 +56,7 @@ namespace entities{
 		int get_id();
 		
 		Model& get_model();
-		Vector3 get_position();
+		Vector3& get_position();
 		BoundingBox& get_bounding_box();
 		void update_bounding_box();
 		
@@ -69,10 +69,11 @@ namespace entities{
 		}
 		protected:
 		// all objects have a model and position, and a hitbox, will get to hitboxs
+		int id_;
+
 		ObjectType& object_type_;
 		Vector3 position_;
 		BoundingBox bounding_box_;
-		int id_;
 };
 class static_entity : public entity{
 	public:
@@ -88,35 +89,33 @@ class static_entity : public entity{
 	
 };
 class moveable_entity : public entity {
-public:	
-~moveable_entity() = default;
-moveable_entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id,  Vector3 velocity, float direction)
-		: entity(object_type, position, min, max,  id), velocity_(velocity), direction_(direction) {
+	public:	
+	~moveable_entity() = default;
+	moveable_entity(ObjectType& object_type, Vector3 position, Vector3 min, Vector3 max, int id,  Vector3 velocity, float direction, float mass)
+		: entity(object_type, position, min, max,  id), velocity_(velocity), direction_(direction), mass_(mass) {
 			acceleration_ = Vector3{ 0.0,0.0,0.0 };
-		};
-		moveable_entity(const moveable_entity& other)
-		: entity(other), velocity_(other.velocity_), acceleration_(other.acceleration_), direction_(other.direction_){
-		};
+	};
+	moveable_entity(const moveable_entity& other) = default;
+	moveable_entity(moveable_entity&& other) = default;
+
+	int update(float delta) override;
+	void render() override;
+	void interact(entity& other) override;
+	std::unique_ptr<entity> clone() override;
 		
-		moveable_entity(moveable_entity&& other)
-		: entity(other), velocity_(std::move(other.velocity_)), acceleration_(std::move(other.acceleration_)), direction_(std::move(other.direction_)) {
-		}
-		int update(float delta) override;
-		void render() override;
-		void interact(entity& other) override;
-		std::unique_ptr<entity> clone() override;
-		
-		Vector3 get_acceleration();
-		Vector3 get_velocity();
-		float get_direction();
-		Vector3 get_direction_coefficient();
-		void adjust_acceleration(Vector3 acceleration);
-		
-		
-		protected:
-		Vector3 velocity_;
+	Vector3 get_acceleration();
+	Vector3 get_velocity();
+	Vector3 get_direction_coefficient();
+	
+	float get_direction();
+	float get_mass();
+	void adjust_acceleration(Vector3 acceleration);		
+	
+	protected:
+	Vector3 velocity_;
 	Vector3 acceleration_;
 	float direction_; // in radians
+	float mass_;
 };
 
 // TODO potential rename to distinguish between player_ships and npc_ships, that is how you differentiate
@@ -129,25 +128,15 @@ public:
 	}
 	// init the handler and subscribe
 	player_ship(ShipType& ship_type, Vector3 position, Vector3 min, Vector3 max, int id, Vector3 velocity = Vector3Zero(), float direction = 0.0f)
-	: moveable_entity(ship_type, position, min, max, id, velocity, direction),
+	: moveable_entity(ship_type, position, min, max, id, velocity, direction, SHIP_MASS),
 	sail_(components::sail(direction, 4.2f)), anchor_(components::anchor()),
 	player_input_handler_([this](const events::player_input_event& event){on_player_input_event(event);}){
-		
 		init_control_map();
 		event_interface::subscribe<events::player_input_event>(player_input_handler_);
-		
 	};
 	
-	player_ship(const player_ship& other)
-		: moveable_entity(other), sail_(other.sail_), anchor_(other.anchor_), 
-		player_input_handler_(other.player_input_handler_), control_map_(other.control_map_){
-		};
-
-	player_ship(player_ship&& other)
-		: moveable_entity(other), sail_(std::move(other.sail_)), anchor_(std::move(other.anchor_)), 
-		player_input_handler_(std::move(other.player_input_handler_)){
-		};
-		
+	player_ship(const player_ship& other) = default;
+	player_ship(player_ship&& other) = default;
 	player_ship& operator=(const player_ship& ohter);
 	player_ship& operator= (const player_ship&& other);
 		
@@ -155,7 +144,6 @@ public:
 	void render() override;
 	void interact(entity& other) override;
 	std::unique_ptr<entity> clone() override;
-	
 	void set_position(Vector3 position);
 	
 	Vector3 get_position();

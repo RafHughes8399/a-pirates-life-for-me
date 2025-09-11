@@ -2,7 +2,7 @@
 #include "../lib/raylib/src/raylib.h"
 
 // locations
-#define SHIP_START Vector3{5.0f, 0.05f, 5.0f}
+#define SHIP_START Vector3{5.0f, 0.0f, 5.0f}
 
 // game models and textures
 // CWD is build
@@ -29,10 +29,10 @@
 
 
 // physics constants
-#define GRAVITY -0.3f //  units per second
-#define WATER_DENISTY 1.026f
+#define GRAVITY -0.05f //  units per second
+#define WATER_DENISTY 1.02f
 #define LAND_DENSITY 9.8f
-
+#define SEA_LEVEL 0.0f
 // camera properties
 #define CAMERA_START Vector3{0.0f, 5.0f, 0.0f}
 #define TARGET_START Vector3{2.5, 2.5, 2.5};
@@ -71,7 +71,7 @@
 // ship properties
 #define SHIP_DENSITY 5.3f
 #define SHIP_TURN_SPEED (2 * PI * 0.065)// to be updated maybe ?
-
+#define SHIP_MASS 1.4f
 // sail properties
 #define LOWER_RAISE_SPEED 0.6f
 #define SAIL_TURN_SPEED (2* PI * 0.15)

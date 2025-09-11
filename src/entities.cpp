@@ -31,7 +31,7 @@ Model& entities::entity::get_model(){
 	return object_type_.get_model();
 }
 
-Vector3 entities::entity::get_position(){
+Vector3& entities::entity::get_position(){
 	return position_;
 }
 BoundingBox& entities::entity::get_bounding_box(){
@@ -103,6 +103,9 @@ Vector3 entities::moveable_entity::get_velocity(){
 float entities::moveable_entity::get_direction(){
 	return direction_;
 }
+float entities::moveable_entity::get_mass(){
+	return mass_;
+}
 
 Vector3 entities::moveable_entity::get_direction_coefficient(){
 	// cos on the z, sin on the x
@@ -112,7 +115,6 @@ Vector3 entities::moveable_entity::get_direction_coefficient(){
 void entities::moveable_entity::adjust_acceleration(Vector3 acceleration){
 	acceleration_ = Vector3Add(acceleration_, acceleration);
 }
-
 
 int entities::test_entity::update(float delta ){
 	(void) delta;

@@ -113,10 +113,8 @@ namespace tree{
                 return;
             }
             for(auto & entity : tree->objects_){
-                std::cout << " check object " << entity->get_id() << std::endl;
                 if(p(entity)){
                     entity->render();
-                    std::cout << " render object " << entity->get_id() << std::endl;
                 }
             }
             for(auto & child : tree->children_){
@@ -195,11 +193,8 @@ namespace tree{
         
         // update and render
         void update(double delta){
-            std::cout << "=========UPDATE TREE======================" << std::endl; 
-            std::cout << num_nodes(root_) << std::endl;
             update(root_, delta);
             auto parent_objects = std::vector<entities::entity*>{};
-            std::cout << "=========CHECK COLLISIONS IN TREE======================" << std::endl; 
             identify_collisions(root_, parent_objects); // start with an empty list
         }
 
