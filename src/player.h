@@ -20,6 +20,12 @@
 // target, as the target (the ship) moves, so too must the camera. it must move the same amount 
 
 namespace player{
+	enum huds{
+		ship = 0,
+		pirate = 1,
+		// include more if there are
+		size = 2
+	};
 	class hud{
 		/**
 		 * hud elements are templated for an event type so the event that they listen to can be specified easily without creating 
@@ -51,93 +57,110 @@ namespace player{
 				Vector2 position_;
 				events::event_handler<E> handler_;
 		};
-			class hud_state{
-				public:
-					virtual ~hud_state() = default;
-					hud_state()  = default; // empty hud 
-					
-					template<typename InputIt>
-					hud_state(InputIt begin, InputIt end)
-					: elements_(begin, end){};
-
-					hud_state(const hud_state& other) = default;
-					hud_state(hud_state&& other) = default;
-
-					void draw();
-					virtual void build_hud() = 0;
-
-				protected:
-					std::vector<hud_element<events::event>> elements_;
-			};
-
-			class pirate_hud_state : public hud_state{
-				public:
-					void build_hud() override;
-				private:
-			};
-			class ship_hud_state : public hud_state{
-				public:
-					void build_hud() override;
-				private:
-			};
         public:
             ~hud() = default;
             hud() = default;
             hud(const hud& other) = default;
             hud(hud&& other) = default;
 
+			hud& operator=(const hud& other) = default;
+			hud& operator=(hud&& other) = default;
             void draw();
 
         private:
-            std::unique_ptr<hud_state> state_;
+			std::vector<hud_element<events::event>> elements_;
+	};
+	class hud_builder {
+		public:
+			virtual ~hud_builder() = default;
+			hud_builder()
+				: hud_(hud()){};
+	
+			void reset();
+			hud get_hud();
+
+			// map components
+			virtual void build_map() = 0;
+			//virtual hud build_quests() = 0;
+			virtual void build_player_components() = 0;
+		protected:
+			hud hud_;
+	};
+	class ship_hud_builder : public hud_builder{
+		public:
+		ship_hud_builder() 
+			:hud_builder(){};
+		
+		void build_map() override;
+		void build_player_components() override;
+	};
+	class pirate_hud_builder : public hud_builder{
+		public:
+		pirate_hud_builder() 
+			:hud_builder(){};
+		
+		void build_map() override;
+		void build_player_components() override;
+	};
+	class hud_director{
+		// static build ship hud, static build pirate hud
+		public:
+		static hud build_ship_hud(hud_builder& builder);
+		static hud build_pirate_hud(hud_builder& builder);
 	};
 	class player {
 		public:
-		~player(){
-			// unsubscribe
-			event_interface::unsubscribe<events::camera_move_event>(camera_movement_handler_);
-		}
-		player()
-		:camera_(Camera3D{}), camera_mode_(CAMERA_THIRD_PERSON),
-		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), 
-		 camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)),
-		 camera_movement_handler_([this](const events::camera_move_event& event){ on_camera_move_event(event);}){
-			camera_.position = CAMERA_START;
-			camera_.target = SHIP_START;// the camera looks at the cube, slightly above sea level
-			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
-			camera_.fovy = FOV;
-			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
-			
+			~player(){
+				// unsubscribe
+				event_interface::unsubscribe<events::camera_move_event>(camera_movement_handler_);
+			}
+			player()
+			:camera_(Camera3D{}), camera_mode_(CAMERA_THIRD_PERSON),
+			camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), 
+			camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)),
+			camera_movement_handler_([this](const events::camera_move_event& event){ on_camera_move_event(event);}){
+				camera_.position = CAMERA_START;
+				camera_.target = SHIP_START;// the camera looks at the cube, slightly above sea level
+				camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
+				camera_.fovy = FOV;
+				camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
+				
 
-			// something along the lines of 
-			//hud_ = hud_builder::build_ship_hud();
-			// subscribe
-			event_interface::subscribe<events::camera_move_event>(camera_movement_handler_);
-		}
-		player(const player& other) = default;
-		player(player&& other) = default;
+				// something along the lines of 
+				build_huds();
+				// subscribe
+				event_interface::subscribe<events::camera_move_event>(camera_movement_handler_);
+			}
+			player(const player& other) = default;
+			player(player&& other) = default;
 
-		player& operator=(const player& other) = default;
-		player& operator= (player&& other) = default;
-			
-		void update(float delta);
-		void render();
-			
-		Camera3D& get_camera();
-		void move_camera(int mode);
+			player& operator=(const player& other) = default;
+			player& operator= (player&& other) = default;
+				
+			void update(float delta);
+			void render();
+				
+			Camera3D& get_camera();
+			void move_camera(int mode);
 
-		void on_camera_move_event(const events::camera_move_event& event);
-		rendering::frustrum& get_frustrum();
+			void on_camera_move_event(const events::camera_move_event& event);
+			rendering::frustrum& get_frustrum();
 
 		private:
 			void check_key_input(float delta);
+			void build_huds();
 			int camera_mode_;
 			Camera3D camera_;
 			const Vector3 camera_target_distance_;
 			
 			rendering::frustrum camera_frustrum_;
 			events::event_handler<events::camera_move_event> camera_movement_handler_;
-			hud hud_;
+
+			/** the player holds the various huds that it would need i.e the ship and the pirate
+			 * it draws the hud based on the index which changes upon detecting a certain event (docking / undocking)
+			 */
+			hud huds_[huds::size];
+			size_t hud_index_;
 	};
 	
 	class test_player{

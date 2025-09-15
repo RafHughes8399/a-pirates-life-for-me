@@ -1,10 +1,6 @@
-#include "hud.h"
+#include "player.h"
 
-void hud::hud::draw(){
-    state_->draw();
-}
-
-void hud::hud_state::draw(){
+void player::hud::draw(){
     for(auto & element : elements_){
         element.draw();
     }
