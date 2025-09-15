@@ -133,3 +133,4 @@ void entities::test_entity::interact(entity& other){
 std::unique_ptr<entities::entity> entities::test_entity::clone(){
 	return nullptr;
 }
+

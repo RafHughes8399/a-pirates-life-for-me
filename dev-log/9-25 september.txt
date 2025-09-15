@@ -179,3 +179,40 @@ then object factory to create stuff
 then land exploration (interactables) and island decoration 
 then fishing points 
 then NPCs and quests
+
+
+Hitboxes:
+
+User Interface:
+    -> for now, the hud
+    -> there is a ship hud and a player hud, they differ in the elements drawn
+    -> perhaps a state pattern ? 
+
+-> the hud is comprised of hud elements (mini map, player status, etc )
+-> hud elements consist of a sprite sheet with animations
+-> they are Texture2D and a Rectangle for the frame
+-> there is a ship hud and a player hud which depend on the state of the player, updated based on an event
+-> a game has a hud so it can be rendered on the screen 
+
+
+-> hud with a list of elements, 
+-> hud element consists of a textured and an animation, use the code you wrote previously
+-> the hud represents the information from the player by listening to the appropraite events
+-> the player and ship hud logic are the same ish, they just differ by their contents and what they listen to
+-> so it is a strategy thing 
+
+
+
+
+-> a sprite has a sprite sheet, and a sprite animation
+-> sprite is drawn at the rectangle of the animation
+-> the animation handles the current position of the rectangle
+-> the sprite handles the sheet and the rectangle
+
+
+
+TOOD
+-> figure out the template stuff, start working on it ig
+-> hud building
+-> hud art 
+-> hitboxes and more accurate interaction detection
