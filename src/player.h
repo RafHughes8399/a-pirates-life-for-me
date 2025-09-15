@@ -9,6 +9,7 @@
 #include "rendering.h"
 #include "events_interface.h"
 #include "controls.h"
+#include "sprite.h"
 
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
@@ -19,14 +20,81 @@
 // target, as the target (the ship) moves, so too must the camera. it must move the same amount 
 
 namespace player{
-	// class inventory{}
-	
-	//TODO: figure out a more elegant way to track the player_ship, maybe a mediator 
-	// TODO: a control map for key and mouse inputs to functions in the game
-	// a reference the player_ship's position 
+	class hud{
+		/**
+		 * hud elements are templated for an event type so the event that they listen to can be specified easily without creating 
+		 * heaps of near_identical subclasses
+		 * its so they can handle changes that occur throughout the game according to player input 
+		 * TODO consider how to incorporate event handling into the hud element 
+		 */
+		template <typename E> // E for event
+		class hud_element{
+			public:
+				~hud_element() = default;
+				hud_element() = default;
+				hud_element(const hud_element& other) = default;
+				hud_element(hud_element&& other) = default;
+
+				void draw() const{
+					DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
+				}
+				// on event stuff as well, not sure exactly how this will work just yet though, 
+				/**
+				 // TODO look into the template lecture slides to figure this one out, i think i can define things like on_event<Anchor_hud_event_update> () 
+				* the on event method is tmeplated for E and then you define the different possiblities in the cpp file ? 
+				for now just sub and unsub 
+				* 
+				*/
+			private:
+				// sprite and an event handler
+				sprite::sprite hud_sprite_;
+				Vector2 position_;
+				events::event_handler<E> handler_;
+		};
+			class hud_state{
+				public:
+					virtual ~hud_state() = default;
+					hud_state()  = default; // empty hud 
+					
+					template<typename InputIt>
+					hud_state(InputIt begin, InputIt end)
+					: elements_(begin, end){};
+
+					hud_state(const hud_state& other) = default;
+					hud_state(hud_state&& other) = default;
+
+					void draw();
+					virtual void build_hud() = 0;
+
+				protected:
+					std::vector<hud_element<events::event>> elements_;
+			};
+
+			class pirate_hud_state : public hud_state{
+				public:
+					void build_hud() override;
+				private:
+			};
+			class ship_hud_state : public hud_state{
+				public:
+					void build_hud() override;
+				private:
+			};
+        public:
+            ~hud() = default;
+            hud() = default;
+            hud(const hud& other) = default;
+            hud(hud&& other) = default;
+
+            void draw();
+
+        private:
+            std::unique_ptr<hud_state> state_;
+	};
 	class player {
 		public:
 		~player(){
+			// unsubscribe
 			event_interface::unsubscribe<events::camera_move_event>(camera_movement_handler_);
 		}
 		player()
@@ -40,8 +108,10 @@ namespace player{
 			camera_.fovy = FOV;
 			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
 			
-			
-			// subscribe 
+
+			// something along the lines of 
+			//hud_ = hud_builder::build_ship_hud();
+			// subscribe
 			event_interface::subscribe<events::camera_move_event>(camera_movement_handler_);
 		}
 		player(const player& other) = default;
@@ -58,13 +128,16 @@ namespace player{
 
 		void on_camera_move_event(const events::camera_move_event& event);
 		rendering::frustrum& get_frustrum();
+
 		private:
 			void check_key_input(float delta);
 			int camera_mode_;
 			Camera3D camera_;
 			const Vector3 camera_target_distance_;
+			
 			rendering::frustrum camera_frustrum_;
 			events::event_handler<events::camera_move_event> camera_movement_handler_;
+			hud hud_;
 	};
 	
 	class test_player{

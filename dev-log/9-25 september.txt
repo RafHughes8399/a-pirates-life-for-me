@@ -216,3 +216,12 @@ TOOD
 -> hud building
 -> hud art 
 -> hitboxes and more accurate interaction detection
+
+
+
+HUD:
+-> include in cmake (post event, pre game, animation, sprite, hud ) x 
+-> incorporate into player class x 
+-> build the huds
+-> draw the elements
+-> setup event templates

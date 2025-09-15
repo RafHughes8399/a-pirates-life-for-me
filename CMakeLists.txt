@@ -94,6 +94,7 @@ link_libraries(wind)
 add_library(events src/events.cpp)
 link_libraries(events)
 
+
 add_library(octree src/octree.cpp)
 link_libraries(octree)
 
@@ -105,6 +106,15 @@ link_libraries(player)
 
 add_library(world src/world.cpp)
 link_libraries(world)
+
+add_library(animation src/animation.cpp)
+link_libraries(animation)
+
+add_library(sprite src/sprite.cpp)
+link_libraries(sprite)
+
+add_library(hud src/hud.cpp)
+link_libraries(hud)
 
 add_library(game src/game.cpp)
 link_libraries(game)
