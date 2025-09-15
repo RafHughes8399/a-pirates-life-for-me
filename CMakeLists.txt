@@ -53,7 +53,7 @@ set(CMAKE_CXX_EXE_LINKER_FLAGS_RELWITHDEBINFO_INIT "-fsanitize=address,undefined
 enable_testing()
 add_library(catch2_main lib/catch2_main.cpp)
 target_include_directories(catch2_main PUBLIC lib)
-
+link_libraries(catch2_main)
 # ------------------------------------------------------------ #
 # -------------- DO NOT MODIFY ABOVE THIS LINE --------------- #
 # ------------------------------------------------------------ #
@@ -94,9 +94,6 @@ link_libraries(wind)
 add_library(events src/events.cpp)
 link_libraries(events)
 
-add_library(managers src/managers.cpp)
-link_libraries(managers) 
-
 add_library(octree src/octree.cpp)
 link_libraries(octree)
 
@@ -116,8 +113,10 @@ link_libraries(game)
 add_executable(pirate_life src/pirate-cmake.cpp)
 target_link_libraries(pirate_life catch2_main raylib)
 
+# TODO: Add tests and install targets if needed.
 
 # add_executable(test_example tests/example)
 #add_test(test_example test_example)
-
-# TODO: Add tests and install targets if needed.
+add_executable(octree_test tests/octree_tests.cpp)
+target_link_libraries(octree_test catch2_main raylib)
+add_test(octree_test octree_test)

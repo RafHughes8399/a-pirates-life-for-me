@@ -11,9 +11,6 @@ float rendering::plane::signed_distance_to_plane(Vector3& point) const{
 }
 
 void rendering::frustrum::update_frustrum(Camera3D& camera, float aspect, float fov_y, float z_near, float z_far){
-    
-    std::cout << "======================CALCULATE FRUSTRUM=================================" << std::endl;
-     
     float half_v_side = z_far * tanf(fov_y * 0.5f);
     float half_h_side = half_v_side * aspect;
     auto camera_front = GetCameraForward(&camera);
@@ -21,8 +18,6 @@ void rendering::frustrum::update_frustrum(Camera3D& camera, float aspect, float 
     auto camera_up = GetCameraUp(&camera);
     auto front_mult_far = Vector3Scale(camera_front, z_far);
     
-
-
     Vector3 near_point = Vector3Add(camera.position, Vector3Scale(camera_front, z_near));
     Vector3 near_normal = camera_front;
     near_ = {near_point, near_normal};
@@ -47,8 +42,7 @@ void rendering::frustrum::update_frustrum(Camera3D& camera, float aspect, float 
     Vector3 right_normal = Vector3CrossProduct(right_cross, camera_up);
     right_ =  {camera.position, right_normal};
 
-    print_frustrum();
-    std::cout << "======================END CALCULATE FRUSTRUM=================================" << std::endl;
+    //print_frustrum();
 }
 rendering::frustrum& rendering::frustrum::operator=(const frustrum& other){
     near_ = other.near_;
@@ -70,7 +64,6 @@ rendering::frustrum& rendering::frustrum::operator=(frustrum&& other){
     
     right_ = std::move(other.right_);
     left_ = std::move(other.left_);
-    return *this;
     return *this;
 }
 

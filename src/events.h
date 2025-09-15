@@ -9,19 +9,16 @@
 #include <queue>
 #include <ctime>
 // project includes
-//#include "entities.h" // will need to change the build order ? 
-//#include "player.h"
 #include "rendering.h"
-// other includes
 
 namespace events{
 	// an enum ID for event types
 	enum event_types{
 		test = 0,
-		collision = 1, // for example
+		interaction = 1, // for example
 		key_input = 2,
 		camera_movement = 3,
-		num_types = 4 // update as needed
+		size = 4 // update as needed
 		/**
 		 * types of events:
 		 * 	-> collision
@@ -77,33 +74,16 @@ namespace events{
 	// define event subclasses
 	//TODO add delay tp constructor
 	/// @brief event to manage collisions between two entities
-	class collision_event :  public event{
+	class interaction_event :  public event{
 	public:
-		~collision_event() = default;
-		collision_event() = default;
+		~interaction_event() = default;
+		interaction_event() = default;
 
 		static const int get_static_type(){
-			return event_types::collision;
+			return event_types::interaction;
 		}
 	private:
-		//entities::entity& a_;
-		//entities::entity& b_;
-
-		// a collision event takes two entities and processes 
-		// what happens when those two entities collide
-
-		// entities needs events 
-		// events need entities
 		
-		// unless, the world handles collisions
-		// or there is a separate collision manager
-		// use an intermediate class between event and entities to 
-		// manage the collision, it is abridge between the two
-		// then the game or the world has the collision manager
-		// the game would have the system, access the entities through the world
-
-
-		// there's a design pattern for that right, let's have a look
 	};
 
 	class player_input_event : public event{

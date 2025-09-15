@@ -2,7 +2,7 @@
 #include "utility_functions.h"
 #include <algorithm>
 
-#define HUB Vector3{ -80.0f, -4.3f, 50.0f}
+#define HUB Vector3{ -80.0f, -5.0f, 50.0f}
 #define LAGOON Vector3{ -225.0f, -4.8f, 325.0f }
 #define REEF Vector3{75.0f, -1.2f, 500}
 #define BAY Vector3{300, -1.0f, 400}
@@ -15,15 +15,10 @@ void environment::world::build_world(wind& wind, player::player& player){
 		OceanType::get_instance(),
 		Vector3{0.0f, WORLD_Y * -0.25, 0.0f},
 		Vector3Scale(Vector3{WORLD_X, WORLD_Y, WORLD_Z}, -0.5),
-		Vector3{WORLD_X * 0.5, -1.0f, WORLD_Z * 0.5},
+		Vector3{WORLD_X * 0.5, 0.5f, WORLD_Z * 0.5},
 		world_entities_.get_next_id()
 	);
-	std::cout << "=========WORLD INSERT=====================" << std::endl;
-	std::cout << world_entities_.size() << std::endl;
-	std::cout << ocean->get_id() << std::endl;
 	world_entities_.insert(ocean);
-	std::cout << world_entities_.size() << std::endl;
-	std::cout << "========= END WORLD INSERT=====================" << std::endl;
 	// build the ship
 	std::unique_ptr<entities::entity> player_ship = std::make_unique<entities::player_ship>(
 		ShipType::get_instance(),
@@ -108,7 +103,6 @@ entities::entity* environment::world::get_entity(int id){
 }
 void environment::world::build_frustrum_test_world(){
 	
-	std::cout << "building the world " << std::endl;
 	// generate a bunch of test objects, objects are 2, 2 , 2
 	// 2 dimensional loop silly boy, ok wait thats far too many cubes, literally half a million
 	for(float i = WORLD_MIN.x + 5; i < WORLD_MAX.x - 5; i += 20){
@@ -128,25 +122,17 @@ void environment::world::build_frustrum_test_world(){
 void environment::world::update(float delta){
 	// based on player position, update based on simulation distance
 	// check for interactions 
+	std::cout << "FRAME" << std::endl;
 	world_entities_.update(delta);
-
 	// randomise the wind every 90 seconds ? 
 	wind_.update(GetTime());
-
-	world_entities_.update(delta);
 	world_entities_.prune_leaves(delta);
+	std::cout << "END FRAME" << std::endl;
 }
 
 void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	// entity is std::unique_ptr<entities::entity>
-
-	// TODO: 
-	// issue with the frustrum, it is rendering everything
-	// double check the test game and double check the numbers
-	std::cout << "==================FRUSTRUM================================= "<< std::endl;
-	rendering_frustrum.print_frustrum();
-	std::cout << "==================END FRUSTRUM=================================" << std::endl;
-	std::cout << "================= RENDER =====================" << std::endl;
+	//rendering_frustrum.print_frustrum();
 
 	auto num_rendered = 0;
 	auto frustrum_predicate = [rendering_frustrum, &num_rendered](auto & entity)-> bool{
@@ -158,9 +144,4 @@ void environment::world::render(rendering::frustrum& rendering_frustrum) {
 	};
 	sky_.render();
 	world_entities_.render(frustrum_predicate);
-	std::cout << "================= END RENDER=====================" << std::endl;
-	std::cout << "rendered: " << num_rendered << " total: " << world_entities_.size() << std::endl;
-	// quick debug to check if this is working, i think not because its rendering everything
-	// do some more debug printing here
-	// debug
 }

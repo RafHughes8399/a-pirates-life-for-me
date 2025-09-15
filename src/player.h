@@ -35,7 +35,7 @@ namespace player{
 		 camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)),
 		 camera_movement_handler_([this](const events::camera_move_event& event){ on_camera_move_event(event);}){
 			camera_.position = CAMERA_START;
-			camera_.target = TARGET_START;// the camera looks at the cube, slightly above sea level
+			camera_.target = SHIP_START;// the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
 			camera_.fovy = FOV;
 			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
@@ -73,7 +73,6 @@ namespace player{
 		test_player()
 		:camera_(Camera3D{}),  camera_mode_(CAMERA_THIRD_PERSON),
 		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR){
-			std::cout << "building test_player" << std::endl;
 			camera_.position = Vector3Zero();;
 			camera_.target = Vector3Zero(); // the camera looks at the cube, slightly above sea level
 			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target

@@ -10,7 +10,6 @@
 #include "environment.h" // has player, and object, and raylib, and config
 #include "config.h"
 #include "events_interface.h"
-#include "managers.h"
 // events too maybe 
 
 namespace game{
@@ -20,7 +19,7 @@ namespace game{
 	public:
 		~game() = default;
 		game(environment::world& world, player::player& player)
-			: world_(world), player_(player), test_event_manager_(managers::event_manager<events::test_event>()) {
+			: world_(world), player_(player){
 			// here in the game, add event listeners basewd on what you want to listen to
 		}
 		game(const game& other)
@@ -48,7 +47,6 @@ namespace game{
 	private:
 		environment::world& world_;
 		player::player& player_;
-		managers::event_manager<events::test_event> test_event_manager_;
 		// Hud hud_;
 	};
 

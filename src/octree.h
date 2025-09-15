@@ -54,6 +54,7 @@ namespace tree{
         void insert(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& object);
         void insert(std::unique_ptr<o_node>& tree, std::vector<std::unique_ptr<entities::entity>>& objects);
         void erase(std::unique_ptr<o_node>& tree, size_t object_id);
+        std::unique_ptr<entities::entity> extract(std::unique_ptr<o_node>& tree, size_t object_id);
         
         void clear(std::unique_ptr<o_node>& tree);
         // object lookup
@@ -99,8 +100,12 @@ namespace tree{
         
         // update and render
         void update(std::unique_ptr<o_node>& tree, float delta);
+        void identify_collisions(std::unique_ptr<o_node>& tree, std::vector<entities::entity*> parent_entities);
         void render(std::unique_ptr<o_node>& tree);
 
+
+        void move_entity(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity);
+        std::unique_ptr<o_node>* find_new_parent(std::unique_ptr<o_node>& tree, std::unique_ptr<entities::entity>& entity);
         template<typename UnaryPred>
         void render(std::unique_ptr<o_node>& tree, UnaryPred p){
         
@@ -108,10 +113,8 @@ namespace tree{
                 return;
             }
             for(auto & entity : tree->objects_){
-                std::cout << " check object " << entity->get_id() << std::endl;
                 if(p(entity)){
                     entity->render();
-                    std::cout << " render object " << entity->get_id() << std::endl;
                 }
             }
             for(auto & child : tree->children_){
@@ -166,6 +169,9 @@ namespace tree{
         void erase(size_t id){
             erase(root_, id);
         }
+        std::unique_ptr<entities::entity> extract(size_t id){
+            return extract(root_, id);
+        }
         void clear(){
             clear(root_);
         }
@@ -188,6 +194,8 @@ namespace tree{
         // update and render
         void update(double delta){
             update(root_, delta);
+            auto parent_objects = std::vector<entities::entity*>{};
+            identify_collisions(root_, parent_objects); // start with an empty list
         }
 
         // render the tree within a certain bounding box, default is the whole tree
