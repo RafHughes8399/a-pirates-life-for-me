@@ -2,6 +2,9 @@
 #define SPRITE_H
 #include "animation.h"
 namespace sprite{
+    /** 
+     * ? maybe a sprite factor could help to build certain sprites, look into a factory pattern
+     * */
     class sprite{
         public:
             ~sprite() = default;

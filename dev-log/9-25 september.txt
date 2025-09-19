@@ -222,13 +222,22 @@ TOOD
 HUD:
 -> include in cmake (post event, pre game, animation, sprite, hud ) x 
 -> incorporate into player class x 
--> build the huds x 
+-> build the huds 
     -> ship hud : map, compass, anchor, sail
     -> pirate : map, compass, health
 -> draw the elements
 -> setup event templates
 -> establish event listening
-
+-> define the hud building functions overrides
 so a hud element is templated for an event type
 that determines what event handler it has and what event it listens for
 you could pair an event id to a on event function using a map perhaps ? 
+
+-> make the id on_event function map
+-> compile and test 
+-> start building the hud for the ship
+
+
+ok compiles
+-> need to setup event map for the Interface
+-> need to setup deep copying semantics (element cloning, maybe event cloning too ? )

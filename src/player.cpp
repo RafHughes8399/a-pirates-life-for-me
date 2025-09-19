@@ -5,11 +5,9 @@ void player::player::build_huds(){
 	auto pirate_builder = pirate_hud_builder();
 	auto ship_builder = ship_hud_builder();
 
-	// upcast the builders then pass them through
-	hud_builder& casted_pirate = pirate_builder;
-	hud_builder& casted_ship = ship_builder;
-	huds_[huds::pirate] = hud_director::build_pirate_hud(casted_pirate);
-	huds_[huds::ship] = hud_director::build_ship_hud(casted_ship);
+
+	huds_[huds::pirate] = hud_director::build_hud(pirate_builder);
+	huds_[huds::ship] = hud_director::build_hud(ship_builder);
 }
 // player is updated after the objects so this should wok
 void player::player::update(float delta) {
