@@ -37,34 +37,58 @@ namespace hud   {
             event_strategy& operator=(const event_strategy& other) = default;
             event_strategy& operator=(event_strategy&& other) = default;
             
-            virtual void on_event(const events::event& event) = 0;
+            virtual void on_event(const events::event& event, sprite::sprite& sprite) = 0;
         protected:
 
     };
-    class player_change_strategy : public event_strategy{
+    class player_direction_change_strategy : public event_strategy{
         public:
-            player_change_strategy()
+            player_direction_change_strategy()
             : event_strategy() {};
 
-            void on_event(const events::event& event) override;
+            void on_event(const events::event& event, sprite::sprite& sprite) override;
         private:
     };
+    // todo 
+        /**
+         *  player pos
+         * anchor height
+         * sail length'
+         * sail / wind comparison
+         */
+    
+    class player_position_change_strategy : public event_strategy{
+        player_position_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
 
+    class anchor_height_change_strategy : public event_strategy{
+        anchor_height_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
+
+    class sail_length_change_strategy : public event_strategy{
+        sail_length_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
+    
+    class sail_wind_change_strategy : public event_strategy{
+        sail_wind_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
+    //TODO rethink this inheritance structure, i think it can be modified to be more logical 
 	class hud_element_interface{
 		public:
 			virtual ~hud_element_interface() = default;
 			virtual void draw() = 0;
-			static std::map<int, std::function<void(const events::event&)>> on_event_map_;
-			// TODO define on event functions
-			void on_anchor_move_event(const events::anchor_hud_change_event& event);
-			void on_player_move_event(const events::map_change_event& event);
-			void on_player_turn_event(const events::map_change_event& event);
-			void on_sail_move_event(const events::sail_hud_change_event& event);
-			void on_sail_turn_event(const events::sail_hud_change_event event);
-
-			static void register_handler(int event_type, std::function<void(const events::event&)> handler){
-				on_event_map_[event_type] = handler;
-			}
 	};
 	template <typename E> // E for event
 	class hud_element : public hud_element_interface{
@@ -85,12 +109,7 @@ namespace hud   {
 				DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
 			}
 			void on_event(const E& event){
-				// examine the map defined by the interface, pass in the data 
-				// access the map by using the id of E, to access the specific on event fucntion
-				// and pass in the appropraite sprite data
-				// ? can it ?, well yes it can
-                //?  perhaps requires a reference to the self to be passed through ? 
-				hud_element_interface::on_event_map_[E::get_static_type()](event); // ? maybe the sprite too ? 
+				on_event_strategy_.on_event(event);
 			}
 			private:
 			// sprite and an event handler, maybe make these part of the interfaso you can directly access them

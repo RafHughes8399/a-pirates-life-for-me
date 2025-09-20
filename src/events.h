@@ -18,10 +18,12 @@ namespace events{
 		interaction = 1, // for example
 		key_input = 2,
 		camera_movement = 3,
-		map_change = 4,
+		player_direction_change = 4,
+		player_position_change = 5,
 		anchor_change = 5,
-		sail_change = 6,
-		size = 7 // update as needed
+		sail_length_change = 6,
+		sail_wind_change = 7,
+		size = 8 // update as needed
 		/**
 		 * types of events:
 		 * 	-> collision
@@ -140,25 +142,37 @@ namespace events{
 	 * ! they take in the new value of the position or direction
 	 * ! that is used directly to select the new frame of the animation of the hud component
 	 */
-	class map_change_event : public event {
+	class player_direction_change_event : public event {
 		public:
-			~map_change_event() = default;
-			map_change_event(Vector2 new_position, float new_direction)
-				: event(event_types::map_change), new_position_(new_position), new_direction_(new_direction) {};
+			~player_direction_change_event() = default;
+			player_direction_change_event(int new_direction)
+				: event(event_types::player_direction_change), new_direction_(new_direction) {};
+			
+			int get_new_direction() const{
+				return new_direction_;
+			}
+			static const int get_static_type(){
+				return event_types::player_direction_change;
+			}
+		private:
+			// position change for the map and the direction for the compass
+			int new_direction_; // selects the frame of the compass 
+	};
+	class player_position_change_event : public event {
+		public:
+			~player_position_change_event() = default;
+			player_position_change_event(Vector2 new_position)
+				: event(event_types::player_position_change),  new_position_(new_position) {};
 			
 			Vector2 get_new_position() const{
 				return new_position_;
 			}
-			float get_new_direction() const{
-				return new_direction_;
-			}
 			static const int get_static_type(){
-				return event_types::map_change;
+				return event_types::player_position_change;
 			}
 		private:
 			// position change for the map and the direction for the compass
 			Vector2 new_position_; // selects the position of the ship on the map
-			float new_direction_; // selects the frame of the compass 
 	};
 	class anchor_hud_change_event : public event{
 		public:
@@ -176,24 +190,36 @@ namespace events{
 			int new_depth_; // the new frame for the anchor hud, based on the current depth / max depth
 
 	};
-	class sail_hud_change_event : public event{
+	class sail_length_change_event : public event{
 		public:
-			~sail_hud_change_event() = default;
-			sail_hud_change_event(int new_length, int new_force)
-				: event(event_types::sail_change), new_length_(new_length), new_force_(new_force){};
+			~sail_length_change_event() = default;
+			sail_length_change_event(int new_length, int new_force)
+				: event(event_types::sail_length_change), new_length_(new_length){};
 			
 			int get_new_length() const{
 				return new_length_;
 			}
-			int get_new_force() const{
-				return new_force_;
-			}
 			static const int get_static_type(){
-				return event_types::sail_change;
+				return event_types::sail_length_change;
 			}
 		private:
 			// length and direction in terms of wind force, in terms of the frame and aanimation for the hud
 			int new_length_;
+	};
+	class sail_wind_change_event : public event{
+		public:
+			~sail_wind_change_event() = default;
+			sail_wind_change_event( int new_force)
+				: event(event_types::sail_length_change), new_force_(new_force){};
+			
+			int get_new_force() const{
+				return new_force_;
+			}
+			static const int get_static_type(){
+				return event_types::sail_length_change;
+			}
+		private:
+			// length and direction in terms of wind force, in terms of the frame and aanimation for the hud
 			int new_force_;
 	};
 	class event_handler_interface{
