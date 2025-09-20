@@ -7,10 +7,11 @@
 #include "entities.h"
 #include "config.h"
 #include "rendering.h"
+#include "events.h"
 #include "events_interface.h"
 #include "controls.h"
 #include "sprite.h"
-
+#include "hud.h"
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
 #include "../lib/raylib/src/rcamera.h"
@@ -25,124 +26,6 @@ namespace player{
 		pirate = 1,
 		// include more if there are
 		size = 2
-	};
-	class hud{
-		class hud_element_interface{
-			public:
-			virtual ~hud_element_interface() = default;
-			virtual void draw() = 0;
-			static std::map<int, std::function<void(const events::event&)>> on_event_map_;
-			static void register_handler(int event_type, std::function<void(const events::event&)> handler){
-				on_event_map_[event_type] = handler;
-			}
-		};
-		template <typename E> // E for event
-		class hud_element : public hud_element_interface{
-			public:
-				~hud_element() {
-					// unsub
-					event_interface::unsubscribe<E>(handler_);
-				};
-				hud_element(sprite::sprite& sprite, Vector2 position)
-				: hud_sprite_(sprite), position_(position), handler_(){// construct it with an on_event method) {
-					// sub
-					event_interface::subscribe<E>(handler_);
-				}
-				hud_element(const hud_element<E>& other) = default;
-				hud_element(hud_element<E>&& other) = default;
-
-				void draw(){
-					DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
-				}
-				// on event stuff as well, not sure exactly how this will work just yet though, 
-				/**
-				 // TODO look into the template lecture slides to figure this one out, i think i can define things like on_event<Anchor_hud_event_update> () 
-				* the on event method is tmeplated for E and then you define the different possiblities in the cpp file ? 
-				for now just sub and unsub 
-				* 
-				*/
-				//TODO define the on event functions here
-				void on_anchor_move_event(const events::event& event);
-				void on_player_move_event(const events::event& event);
-				void on_player_turn_event(const events::event& event);
-				void on_sail_move_event(const events::event& event);
-				void on_sail_turn_event(const events::event& event);
-
-			private:
-				// sprite and an event handler
-				sprite::sprite hud_sprite_;
-				Vector2 position_;
-				events::event_handler<E> handler_;
-		};
-        public:
-            ~hud() = default;
-            hud() = default;
-			// TODO implement with deep copy 
-            hud(const hud& other)
-			: elements_() {
-				// deep copy the elements
-				for(auto & elem : other.elements_){
-					// ? assuming each hud_element has a clone method
-					// ? elements_.push_back(elem->clone());
-				}
-			}
-            hud(hud&& other) = default;
-
-			hud& operator=(const hud& other){
-				if(this != &other){
-					elements_.clear();
-					for(auto & elem : other.elements_){
-						// ? assuming each hud_element has a clone method
-						// ? elements_.push_back(elem->clone());
-					}
-				}
-				return *this;
-			}
-			hud& operator=(hud&& other) = default;
-            void draw();
-			void clear();
-			void add_element(std::unique_ptr<hud_element_interface> element);
-
-        private:
-			std::vector<std::unique_ptr<hud_element_interface>> elements_;
-	};
-	// TODO implement overrides, pending art 
-	class hud_builder {
-		public:
-			virtual ~hud_builder() = default;
-			hud_builder()
-				: hud_(hud()){};
-	
-			void reset();
-			hud& get_hud();
-
-			// map components
-			virtual void build_map() = 0;
-			//virtual hud build_quests() = 0;
-			virtual void build_player_components() = 0;
-		protected:
-			hud hud_;
-	};
-	class ship_hud_builder : public hud_builder{
-		public:
-		ship_hud_builder() 
-			:hud_builder(){};
-		
-		void build_map() override;
-		void build_player_components() override;
-	};
-	class pirate_hud_builder : public hud_builder{
-		public:
-		pirate_hud_builder() 
-			:hud_builder(){};
-		
-		void build_map() override;
-		void build_player_components() override;
-	};
-	class hud_director{
-		// static build ship hud, static build pirate hud
-		public:
-		static hud& build_hud(hud_builder& builder);
 	};
 	class player {
 		public:
@@ -195,7 +78,7 @@ namespace player{
 			/** the player holds the various huds that it would need i.e the ship and the pirate
 			 * it draws the hud based on the index which changes upon detecting a certain event (docking / undocking)
 			 */
-			hud huds_[huds::size];
+			hud::hud huds_[huds::size];
 			size_t hud_index_;
 	};
 	

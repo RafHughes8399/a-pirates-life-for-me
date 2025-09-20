@@ -241,3 +241,19 @@ you could pair an event id to a on event function using a map perhaps ?
 ok compiles
 -> need to setup event map for the Interface
 -> need to setup deep copying semantics (element cloning, maybe event cloning too ? )
+
+
+// consider the event types
+
+
+hold on how would a strategy pattern work ? 
+the on_event strategy for a hud element
+define abstract element_on_event strategy
+has an abstract base event handler can it ?
+
+it should just have the on event function 
+then the hud element is assigned a strategy when it is build based on the element 
+and the 
+
+yeah strategy pattern to assign the hud element an on_event behaviour that can be specifed through a builder
+it is still templated over an event so it can continue to listen and sub/unsub to events correctly 

@@ -17,7 +17,6 @@ Vector3 components::sail::get_force(){
 	return force_;
 }
 
-// TODO fix
 void components::sail::turn(float delta, float ship_direction, int turn_direction){
 	// i need to make sure these values are on the same page, i.e not negative
 	auto left_bound = std::fmod(ship_direction + (PI /2), PI2);
@@ -85,7 +84,13 @@ void components::sail::calculate_force(){
 	force_ = Vector3{ (NO_WIND), 0.0, (NO_WIND) };
 	float distance = std::fmod(std::abs(wind_.x - direction_), PI2);
 	float max_distance = PI2;
-	float proportion = 1 - (distance / max_distance);
+	float proportion = 1 - (distance / max_distance); // somewhere here will create the event, inform animation based on proportion
+	/**
+	 * theres a range right, assume 3 levels 
+	 * so [0, 33] is one
+	 * [34, 66] is another
+	 * [67, 100] is the final one 
+	 */
 	force_ = Vector3Add(Vector3{ wind_.y * proportion, 0.0f, wind_.y * proportion }, force_);
 	// scale the force by th length of the sail
 	force_ = Vector3Scale(force_, length_);
