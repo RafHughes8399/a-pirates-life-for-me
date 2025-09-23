@@ -85,7 +85,6 @@
 
 
 
-// ship controls- immuatable for now, 
-// TODO: make controls mutable
-
 // locations 
+
+// sprites

@@ -1,29 +1,4 @@
 #include "hud.h"
-// define the map
-/* std::map<int, std::function<void(const events::event&)>> hud::hud_element_interface::on_event_map_ = {
-    // TODO minimap and compass udpates for ship hud
-    {events::event_types::player_direction_change, [](const events::event& event) -> void{
-        // cast the event
-        const auto& map_event = static_cast<const events::player_direction_change_event&>(event);
-        // maybe this is where it happens instead of a completely different function , pass the sprite in too ?
-        return;
-    }},
-    // TODO anchor updates for ship hud
-    {events::event_types::anchor_change, [](const events::event& event) -> void{
-        // cast the event
-
-        // call the appropraite functions
-
-    }},
-    //TODO sail updates for ship hud
-    {events::event_types::sail_change, [](const events::event& event)-> void{
-        // cast the event
-
-        // call the appropraite functions
-    }}
-};
- */
-
 
 void hud::hud::draw(){
     for(auto & element : elements_){
@@ -38,7 +13,6 @@ void hud::hud::add_element(std::unique_ptr<hud_element_interface> element){
     elements_.push_back(std::move(element));
 }
 
-// TODO implement
 void hud::hud_builder::reset(){
     hud_.clear();
     return;

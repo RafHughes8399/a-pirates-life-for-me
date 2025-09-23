@@ -84,6 +84,7 @@ namespace hud   {
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;
     };
+    
     //TODO rethink this inheritance structure, i think it can be modified to be more logical 
 	class hud_element_interface{
 		public:

@@ -77,7 +77,7 @@ namespace events{
 	};
 	
 	// define event subclasses
-	//TODO add delay tp constructor
+	//TODO add delay to constructor
 	/// @brief event to manage collisions between two entities
 	class interaction_event :  public event{
 	public:
@@ -130,10 +130,6 @@ namespace events{
 	private:
 		Vector3& position_change_; // describes how the player ship has changed on each axis
 	};
-
-	// handler is templated for event types, there 
-	// is a handler for each event type
-	// TODO : 
 	/**
 	 * mini map change (direction and position)
 	 * anchor hud change

@@ -43,7 +43,6 @@ int entities::entity::get_id(){
 }
 
 //  =============== STATIC ENTITY  ===============
-//TODO implement
 void entities::static_entity::interact(entities::entity& other){
 	// your choice is pointers and if statements or references and try catch 
 

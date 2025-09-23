@@ -257,3 +257,10 @@ and the
 
 yeah strategy pattern to assign the hud element an on_event behaviour that can be specifed through a builder
 it is still templated over an event so it can continue to listen and sub/unsub to events correctly 
+
+
+-> have the hud change events created and queued 
+-> design the sprites
+-> build the hud elements using the builder
+-> build the huds for the player
+-> make sure copy constructor and operators work 

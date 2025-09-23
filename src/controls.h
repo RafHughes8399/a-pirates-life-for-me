@@ -19,7 +19,6 @@ namespace controls{
             static ship_controls instance;
             return instance;
         }
-        //TODO implement 
         void update_control(int key);
         std::vector<int>& get_controls(){
             return controls_;

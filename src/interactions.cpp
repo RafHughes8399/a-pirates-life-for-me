@@ -1,7 +1,6 @@
 #include "interactions.h"
 
 void interactions::interaction::process(){
-    //TODO implement
     // something along the lines of interactor.interact(interactee);
     // that is the next stage, for now just check
     return;

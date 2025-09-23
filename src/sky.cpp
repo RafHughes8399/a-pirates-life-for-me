@@ -33,7 +33,6 @@ void environment::sky::generate_sky_faces(){
     sky_positions_[faces::right] = SKY_RIGHT;
 
 }
-//TODO: implement
 void environment::sky::render(){
     for(size_t i = 0; i < FACES; ++i){
         DrawModel(sky_models_[i], sky_positions_[i], 1.0f, SKY_BLUE);
