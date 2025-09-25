@@ -85,6 +85,7 @@ namespace hud   {
 		public:
 			virtual ~hud_element_interface() = default;
 			virtual void draw() = 0;
+			virtual std::unique_ptr<hud_element_interface> clone()  = 0;
 	};
 	template <typename E> // E for event
 	class hud_element : public hud_element_interface{
@@ -105,10 +106,14 @@ namespace hud   {
 			hud_element& operator=(const hud_element<E>& other) = default;
 			hud_element& operator=(hud_element<E>&& other) = default;
 			void draw(){
+				std::cout << "DRAW ELEMENT" << std::endl;
 				DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
 			}
 			void on_event(const E& event){
 				on_event_strategy_.on_event(event, hud_sprite_);
+			}
+			std::unique_ptr<hud_element_interface> clone() override{
+				return std::make_unique<hud_element<E>>(hud_sprite_, position_, on_event_strategy_);
 			}
 			private:
 			// sprite and an event handler, maybe make these part of the interfaso you can directly access them
@@ -126,6 +131,7 @@ namespace hud   {
             hud(const hud& other)
 			: elements_() {
 				// deep copy the elements
+				std::cout << "hud copy " << std::endl;
 				for(auto & elem : other.elements_){
 					// ? assuming each hud_element has a clone method
 					// ? elements_.push_back(elem->clone());
@@ -136,9 +142,16 @@ namespace hud   {
 			hud& operator=(const hud& other){
 				if(this != &other){
 					elements_.clear();
+					std::cout << "hud copy " << std::endl;
 					for(auto & elem : other.elements_){
-						// ? assuming each hud_element has a clone method
-						// ? elements_.push_back(elem->clone());
+						elements_.push_back(elem->clone());
+					}
+				}
+				if(this != &other){
+					elements_.clear();
+					std::cout << "hud copy " << std::endl;
+					for(auto & elem : other.elements_){
+						elements_.push_back(elem->clone());
 					}
 				}
 				return *this;

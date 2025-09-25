@@ -52,14 +52,9 @@ int main(){
 
 void render(game::game& game) {
 	BeginDrawing();
-	ClearBackground(WHITE);
-	auto camera = game.get_player().get_camera();
-	BeginMode3D(camera);
-
-	game.render();
-
-	EndMode3D();
-	DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
+		ClearBackground(WHITE);
+		game.render();
+		DrawText(TextFormat("%d", GetFPS()), 40, 40, 30, GREEN);
 	EndDrawing();
 }
 
@@ -69,13 +64,9 @@ void render(game::game& game) {
 
 void render(game::test_game& game) {
 	BeginDrawing();
-	ClearBackground(WHITE);
-	auto camera = game.get_player().get_camera();
-	BeginMode3D(camera);
-
-	game.render();
-	EndMode3D();
-	debug(camera, game);
+		ClearBackground(WHITE);
+		game.render();
+		//debug(camera, game);
 	EndDrawing();
 }
 
