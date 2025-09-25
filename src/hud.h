@@ -2,6 +2,7 @@
 #define HUD_H
 
 #include "../lib/raylib/src/raylib.h"
+#include "config.h"
 #include "sprite.h"
 #include "events.h"
 #include "events_interface.h"
@@ -39,7 +40,6 @@ namespace hud   {
             
             virtual void on_event(const events::event& event, sprite::sprite& sprite) = 0;
         protected:
-
     };
     class player_direction_change_strategy : public event_strategy{
         public:
@@ -49,22 +49,15 @@ namespace hud   {
             void on_event(const events::event& event, sprite::sprite& sprite) override;
         private:
     };
-    // todo 
-        /**
-         *  player pos
-         * anchor height
-         * sail length'
-         * sail / wind comparison
-         */
-    
     class player_position_change_strategy : public event_strategy{
-        player_position_change_strategy()
+        public:
+		player_position_change_strategy()
         : event_strategy() {};
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;
     };
-
     class anchor_height_change_strategy : public event_strategy{
+		public:
         anchor_height_change_strategy()
         : event_strategy() {};
         
@@ -72,14 +65,16 @@ namespace hud   {
     };
 
     class sail_length_change_strategy : public event_strategy{
-        sail_length_change_strategy()
+        public:
+		sail_length_change_strategy()
         : event_strategy() {};
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;
     };
     
     class sail_wind_change_strategy : public event_strategy{
-        sail_wind_change_strategy()
+        public:
+		sail_wind_change_strategy()
         : event_strategy() {};
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;
@@ -98,19 +93,22 @@ namespace hud   {
 				// unsub
 				event_interface::unsubscribe<E>(handler_);
 			};
-			hud_element(sprite::sprite& sprite, Vector2 position)
-			: hud_sprite_(sprite), position_(position), handler_([this](const E& event) -> void {on_event(event);}){// construct it with the on_event method) {
+			// and an event strategy
+			hud_element(sprite::sprite& sprite, Vector2 position, event_strategy& event_strategy)
+			: hud_sprite_(sprite), position_(position), on_event_strategy_(event_strategy), handler_([this](const E& event) -> void {on_event(event);}){// construct it with the on_event method) {
 				// sub
 				event_interface::subscribe<E>(handler_);
 			}
 			hud_element(const hud_element<E>& other) = default;
 			hud_element(hud_element<E>&& other) = default;
 
+			hud_element& operator=(const hud_element<E>& other) = default;
+			hud_element& operator=(hud_element<E>&& other) = default;
 			void draw(){
 				DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
 			}
 			void on_event(const E& event){
-				on_event_strategy_.on_event(event);
+				on_event_strategy_.on_event(event, hud_sprite_);
 			}
 			private:
 			// sprite and an event handler, maybe make these part of the interfaso you can directly access them
@@ -148,7 +146,8 @@ namespace hud   {
 			hud& operator=(hud&& other) = default;
             void draw();
 			void clear();
-			void add_element(std::unique_ptr<hud_element_interface> element);
+			void add_element(std::unique_ptr<hud_element_interface>& element);
+			size_t size();
         private:
 			std::vector<std::unique_ptr<hud_element_interface>> elements_;
 	};
@@ -161,6 +160,7 @@ namespace hud   {
 	
 			void reset();
 			hud& get_hud();
+			
 
 			// map components
 			virtual void build_map() = 0;

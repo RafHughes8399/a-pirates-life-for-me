@@ -102,6 +102,10 @@ void components::anchor::move(float depth, int direction){
 	// ensure depth is within bounds 
 	depth_ += (depth * direction);
 	depth_ = Clamp(depth_, 0.0f, ANCHOR_MAX_DEPTH);
+	// new depth and max depth, pick the frame that represents the proportion 
+	// make the event and queue it 
+	std::unique_ptr<events::event> anchor_move_event = std::make_unique<events::anchor_hud_change_event>(depth);
+	event_interface::queue_event(anchor_move_event);
 	calculate_force();
 }
 Vector3 components::anchor::get_force(){

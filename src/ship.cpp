@@ -15,7 +15,6 @@ int entities::player_ship::update(float delta){
 	auto anchor_force = anchor_.get_force();
 	acceleration_ = Vector3Multiply(acceleration_, anchor_.get_force());
 	
-	std::cout << "acceleration: " << acceleration_.y << std::endl;
 	// apply acceleration to velocity
 	velocity_ = acceleration_;
 

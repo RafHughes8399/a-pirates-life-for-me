@@ -122,12 +122,10 @@ void environment::world::build_frustrum_test_world(){
 void environment::world::update(float delta){
 	// based on player position, update based on simulation distance
 	// check for interactions 
-	std::cout << "FRAME" << std::endl;
 	world_entities_.update(delta);
 	// randomise the wind every 90 seconds ? 
 	wind_.update(GetTime());
 	world_entities_.prune_leaves(delta);
-	std::cout << "END FRAME" << std::endl;
 }
 
 void environment::world::render(rendering::frustrum& rendering_frustrum) {

@@ -173,18 +173,17 @@ namespace events{
 	class anchor_hud_change_event : public event{
 		public:
 			~anchor_hud_change_event() = default;
-			anchor_hud_change_event(int new_depth)
+			anchor_hud_change_event(float new_depth)
 				: event(event_types::anchor_change), new_depth_(new_depth){};
 
-			int get_new_depth() const{
+			float get_new_depth() const{
 				return new_depth_;
 			}
 			static const int get_static_type(){
 				return event_types::anchor_change;
 			}
 		private:
-			int new_depth_; // the new frame for the anchor hud, based on the current depth / max depth
-
+			float new_depth_; // based on the current depth / max depth used to determine the new frame 
 	};
 	class sail_length_change_event : public event{
 		public:

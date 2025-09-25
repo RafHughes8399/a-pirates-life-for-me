@@ -5,11 +5,14 @@
 #include <numbers>
 #include <utility>
 #include <cmath>
+
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
+
 #include "config.h"
 #include "utility_functions.h"
-
+#include "events.h"
+#include "events_interface.h"
 namespace components{
 	class sail {
 	public:

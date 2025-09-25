@@ -30,6 +30,9 @@ namespace animation{
             sprite_animation(const sprite_animation& other) = default;
             sprite_animation(sprite_animation&& other) = default;
 
+            sprite_animation& operator=(const sprite_animation& other) = default;
+            sprite_animation& operator=(sprite_animation&& other) = default;
+            
             const Rectangle& get_frame() const;
 
             void next_frame(bool wrap = true);
@@ -40,6 +43,9 @@ namespace animation{
 
             void play();
             void pause();
+
+            int num_frames();
+            int num_animations();
         private:
         // the frame of the sprite sheet
         Rectangle frame_;

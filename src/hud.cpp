@@ -8,8 +8,11 @@ void hud::hud::draw(){
 void hud::hud::clear(){
     elements_.clear();
 }
+size_t hud::hud::size(){
+    return elements_.size();
+}
 
-void hud::hud::add_element(std::unique_ptr<hud_element_interface> element){
+void hud::hud::add_element(std::unique_ptr<hud_element_interface>& element){
     elements_.push_back(std::move(element));
 }
 
@@ -28,6 +31,27 @@ void hud::ship_hud_builder::build_map() {
 }
 //TODO implement
 void hud::ship_hud_builder::build_player_components(){
+    // build compass
+
+    // build sail 
+
+    // build anchor
+    // ok so you build the element, which needs a sprite
+    auto anchor_texture = LoadTexture(ANCHOR_HUD_PATH);
+    auto anchor_sprite = sprite::sprite(anchor_texture, ANCHOR_HUD_WIDTH_FRAME, ANCHOR_HUD_HEIGHT_FRAME);
+
+    // a position 
+    // for now the position will be rigid and based on the 1920 x 1080 resolution, 
+    // TODO in the future is to make it scale based on the current machine resolution
+    auto anchor_position = Vector2{50, 800}; // subject to change 
+
+    // and a strategy 
+    anchor_height_change_strategy strategy = anchor_height_change_strategy();
+    // build the hud element
+    std::unique_ptr<hud_element_interface> anchor_hud_element = std::make_unique<hud_element<events::anchor_hud_change_event>>(anchor_sprite, anchor_position, strategy);
+    // append to the hud 
+    hud_.add_element(anchor_hud_element);
+    std::cout << "HUD SIZE BUILDER : " << hud_.size() << std::endl;
     return;
 }
 
@@ -70,9 +94,13 @@ void hud::player_position_change_strategy::on_event(const events::event& event, 
     return;
 };
 void hud::anchor_height_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
+    std::cout << "CHANGE ANCHOR HUD" << std::endl;
     const events::anchor_hud_change_event& anchor_event = static_cast<const events::anchor_hud_change_event&>(event);
     // something along the lines of :
-    auto frame = anchor_event.get_new_depth();
+    auto depth = anchor_event.get_new_depth();
+    // calculate proportion 
+    float depth_proportion = depth / ANCHOR_MAX_DEPTH;
+    int frame = sprite.get_animation().num_frames() * depth_proportion;
     sprite.get_animation().goto_frame(frame);
     // maybe some interemdiate maths to smooth the transition, that may be more to do with the actual changing part of the anchor's movement  ?
     return;

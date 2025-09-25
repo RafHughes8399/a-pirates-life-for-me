@@ -8,6 +8,9 @@ void player::player::build_huds(){
 
 	huds_[huds::pirate] = hud::hud_director::build_hud(pirate_builder);
 	huds_[huds::ship] = hud::hud_director::build_hud(ship_builder);
+
+	// and set the hud index 
+	hud_index_ = huds::ship;
 }
 // player is updated after the objects so this should wok
 void player::player::update(float delta) {
@@ -18,7 +21,8 @@ void player::player::update(float delta) {
 }
 void player::player::render() {
 	//this is where the hud will be drawn and other components
-	// ! huds_[hud_index_].draw();
+	std::cout << "HUD SIZE DRAW " << huds_[hud_index_].size() << std::endl; 
+	huds_[hud_index_].draw();
 }
 
 Camera3D& player::player::get_camera(){
