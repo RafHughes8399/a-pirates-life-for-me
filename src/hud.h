@@ -98,6 +98,7 @@ namespace hud   {
 			hud_element(sprite::sprite& sprite, Vector2 position, event_strategy& event_strategy)
 			: hud_sprite_(sprite), position_(position), on_event_strategy_(event_strategy), handler_([this](const E& event) -> void {on_event(event);}){// construct it with the on_event method) {
 				// sub
+				std::cout << "hud element subscribe " << std::endl;
 				event_interface::subscribe<E>(handler_);
 			}
 			hud_element(const hud_element<E>& other) = default;
@@ -106,10 +107,10 @@ namespace hud   {
 			hud_element& operator=(const hud_element<E>& other) = default;
 			hud_element& operator=(hud_element<E>&& other) = default;
 			void draw(){
-				std::cout << "DRAW ELEMENT" << std::endl;
 				DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
 			}
 			void on_event(const E& event){
+				std::cout << "execute on event strategy " << std::endl;
 				on_event_strategy_.on_event(event, hud_sprite_);
 			}
 			std::unique_ptr<hud_element_interface> clone() override{
@@ -131,10 +132,9 @@ namespace hud   {
             hud(const hud& other)
 			: elements_() {
 				// deep copy the elements
-				std::cout << "hud copy " << std::endl;
 				for(auto & elem : other.elements_){
 					// ? assuming each hud_element has a clone method
-					// ? elements_.push_back(elem->clone());
+					elements_.push_back(elem->clone());
 				}
 			}
             hud(hud&& other) = default;

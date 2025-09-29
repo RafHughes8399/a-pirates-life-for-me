@@ -51,7 +51,6 @@ void hud::ship_hud_builder::build_player_components(){
     std::unique_ptr<hud_element_interface> anchor_hud_element = std::make_unique<hud_element<events::anchor_hud_change_event>>(anchor_sprite, anchor_position, strategy);
     // append to the hud 
     hud_.add_element(anchor_hud_element);
-    std::cout << "HUD SIZE BUILDER : " << hud_.size() << std::endl;
     return;
 }
 

@@ -20,10 +20,10 @@ namespace events{
 		camera_movement = 3,
 		player_direction_change = 4,
 		player_position_change = 5,
-		anchor_change = 5,
-		sail_length_change = 6,
-		sail_wind_change = 7,
-		size = 8 // update as needed
+		anchor_change = 6,
+		sail_length_change = 7,
+		sail_wind_change = 8,
+		size = 9 // update as needed
 		/**
 		 * types of events:
 		 * 	-> collision
@@ -174,7 +174,9 @@ namespace events{
 		public:
 			~anchor_hud_change_event() = default;
 			anchor_hud_change_event(float new_depth)
-				: event(event_types::anchor_change), new_depth_(new_depth){};
+				: event(event_types::anchor_change), new_depth_(new_depth){
+					std::cout << "make anchor event" << std::endl;
+				};
 
 			float get_new_depth() const{
 				return new_depth_;
@@ -234,9 +236,16 @@ namespace events{
 	public:
 		~event_handler() override = default;
 		event_handler(std::function<void(const E& e)> handle)
-			: handler_type_(E::get_static_type()), handler_(handle){};
+			: handler_type_(E::get_static_type()), handler_(handle){
+				std::cout << "create handler for event: " << E::get_static_type() << std::endl; 
+			};
+		
 		event_handler(const event_handler& other) = default;
 		event_handler(event_handler&& other) = default;
+		
+		event_handler& operator=(const event_handler& other) = default;
+		event_handler& operator=(event_handler&& other) = default;
+		
 		void call_event(const event& e) override{
 			// check if event and handler template match, because you're doing a static 
 			// cast
