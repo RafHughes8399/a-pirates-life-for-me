@@ -6,8 +6,8 @@ void player::player::build_huds(){
 	auto ship_builder = hud::ship_hud_builder();
 
 
-	huds_[huds::pirate] = hud::hud_director::build_hud(pirate_builder);
-	huds_[huds::ship] = hud::hud_director::build_hud(ship_builder);
+	huds_[huds::pirate] = std::move(hud::hud_director::build_hud(pirate_builder));
+	huds_[huds::ship] = std::move(hud::hud_director::build_hud(ship_builder));
 
 	// and set the hud index 
 	hud_index_ = huds::ship;

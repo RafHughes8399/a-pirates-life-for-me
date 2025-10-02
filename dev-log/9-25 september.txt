@@ -271,3 +271,5 @@ it is still templated over an event so it can continue to listen and sub/unsub t
 TODO (fixing the issues with anchor event execution)
 -> extract the event handler to the on_event strategy pattern, remove the need 
 -> modify the hud buiding to avoid the extra copying construct and operator calls (through refs or pointers )
+
+-> i think the problem is upcasting or not moving the strat properly ?

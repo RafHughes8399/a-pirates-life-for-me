@@ -6,6 +6,15 @@ const Rectangle& animation::sprite_animation::get_frame() const{
     return frame_;
 }
 
+int animation::sprite_animation::get_current_frame(){
+    return current_frame_;
+}
+int animation::sprite_animation::get_current_animation(){
+    return current_animation_;
+}
+bool animation::sprite_animation::playing(){
+    return is_playing_;
+}
 void animation::sprite_animation::next_frame(bool wrap){
     // check bounds, increment, adjust rectangle, loop if wrap 
     if(current_frame_ < frames_ - 1){
@@ -49,9 +58,9 @@ int animation::sprite_animation::num_frames(){
     return frames_;
 }
 void animation::sprite_animation::play(){
-    is_playing = true;
+    is_playing_ = true;
 }
 void animation::sprite_animation::pause(){
-    is_playing = false;
+    is_playing_ = false;
 }
 

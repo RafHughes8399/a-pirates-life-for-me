@@ -34,7 +34,9 @@ namespace animation{
             sprite_animation& operator=(sprite_animation&& other) = default;
             
             const Rectangle& get_frame() const;
-
+            int get_current_frame(); 
+            int get_current_animation();
+            bool playing();
             void next_frame(bool wrap = true);
             void next_animation();
 
@@ -57,7 +59,7 @@ namespace animation{
         // default frame is the origin upon construction 
         int current_frame_ = 0;
         int current_animation_ = 0;
-        bool is_playing = false;
+        bool is_playing_ = false;
 
     };
     // TODO: 3D model animation
