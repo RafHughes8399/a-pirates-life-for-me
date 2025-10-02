@@ -8,25 +8,19 @@ void events::event_dispatcher::subscribe(int event_key, std::unique_ptr<event_ha
     auto event = subscriber_map_.find(event_key);
     // if the event does not exist yet in subscribes, add it as a key
     if(event == subscriber_map_.end()){
-        std::cout << "event " << event_key << " not yet in map " << std::endl;
         subscriber_map_.insert({event_key, std::vector<std::unique_ptr<event_handler_interface>>{}});
         subscriber_map_[event_key].push_back(std::move(handler_value));
-        std::cout << subscriber_map_[event_key].size() << std::endl;
     }
     // otherwise insert handler, provided there are no duplicates
     else{
-        std::cout << "event " << event_key << " in map " << std::endl;
         bool exists = false;
         for(auto& handler : event->second){
             if(handler->get_type() == handler_value->get_type()){
-                std::cout << "handler already exists " << std::endl;
                 exists = true;
             }
         }
         if(not exists){
-            std::cout << "handler does not exist " << std::endl;
             event->second.push_back(std::move(handler_value));
-            std::cout << event->second.size() << std::endl;
         }
     }
     return;
@@ -45,8 +39,6 @@ void events::event_dispatcher::unsubscribe(int event_key, const int handler_valu
 void events::event_dispatcher::execute_event(const event& event){
     //for all handlers of the event, execute the event
     auto key = event.get_type();
-    std::cout << "execute event: " << key << std::endl;
-    std::cout << "subscribers: " << subscriber_map_.at(key).size() << std::endl;
     for(auto& handler : subscriber_map_.at(key)){
         handler->execute(event);
     }
@@ -55,7 +47,6 @@ void events::event_dispatcher::execute_event(const event& event){
 
 void events::event_dispatcher::queue_event(std::unique_ptr<event>& event){
     // add an event to the queue
-    std::cout << "queue event:  " << event->get_type() << std::endl;
     event_queue_.push(std::move(event));
     return;
 }

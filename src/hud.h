@@ -48,6 +48,7 @@ namespace hud   {
             virtual void on_event(const events::event& event, sprite::sprite& sprite) = 0;
 			virtual void unsubscribe() = 0;
 			virtual void subscribe() = 0;
+			void set_sprite_pointer(sprite::sprite* sprite_pointer);
         protected:
 			std::unique_ptr<events::event_handler_interface> handler_;
 			sprite::sprite* sprite_; 
@@ -120,8 +121,8 @@ namespace hud   {
 				hud_element(sprite::sprite sprite, Vector2 position, std::unique_ptr<event_strategy>&& event_strategy)
 				: hud_sprite_(sprite), position_(position), on_event_strategy_(std::move(event_strategy)){// construct it with the on_event method) {
 					// sub
-					std::cout << "hud element subscribe " << std::endl;
 					on_event_strategy_->subscribe();
+					on_event_strategy_->set_sprite_pointer(&hud_sprite_);
 				}
 				hud_element(const hud_element& other) = delete;
 				hud_element(hud_element&& other) = default;

@@ -50,11 +50,11 @@ void animation::sprite_animation::goto_animation(const int animation){
     }
 }
 
-int animation::sprite_animation::num_animations(){
+const int animation::sprite_animation::num_animations(){
     return animations_;
 }
 
-int animation::sprite_animation::num_frames(){
+const int animation::sprite_animation::num_frames(){
     return frames_;
 }
 void animation::sprite_animation::play(){

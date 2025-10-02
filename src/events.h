@@ -175,7 +175,6 @@ namespace events{
 			~anchor_hud_change_event() = default;
 			anchor_hud_change_event(float new_depth)
 				: event(event_types::anchor_change), new_depth_(new_depth){
-					std::cout << "make anchor event" << std::endl;
 				};
 
 			float get_new_depth() const{
@@ -237,7 +236,6 @@ namespace events{
 		~event_handler() override = default;
 		event_handler(std::function<void(const E& e)> handle)
 			: handler_type_(E::get_static_type()), handler_(handle){
-				std::cout << "create handler for event: " << E::get_static_type() << std::endl; 
 			};
 		
 		event_handler(const event_handler& other) = default;

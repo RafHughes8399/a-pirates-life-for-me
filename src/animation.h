@@ -1,8 +1,8 @@
 
 #ifndef ANIMATION_H
 #define ANIMATION_H
+#include <iostream>
 #include "../lib/raylib/src/raylib.h"
-
 // should listen for play events yk
 /**
  * ? if you template it for an event you can choose the type of event the animation listens to ? 
@@ -25,14 +25,12 @@ namespace animation{
             ~sprite_animation() = default;
             sprite_animation(float frame_width, float frame_height, int frames, int animations)
             : frame_(Rectangle{0.0f, 0.0f, frame_width, frame_height}), frames_(frames), animations_(animations){
-
             }
             sprite_animation(const sprite_animation& other) = default;
-            sprite_animation(sprite_animation&& other) = default;
-
+            sprite_animation(sprite_animation&& other)= default;
+                
             sprite_animation& operator=(const sprite_animation& other) = default;
             sprite_animation& operator=(sprite_animation&& other) = default;
-            
             const Rectangle& get_frame() const;
             int get_current_frame(); 
             int get_current_animation();
@@ -46,15 +44,15 @@ namespace animation{
             void play();
             void pause();
 
-            int num_frames();
-            int num_animations();
+            const int num_frames();
+            const int num_animations();
         private:
         // the frame of the sprite sheet
         Rectangle frame_;
         // num animations in the sheet (rows)
-        int animations_; 
+        const int animations_; 
         // num frames in the animation (columns)
-        int frames_;
+        const int frames_;
         
         // default frame is the origin upon construction 
         int current_frame_ = 0;

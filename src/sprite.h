@@ -8,9 +8,9 @@ namespace sprite{
     class sprite{
         public:
             ~sprite() = default;
-            sprite(Texture2D& sprite_sheet, float sprite_width, float sprite_height)
+            sprite(Texture2D& sprite_sheet, float sprite_width, float sprite_height, int sprite_frames, int sprite_animations)
             :   sprite_sheet_(sprite_sheet), animation_(animation::sprite_animation(sprite_width, sprite_height, 
-                sprite_sheet.width / sprite_width, sprite_sheet.height / sprite_height)){
+                sprite_frames, sprite_animations)){
             };
             sprite(const sprite& other) = default;
             sprite(sprite&& other) = default;

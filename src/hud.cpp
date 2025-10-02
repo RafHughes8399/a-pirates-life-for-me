@@ -5,7 +5,6 @@ void hud::hud::hud_element::draw(){
     DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
 }
 /*  void hud::hud::hud_element::on_event(const events::event& event){
-	std::cout << "execute on event strategy " << std::endl;
 	on_event_strategy_.on_event(event, hud_sprite_);
 }
  */
@@ -47,7 +46,7 @@ void hud::ship_hud_builder::build_player_components(){
     // build anchor
     // ok so you build the element, which needs a sprite
     auto anchor_texture = LoadTexture(ANCHOR_HUD_PATH);
-    auto anchor_sprite = sprite::sprite(anchor_texture, ANCHOR_HUD_WIDTH_FRAME, ANCHOR_HUD_HEIGHT_FRAME);
+    auto anchor_sprite = sprite::sprite(anchor_texture, ANCHOR_HUD_WIDTH_FRAME, ANCHOR_HUD_HEIGHT_FRAME, ANCHOR_HUD_FRAMES, ANCHOR_HUD_ANIMATIONS);
 
     // a position 
     // for now the position will be rigid and based on the 1920 x 1080 resolution, 
@@ -61,7 +60,6 @@ void hud::ship_hud_builder::build_player_components(){
     auto anchor_hud_element = std::make_unique<hud::hud_element>(anchor_sprite, anchor_position, std::move(anchor_event_strategy));
     // which is added to the hud
     hud_.add_element(std::move(anchor_hud_element));
-    std::cout  << "HUD SIZE BUILDER : " << hud_.size() << std::endl;
     return;
 }
 
@@ -84,27 +82,24 @@ hud::hud& hud::hud_director::build_hud(hud_builder& builder){
 }
 
 void hud::anchor_height_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
-    std::cout << "CHANGE ANCHOR HUD" << std::endl;
     const events::anchor_hud_change_event& anchor_event = static_cast<const events::anchor_hud_change_event&>(event);
     // something along the lines of :
-    std::cout << "CASTED EVENT" << std::endl;
 
     auto depth = anchor_event.get_new_depth();
-    std::cout << "NEW DEPTH: " << depth << std::endl;
     // calculate proportion 
     float depth_proportion = depth / ANCHOR_MAX_DEPTH;
-    std::cout << "DEPTH PROPORTION: " << depth_proportion << std::endl;
-    std::cout << "CURRENT FRAME: " << sprite.get_animation().get_current_frame() << std::endl;
     int frame = sprite.get_animation().num_frames() * depth_proportion;
-    std::cout << "CALCULATED FRAME: " << frame << std::endl;
     sprite.get_animation().goto_frame(frame);
-    std::cout << "UPDATED FRAME " << std::endl;
     // maybe some interemdiate maths to smooth the transition, that may be more to do with the actual changing part of the anchor's movement  ?
     return;
 };
 
 
 // need to cast the handler i think ? 
+
+void hud::event_strategy::set_sprite_pointer(sprite::sprite* sprite_pointer){
+    sprite_ = sprite_pointer;
+}
 void hud::anchor_height_change_strategy::subscribe(){
     auto* anchor_handler_cast = static_cast<events::event_handler<events::anchor_hud_change_event>*>(handler_.get());
     event_interface::subscribe<events::anchor_hud_change_event>(*anchor_handler_cast);
