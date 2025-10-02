@@ -15,7 +15,6 @@ int entities::player_ship::update(float delta){
 	auto anchor_force = anchor_.get_force();
 	acceleration_ = Vector3Multiply(acceleration_, anchor_.get_force());
 	
-	std::cout << "acceleration: " << acceleration_.y << std::endl;
 	// apply acceleration to velocity
 	velocity_ = acceleration_;
 
@@ -91,7 +90,6 @@ void entities::player_ship::on_player_input_event(const events::player_input_eve
 }
 void entities::player_ship::steer_ship(float delta, int direction){
 	auto turn = SHIP_TURN_SPEED * delta * direction;
-	// TODO make sure this doesn't become negative
 	auto new_direction = std::fmod(direction_ + turn, PI2);
 	
 	// if the value were to become negative, instead add 2PI?, yes shorty
@@ -132,7 +130,6 @@ void entities::player_ship::init_control_map(){
 	control_map_[control_list[TURN_RIGHT]] = [this](float delta){
 		steer_ship(delta, - 1);
 	};
-	// TODO refactor sail movement in sail
 	control_map_[control_list[SAIL_UP]] = [this](float delta){
 		move_sail(delta, -1);
 	};
@@ -141,14 +138,12 @@ void entities::player_ship::init_control_map(){
 		move_sail(delta, 1);
 	};
 
-	// TODO refactor sail turning
 	control_map_[control_list[SAIL_LEFT]] = [this](float delta){
 		turn_sail(delta, 1);
 	};
 	control_map_[control_list[SAIL_RIGHT]] = [this](float delta){
 		turn_sail(delta, -1);
 	};
-	//TODO controls for anchor, requires anchor refactor
 	control_map_[control_list[ANCHOR_UP]] = [this](float delta){
 		move_anchor(delta, -1);
 	};

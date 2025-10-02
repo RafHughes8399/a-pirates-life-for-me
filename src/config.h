@@ -85,7 +85,16 @@
 
 
 
-// ship controls- immuatable for now, 
-// TODO: make controls mutable
-
 // locations 
+
+// sprites
+#define ANCHOR_HUD_PATH "../sprites/anchor.png"
+#define ANCHOR_HUD_WIDTH_TOTAL 6270
+#define ANCHOR_HUD_HEIGHT_TOTAL 190
+
+#define ANCHOR_HUD_FRAMES 57
+#define ANCHOR_HUD_ANIMATIONS 1 
+
+#define ANCHOR_HUD_WIDTH_FRAME ANCHOR_HUD_WIDTH_TOTAL / ANCHOR_HUD_FRAMES
+#define ANCHOR_HUD_HEIGHT_FRAME ANCHOR_HUD_HEIGHT_TOTAL
+

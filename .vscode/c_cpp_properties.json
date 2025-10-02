@@ -6,10 +6,25 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "cStandard": "c17",
+            "cStandard": "c23",
             "cppStandard": "c++20",
-            "intelliSenseMode": "linux-clang-x64",
+            "intelliSenseMode": "${default}",
             "compilerPath": "C:/msys64/ucrt64/bin/gcc.exe"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.22621.0",
+            "compilerPath": "C:/msys64/ucrt64/bin/g++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++20"
         }
     ],
     "version": 4

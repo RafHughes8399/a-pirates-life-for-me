@@ -2,10 +2,13 @@
 #define HUD_H
 
 #include "../lib/raylib/src/raylib.h"
+#include "config.h"
 #include "sprite.h"
 #include "events.h"
+#include "events_interface.h"
 #include <vector>
 #include <memory>
+#include <map>
 // the hud has an abstract hud_strategy, which is a concrete strategy, just swap the strategy
 // or you just build two instances of the hud
 
@@ -23,78 +26,171 @@
 // ? possibilites include a hud state or a hud strategy that change in response to events triggered by the player ? 
 // ? the state / strategy define the specific elements of the hud
 // ? i think state perhaps, because the behaviour is the same, all that differs is the content
+
+
+/**
+ * incorporating the handler into the pattern
+ * event strategy abstract class has pointer to handler interface
+ * concrete subclasses assign with pointer to the handler for the event type asscoaited 
+ * with the strategy, using its override of the on_event function
+ * 
+ * overload unsub and sub that are called when the hud element is created and destroyed
+ * 
+ * i also have to solve the problem of hud copying, i think manageable 
+ */
 namespace hud   {
-    class hud{
+
+    class event_strategy{
         public:
+            virtual ~event_strategy() = default;
+			event_strategy(sprite::sprite* sprite)
+				: sprite_(sprite){};
+            virtual void on_event(const events::event& event, sprite::sprite& sprite) = 0;
+			virtual void unsubscribe() = 0;
+			virtual void subscribe() = 0;
+			void set_sprite_pointer(sprite::sprite* sprite_pointer);
+        protected:
+			std::unique_ptr<events::event_handler_interface> handler_;
+			sprite::sprite* sprite_; 
+    };
+	class anchor_height_change_strategy : public event_strategy{
+		public:
+		anchor_height_change_strategy(sprite::sprite* sprite)
+		: event_strategy(sprite) {
+			// create the handler
+			handler_ = std::make_unique<events::event_handler<events::anchor_hud_change_event>>(
+				[this](const events::anchor_hud_change_event& event) -> void{
+					on_event(event, *sprite_);
+				}
+			);
+		};
+		void on_event(const events::event& event, sprite::sprite& sprite) override;
+		void unsubscribe() override;
+		void subscribe() override;
+
+	};
+	/**
+	 * will uncomment as i implement, for now just focusing on the anchor 
+	 class player_direction_change_strategy : public event_strategy{
+        public:
+		player_direction_change_strategy()
+		: event_strategy() {};
+		
+		void on_event(const events::event& event, sprite::sprite& sprite) override;
+		void unsubscribe() override;
+        private:			
+    };
+    class player_position_change_strategy : public event_strategy{
+        public:
+		player_position_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
+
+    class sail_length_change_strategy : public event_strategy{
+        public:
+		sail_length_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
+    
+    class sail_wind_change_strategy : public event_strategy{
+        public:
+		sail_wind_change_strategy()
+        : event_strategy() {};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+    };
+    */
+	class hud{
+		public:
+			/**
+			 * ? the eleement does not have an on_event, that is managed by the strategy
+			 * ? the element manages the subscribing and unsubscribing of its strategy and passes
+			 * ? it the necessary information to 
+			 */
+			class hud_element{
+			public:
+				~hud_element() {
+					// unsub
+					on_event_strategy_->unsubscribe();
+				};
+				// and an event strategy
+				hud_element(sprite::sprite sprite, Vector2 position, std::unique_ptr<event_strategy>&& event_strategy)
+				: hud_sprite_(sprite), position_(position), on_event_strategy_(std::move(event_strategy)){// construct it with the on_event method) {
+					// sub
+					on_event_strategy_->subscribe();
+					on_event_strategy_->set_sprite_pointer(&hud_sprite_);
+				}
+				hud_element(const hud_element& other) = delete;
+				hud_element(hud_element&& other) = default;
+
+				hud_element& operator=(const hud_element& other) = delete;
+				hud_element& operator=(hud_element&& other) = default;
+				
+				void draw();
+				private:
+				// sprite and an event handler, maybe make these part of the interfaso you can directly access them
+				sprite::sprite hud_sprite_; // might transfer ownership to the strategy
+				Vector2 position_;
+				std::unique_ptr<event_strategy> on_event_strategy_; // this handles the on event 
+			};
             ~hud() = default;
             hud() = default;
-            hud(const hud& other) = default;
+
+            hud(const hud& other) = delete;
             hud(hud&& other) = default;
 
+			hud& operator=(const hud& other) = delete;
+			hud& operator=(hud&& other) = default;
             void draw();
-
+			void clear();
+			void add_element(std::unique_ptr<hud_element>&& element);
+			size_t size();
         private:
-            std::unique_ptr<hud_state> state_;
-    };
-    class hud_state{
-        public:
-            virtual ~hud_state() = default;
-            hud_state()  = default; // empty hud 
-            
-            template<typename InputIt>
-            hud_state(InputIt begin, InputIt end)
-            : elements_(begin, end){};
+			std::vector<std::unique_ptr<hud_element>> elements_;
+	};
+	// TODO implement overrides, pending art 
+	class hud_builder {
+		public:
+			virtual ~hud_builder() = default;
+			hud_builder()
+				: hud_(hud()){};
+	
+			void reset();
+			hud& get_hud();
+			
 
-            hud_state(const hud_state& other) = default;
-            hud_state(hud_state&& other) = default;
+			// map components
+			virtual void build_map() = 0;
+			//virtual hud build_quests() = 0;
+			virtual void build_player_components() = 0;
+		protected:
+			hud hud_;
+	};
+	class ship_hud_builder : public hud_builder{
+		public:
+		ship_hud_builder() 
+			:hud_builder(){};
+		
+		void build_map() override;
+		void build_player_components() override;
+	};
+	class pirate_hud_builder : public hud_builder{
+		public:
+		pirate_hud_builder() 
+			:hud_builder(){};
+		
+		void build_map() override;
+		void build_player_components() override;
+	};
+	class hud_director{
+		// static build ship hud, static build pirate hud
+		public:
+		static hud& build_hud(hud_builder& builder);
+	};
 
-            void draw();
-            virtual void build_hud() = 0;
-
-        protected:
-            std::vector<hud_element<events::event>> elements_;
-    };
-
-    class pirate_hud_state : public hud_state{
-        public:
-            void build_hud() override;
-        private:
-    };
-    class ship_hud_state : public hud_state{
-        public:
-            void build_hud() override;
-        private:
-    };
-    /**
-     * hud elements are templated for an event type so the event that they listen to can be specified easily without creating 
-     * heaps of near_identical subclasses
-     * its so they can handle changes that occur throughout the game according to player input 
-     * TODO consider how to incorporate event handling into the hud element 
-     */
-    template <typename E> // E for event
-    class hud_element{
-        public:
-            ~hud_element() = default;
-            hud_element() = default;
-            hud_element(const hud_element& other) = default;
-            hud_element(hud_element&& other) = default;
-
-            void draw() const{
-                DrawTextureRec(hud_sprite_.get_sprite_sheet(), hud_sprite_.get_animation().get_frame(), position_, WHITE);
-            }
-            // on event stuff as well, not sure exactly how this will work just yet though, 
-            /**
-             // TODO look into the template lecture slides to figure this one out, i think i can define things like on_event<Anchor_hud_event_update> () 
-             * the on event method is tmeplated for E and then you define the different possiblities in the cpp file ? 
-             for now just sub and unsub 
-             * 
-             */
-        private:
-            // sprite and an event handler
-            sprite::sprite hud_sprite_;
-            Vector2 position_;
-            events::event_handler<E> handler_;
-    };
 } // namespace name
-
 #endif

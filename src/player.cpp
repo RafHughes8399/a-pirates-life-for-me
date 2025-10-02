@@ -1,5 +1,17 @@
 #include "player.h"
 
+
+void player::player::build_huds(){
+	auto pirate_builder = hud::pirate_hud_builder();
+	auto ship_builder = hud::ship_hud_builder();
+
+
+	huds_[huds::pirate] = std::move(hud::hud_director::build_hud(pirate_builder));
+	huds_[huds::ship] = std::move(hud::hud_director::build_hud(ship_builder));
+
+	// and set the hud index 
+	hud_index_ = huds::ship;
+}
 // player is updated after the objects so this should wok
 void player::player::update(float delta) {
 	// check for key inputs, generate any events if they are pressed (or held down)
@@ -9,6 +21,7 @@ void player::player::update(float delta) {
 }
 void player::player::render() {
 	//this is where the hud will be drawn and other components
+	huds_[hud_index_].draw();
 }
 
 Camera3D& player::player::get_camera(){

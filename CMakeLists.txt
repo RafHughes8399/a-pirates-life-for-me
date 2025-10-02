@@ -70,6 +70,12 @@ add_subdirectory(lib/raylib)
 add_library(util src/utility_functions.cpp)
 link_libraries(util)
 
+add_library(animation src/animation.cpp)
+link_libraries(animation)
+
+add_library(sprite src/sprite.cpp)
+link_libraries(sprite)
+
 add_library(ship_components src/ship_components.cpp)
 link_libraries(ship_components)
 
@@ -94,11 +100,15 @@ link_libraries(wind)
 add_library(events src/events.cpp)
 link_libraries(events)
 
+
 add_library(octree src/octree.cpp)
 link_libraries(octree)
 
 add_library(rendering src/rendering.cpp)
 link_libraries(rendering)
+
+add_library(hud src/hud.cpp)
+link_libraries(hud)
 
 add_library(player src/player.cpp)
 link_libraries(player)

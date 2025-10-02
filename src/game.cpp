@@ -11,10 +11,15 @@ void game::game::update(){
 }
 
 void game::game::render(){
-	// render the player 
+	// render the world
+	BeginMode3D(player_.get_camera());
+
+		world_.render(player_.get_frustrum());
+
+	EndMode3D();
+	// then the player, so the hud appears on top
 	player_.render();
-	// then the world
-	world_.render(player_.get_frustrum());
+	//DrawRectangle(100, 100, 100, 100, RED); // testing 2d drawing after 3d
 
 }
 

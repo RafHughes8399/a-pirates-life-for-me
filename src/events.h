@@ -18,7 +18,12 @@ namespace events{
 		interaction = 1, // for example
 		key_input = 2,
 		camera_movement = 3,
-		size = 4 // update as needed
+		player_direction_change = 4,
+		player_position_change = 5,
+		anchor_change = 6,
+		sail_length_change = 7,
+		sail_wind_change = 8,
+		size = 9 // update as needed
 		/**
 		 * types of events:
 		 * 	-> collision
@@ -72,7 +77,7 @@ namespace events{
 	};
 	
 	// define event subclasses
-	//TODO add delay tp constructor
+	//TODO add delay to constructor
 	/// @brief event to manage collisions between two entities
 	class interaction_event :  public event{
 	public:
@@ -125,10 +130,94 @@ namespace events{
 	private:
 		Vector3& position_change_; // describes how the player ship has changed on each axis
 	};
+	/**
+	 * mini map change (direction and position)
+	 * anchor hud change
+	 * sail hud change (length and direction)
+	 * 
+	 * ! they take in the new value of the position or direction
+	 * ! that is used directly to select the new frame of the animation of the hud component
+	 */
+	class player_direction_change_event : public event {
+		public:
+			~player_direction_change_event() = default;
+			player_direction_change_event(int new_direction)
+				: event(event_types::player_direction_change), new_direction_(new_direction) {};
+			
+			int get_new_direction() const{
+				return new_direction_;
+			}
+			static const int get_static_type(){
+				return event_types::player_direction_change;
+			}
+		private:
+			// position change for the map and the direction for the compass
+			int new_direction_; // selects the frame of the compass 
+	};
+	class player_position_change_event : public event {
+		public:
+			~player_position_change_event() = default;
+			player_position_change_event(Vector2 new_position)
+				: event(event_types::player_position_change),  new_position_(new_position) {};
+			
+			Vector2 get_new_position() const{
+				return new_position_;
+			}
+			static const int get_static_type(){
+				return event_types::player_position_change;
+			}
+		private:
+			// position change for the map and the direction for the compass
+			Vector2 new_position_; // selects the position of the ship on the map
+	};
+	class anchor_hud_change_event : public event{
+		public:
+			~anchor_hud_change_event() = default;
+			anchor_hud_change_event(float new_depth)
+				: event(event_types::anchor_change), new_depth_(new_depth){
+				};
 
-	// handler is templated for event types, there 
-	// is a handler for each event type
-	
+			float get_new_depth() const{
+				return new_depth_;
+			}
+			static const int get_static_type(){
+				return event_types::anchor_change;
+			}
+		private:
+			float new_depth_; // based on the current depth / max depth used to determine the new frame 
+	};
+	class sail_length_change_event : public event{
+		public:
+			~sail_length_change_event() = default;
+			sail_length_change_event(int new_length, int new_force)
+				: event(event_types::sail_length_change), new_length_(new_length){};
+			
+			int get_new_length() const{
+				return new_length_;
+			}
+			static const int get_static_type(){
+				return event_types::sail_length_change;
+			}
+		private:
+			// length and direction in terms of wind force, in terms of the frame and aanimation for the hud
+			int new_length_;
+	};
+	class sail_wind_change_event : public event{
+		public:
+			~sail_wind_change_event() = default;
+			sail_wind_change_event( int new_force)
+				: event(event_types::sail_length_change), new_force_(new_force){};
+			
+			int get_new_force() const{
+				return new_force_;
+			}
+			static const int get_static_type(){
+				return event_types::sail_length_change;
+			}
+		private:
+			// length and direction in terms of wind force, in terms of the frame and aanimation for the hud
+			int new_force_;
+	};
 	class event_handler_interface{
 		public:
 		virtual ~event_handler_interface() = default;
@@ -146,9 +235,15 @@ namespace events{
 	public:
 		~event_handler() override = default;
 		event_handler(std::function<void(const E& e)> handle)
-			: handler_type_(E::get_static_type()), handler_(handle){};
+			: handler_type_(E::get_static_type()), handler_(handle){
+			};
+		
 		event_handler(const event_handler& other) = default;
 		event_handler(event_handler&& other) = default;
+		
+		event_handler& operator=(const event_handler& other) = default;
+		event_handler& operator=(event_handler&& other) = default;
+		
 		void call_event(const event& e) override{
 			// check if event and handler template match, because you're doing a static 
 			// cast

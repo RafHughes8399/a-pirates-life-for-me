@@ -20,7 +20,7 @@ void events::event_dispatcher::subscribe(int event_key, std::unique_ptr<event_ha
             }
         }
         if(not exists){
-            event->second.emplace_back(std::move(handler_value));
+            event->second.push_back(std::move(handler_value));
         }
     }
     return;

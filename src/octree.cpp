@@ -429,8 +429,6 @@ void tree::octree::update(std::unique_ptr<o_node>& tree, float delta){
                 break;
         }
     }
-    //TODO: move objects - refer to notes
-    // reinsert moved
     for(auto & child : tree->children_){
         update(child, delta);
     }

@@ -118,8 +118,6 @@ class moveable_entity : public entity {
 	float mass_;
 };
 
-// TODO potential rename to distinguish between player_ships and npc_ships, that is how you differentiate
-// yet for a later day
 class player_ship : public moveable_entity {
 public:
 	~player_ship(){

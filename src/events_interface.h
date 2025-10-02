@@ -8,8 +8,7 @@ namespace event_interface{
 
     template<typename E> // e for event
     inline void subscribe(const events::event_handler<E>& handler){
-        std::unique_ptr<events::event_handler_interface> h 
-        = std::make_unique<events::event_handler<E>>(handler);
+        std::unique_ptr<events::event_handler_interface> h = std::make_unique<events::event_handler<E>>(handler);
         events::global_dispatcher_.subscribe(E::get_static_type(), h);
     } 
     
@@ -31,4 +30,4 @@ namespace event_interface{
         events::global_dispatcher_.add_delayed_event(event);
     }
 }
-    #endif
+#endif

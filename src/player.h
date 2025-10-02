@@ -7,9 +7,11 @@
 #include "entities.h"
 #include "config.h"
 #include "rendering.h"
+#include "events.h"
 #include "events_interface.h"
 #include "controls.h"
-
+#include "sprite.h"
+#include "hud.h"
 #include "../lib/raylib/src/raylib.h"
 #include "../lib/raylib/src/raymath.h"
 #include "../lib/raylib/src/rcamera.h"
@@ -19,52 +21,65 @@
 // target, as the target (the ship) moves, so too must the camera. it must move the same amount 
 
 namespace player{
-	// class inventory{}
-	
-	//TODO: figure out a more elegant way to track the player_ship, maybe a mediator 
-	// TODO: a control map for key and mouse inputs to functions in the game
-	// a reference the player_ship's position 
+	enum huds{
+		ship = 0,
+		pirate = 1,
+		// include more if there are
+		size = 2
+	};
 	class player {
 		public:
-		~player(){
-			event_interface::unsubscribe<events::camera_move_event>(camera_movement_handler_);
-		}
-		player()
-		:camera_(Camera3D{}), camera_mode_(CAMERA_THIRD_PERSON),
-		 camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), 
-		 camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)),
-		 camera_movement_handler_([this](const events::camera_move_event& event){ on_camera_move_event(event);}){
-			camera_.position = CAMERA_START;
-			camera_.target = SHIP_START;// the camera looks at the cube, slightly above sea level
-			camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
-			camera_.fovy = FOV;
-			camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
-			
-			
-			// subscribe 
-			event_interface::subscribe<events::camera_move_event>(camera_movement_handler_);
-		}
-		player(const player& other) = default;
-		player(player&& other) = default;
+			~player(){
+				// unsubscribe
+				event_interface::unsubscribe<events::camera_move_event>(camera_movement_handler_);
+			}
+			player()
+			:camera_(Camera3D{}), camera_mode_(CAMERA_THIRD_PERSON),
+			camera_frustrum_(camera_, ASPECT_RATIO, FOV, NEAR, FAR), 
+			camera_target_distance_(Vector3Subtract(SHIP_START, CAMERA_START)),
+			camera_movement_handler_([this](const events::camera_move_event& event){ on_camera_move_event(event);}){
+				camera_.position = CAMERA_START;
+				camera_.target = SHIP_START;// the camera looks at the cube, slightly above sea level
+				camera_.up = Vector3{ 0.0, 1.0, 0.0 }; // rotation toward target
+				camera_.fovy = FOV;
+				camera_.projection = CAMERA_PERSPECTIVE; // should be third person mode ?
+				
 
-		player& operator=(const player& other) = default;
-		player& operator= (player&& other) = default;
-			
-		void update(float delta);
-		void render();
-			
-		Camera3D& get_camera();
-		void move_camera(int mode);
+				// something along the lines of 
+				build_huds();
+				// subscribe
+				event_interface::subscribe<events::camera_move_event>(camera_movement_handler_);
+			}
+			player(const player& other) = default;
+			player(player&& other) = default;
 
-		void on_camera_move_event(const events::camera_move_event& event);
-		rendering::frustrum& get_frustrum();
+			player& operator=(const player& other) = default;
+			player& operator= (player&& other) = default;
+				
+			void update(float delta);
+			void render();
+				
+			Camera3D& get_camera();
+			void move_camera(int mode);
+
+			void on_camera_move_event(const events::camera_move_event& event);
+			rendering::frustrum& get_frustrum();
+
 		private:
 			void check_key_input(float delta);
+			void build_huds();
 			int camera_mode_;
 			Camera3D camera_;
 			const Vector3 camera_target_distance_;
+			
 			rendering::frustrum camera_frustrum_;
 			events::event_handler<events::camera_move_event> camera_movement_handler_;
+
+			/** the player holds the various huds that it would need i.e the ship and the pirate
+			 * it draws the hud based on the index which changes upon detecting a certain event (docking / undocking)
+			 */
+			hud::hud huds_[huds::size];
+			size_t hud_index_;
 	};
 	
 	class test_player{

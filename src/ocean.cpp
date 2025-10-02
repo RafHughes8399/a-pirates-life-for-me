@@ -1,7 +1,6 @@
 #include "entities.h"
 
 void entities::ocean::interact(entities::entity& other) {
-	// TODO buoyancy calculations
 	/**
 	 // ? so what is the logic for the buoyancy, buoyancy is the force exerted on the object
 	Fb = pgv
@@ -34,8 +33,6 @@ void entities::ocean::interact(entities::entity& other) {
 		if(volume){
 			buoyancy = WATER_DENISTY * GRAVITY * volume * -1;
 			buoyancy =  buoyancy / moveable_entity_ptr->get_mass();
-			std::cout << "buoyancy:  " <<  buoyancy << std::endl;
-			std::cout << "gravity:  " << GRAVITY <<  std::endl;
 			moveable_entity_ptr->adjust_acceleration(Vector3{0.0f, buoyancy, 0.0f});
 		}
 	}
