@@ -46,6 +46,8 @@ namespace hud   {
 			event_strategy(sprite::sprite* sprite)
 				: sprite_(sprite){};
             virtual void on_event(const events::event& event, sprite::sprite& sprite) = 0;
+			// ? i could template unsub and sub over an event type to avoid having to cast and repeat
+			// ? essntially the same implementation in all my subclasses ?
 			virtual void unsubscribe() = 0;
 			virtual void subscribe() = 0;
 			void set_sprite_pointer(sprite::sprite* sprite_pointer);
@@ -69,36 +71,59 @@ namespace hud   {
 		void subscribe() override;
 
 	};
-	/**
-	 * will uncomment as i implement, for now just focusing on the anchor 
-	 class player_direction_change_strategy : public event_strategy{
-        public:
-		player_direction_change_strategy()
-		: event_strategy() {};
+	class player_direction_change_strategy : public event_strategy{
+		public:
+		player_direction_change_strategy(sprite::sprite* sprite)
+		: event_strategy(sprite) {
+			// and create the handler
+			handler_ = std::make_unique<events::event_handler<events::player_direction_change_event>>(
+				[this](const events::player_direction_change_event event) -> void {
+					on_event(event, *sprite_);
+				}
+			);
+		};
 		
 		void on_event(const events::event& event, sprite::sprite& sprite) override;
 		void unsubscribe() override;
-        private:			
-    };
-    class player_position_change_strategy : public event_strategy{
+		void subscribe() override;
+	};
+	class sail_length_change_strategy : public event_strategy{
         public:
-		player_position_change_strategy()
-        : event_strategy() {};
+		sail_length_change_strategy(sprite::sprite* sprite)
+        : event_strategy(sprite) {
+			// create handler
+			handler_ = std::make_unique<events::event_handler<events::sail_length_change_event>>(
+				[this](const events::sail_length_change_event& event) -> void {
+					on_event(event, *sprite_);
+				}
+			);
+		};
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;
-    };
-
-    class sail_length_change_strategy : public event_strategy{
-        public:
-		sail_length_change_strategy()
-        : event_strategy() {};
-        
-        void on_event(const events::event& event, sprite::sprite& sprite) override;
-    };
+		void unsubscribe() override;
+		void subscribe() override;
+	};
     
     class sail_wind_change_strategy : public event_strategy{
         public:
-		sail_wind_change_strategy()
+		sail_wind_change_strategy(sprite::sprite* sprite)
+        : event_strategy(sprite) {
+			handler_ = std::make_unique<events::event_handler<events::sail_length_change_event>>(
+				[this](const events::sail_length_change_event& event) -> void {
+					on_event(event, *sprite_);
+				}
+			);
+		};
+        
+        void on_event(const events::event& event, sprite::sprite& sprite) override;
+		void unsubscribe() override;
+		void subscribe() override;
+    };
+	/**
+	* will uncomment as i implement, for now just focusing on the anchor 
+    class player_position_change_strategy : public event_strategy{
+        public:
+		player_position_change_strategy()
         : event_strategy() {};
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;

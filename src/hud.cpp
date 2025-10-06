@@ -84,7 +84,6 @@ hud::hud& hud::hud_director::build_hud(hud_builder& builder){
 void hud::anchor_height_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
     const events::anchor_hud_change_event& anchor_event = static_cast<const events::anchor_hud_change_event&>(event);
     // something along the lines of :
-
     auto depth = anchor_event.get_new_depth();
     // calculate proportion 
     float depth_proportion = depth / ANCHOR_MAX_DEPTH;
@@ -94,32 +93,77 @@ void hud::anchor_height_change_strategy::on_event(const events::event& event, sp
     return;
 };
 
+ void hud::player_direction_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
+    // cast the event, then 
+    const events::player_direction_change_event& map_event = static_cast<const events::player_direction_change_event&>(event);
+    float direction_rad = map_event.get_new_direction();
+    // calculaute the frame based on the degree, i think it is in radians, convert to deg
+    float direction_degree = direction_rad * (180 / PI);
 
-// need to cast the handler i think ? 
+    // then pick the frame, should be the degree / 
+    auto ratio = 360 / COMPASS_HUD_FRAMES;
+    int frame = direction_degree / ratio;
+    // you need to do to the sprite, manipulate sprite with the info in the event 
+    sprite.get_animation().goto_frame(frame);}
 
+void hud::sail_length_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
+    const events::sail_length_change_event& sail_length_event = static_cast<const events::sail_length_change_event&>(event);
+    float length = sail_length_event.get_new_length();
+    // max length for the sail is 1 so length is length proportion
+    int frame = sprite.get_animation().num_frames() * length;
+    sprite.get_animation().goto_frame(frame);
+    return;
+};
+void hud::sail_wind_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
+    const events::sail_wind_change_event& sail_wind_event = static_cast<const events::sail_wind_change_event&>(event);
+    // different as it changes the animation instead of the frame 
+    int force_proportion = sail_wind_event.get_new_force();
+    int animation = sprite.get_animation().num_animations() * force_proportion;
+    sprite.get_animation().goto_animation(animation); 
+    return;
+}
 void hud::event_strategy::set_sprite_pointer(sprite::sprite* sprite_pointer){
     sprite_ = sprite_pointer;
 }
 void hud::anchor_height_change_strategy::subscribe(){
-    auto* anchor_handler_cast = static_cast<events::event_handler<events::anchor_hud_change_event>*>(handler_.get());
-    event_interface::subscribe<events::anchor_hud_change_event>(*anchor_handler_cast);
+    auto* casted_handler = static_cast<events::event_handler<events::anchor_hud_change_event>*>(handler_.get());
+    event_interface::subscribe<events::anchor_hud_change_event>(*casted_handler);
 }
 void hud::anchor_height_change_strategy::unsubscribe(){
-    auto* anchor_handler_cast = static_cast<events::event_handler<events::anchor_hud_change_event>*>(handler_.get());
-    event_interface::unsubscribe<events::anchor_hud_change_event>(*anchor_handler_cast);
-}
-/**
- * will uncomment as implemetned 
- void hud::player_direction_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
-    // cast the event, then 
-    const events::player_direction_change_event& map_event = static_cast<const events::player_direction_change_event&>(event);
-    int direction_deg_frame = map_event.get_new_direction();
-    
-    // you need to do to the sprite, manipulate sprite with the info in the event 
-    sprite.get_animation().goto_frame(direction_deg_frame);
+    auto* casted_handler = static_cast<events::event_handler<events::anchor_hud_change_event>*>(handler_.get());
+    event_interface::unsubscribe<events::anchor_hud_change_event>(*casted_handler);
 }
 
-//TODO implement the remainder of the strategies
+void hud::player_direction_change_strategy::subscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::player_direction_change_event>*>(handler_.get());
+    event_interface::subscribe<events::player_direction_change_event>(*casted_handler);
+}
+void hud::player_direction_change_strategy::unsubscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::player_direction_change_event>*>(handler_.get());
+    event_interface::unsubscribe<events::player_direction_change_event>(*casted_handler);
+}
+
+void hud::sail_length_change_strategy::subscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::sail_length_change_event>*>(handler_.get());
+    event_interface::subscribe<events::sail_length_change_event>(*casted_handler);
+}
+void hud::sail_length_change_strategy::unsubscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::sail_length_change_event>*>(handler_.get());
+    event_interface::unsubscribe<events::sail_length_change_event>(*casted_handler);
+}
+
+void hud::sail_wind_change_strategy::subscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::sail_wind_change_event>*>(handler_.get());
+    event_interface::subscribe<events::sail_wind_change_event>(*casted_handler);
+}
+void hud::sail_wind_change_strategy::unsubscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::sail_wind_change_event>*>(handler_.get());
+    event_interface::unsubscribe<events::sail_wind_change_event>(*casted_handler);
+}
+
+//TODO 6/10 implement the remainder of the strategies
+/**
+ * will uncomment as implemetned 
 void hud::player_position_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
     // cast the event 
     const events::player_position_change_event& pp_change_event = static_cast<const events::player_position_change_event&>(event);
@@ -128,21 +172,5 @@ void hud::player_position_change_strategy::on_event(const events::event& event, 
     // ? like the area that it covers 
     return;
 };
-void hud::sail_length_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
-    const events::sail_length_change_event& sail_length_event = static_cast<const events::sail_length_change_event&>(event);
-    // something along the lines of 
-    auto frame = sail_length_event.get_new_length();
-    sprite.get_animation().goto_frame(frame);
-    // similar to discussion in anchor
-    return;
-};
-void hud::sail_wind_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
-    const events::sail_wind_change_event& sail_wind_event = static_cast<const events::sail_wind_change_event&>(event);
-    // something along the lines of 
-    int anim = sail_wind_event.get_new_force();
-    sprite.get_animation().goto_frame(anim);
-    
-    // similar to discussion in anchor
-    return;
-}
+
 */

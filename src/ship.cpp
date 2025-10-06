@@ -93,6 +93,7 @@ void entities::player_ship::steer_ship(float delta, int direction){
 	auto new_direction = std::fmod(direction_ + turn, PI2);
 	
 	// if the value were to become negative, instead add 2PI?, yes shorty
+	// DIRECTION IS IN RADIANS
 	direction_ = new_direction < 0 ? new_direction + PI2 : new_direction;
 
 	turn_sail(delta, direction);

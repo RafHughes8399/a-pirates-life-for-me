@@ -141,10 +141,10 @@ namespace events{
 	class player_direction_change_event : public event {
 		public:
 			~player_direction_change_event() = default;
-			player_direction_change_event(int new_direction)
+			player_direction_change_event(float new_direction)
 				: event(event_types::player_direction_change), new_direction_(new_direction) {};
 			
-			int get_new_direction() const{
+			float get_new_direction() const{
 				return new_direction_;
 			}
 			static const int get_static_type(){
@@ -152,7 +152,7 @@ namespace events{
 			}
 		private:
 			// position change for the map and the direction for the compass
-			int new_direction_; // selects the frame of the compass 
+			float new_direction_; // the new direction of the player
 	};
 	class player_position_change_event : public event {
 		public:
@@ -189,34 +189,33 @@ namespace events{
 	class sail_length_change_event : public event{
 		public:
 			~sail_length_change_event() = default;
-			sail_length_change_event(int new_length, int new_force)
+			sail_length_change_event(float new_length)
 				: event(event_types::sail_length_change), new_length_(new_length){};
 			
-			int get_new_length() const{
+			float get_new_length() const{
 				return new_length_;
 			}
 			static const int get_static_type(){
 				return event_types::sail_length_change;
 			}
 		private:
-			// length and direction in terms of wind force, in terms of the frame and aanimation for the hud
-			int new_length_;
+			float new_length_;
 	};
 	class sail_wind_change_event : public event{
 		public:
 			~sail_wind_change_event() = default;
-			sail_wind_change_event( int new_force)
-				: event(event_types::sail_length_change), new_force_(new_force){};
+			sail_wind_change_event(int new_force)
+				: event(event_types::sail_length_change), new_force_proportion_(new_force){};
 			
 			int get_new_force() const{
-				return new_force_;
+				return new_force_proportion_;
 			}
 			static const int get_static_type(){
 				return event_types::sail_length_change;
 			}
 		private:
 			// length and direction in terms of wind force, in terms of the frame and aanimation for the hud
-			int new_force_;
+			int new_force_proportion_;
 	};
 	class event_handler_interface{
 		public:
