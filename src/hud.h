@@ -119,16 +119,15 @@ namespace hud   {
 		void unsubscribe() override;
 		void subscribe() override;
     };
-	/**
-	* will uncomment as i implement, for now just focusing on the anchor 
     class player_position_change_strategy : public event_strategy{
         public:
-		player_position_change_strategy()
-        : event_strategy() {};
+		player_position_change_strategy(sprite::sprite* sprite)
+        : event_strategy(sprite) {};
         
         void on_event(const events::event& event, sprite::sprite& sprite) override;
-    };
-    */
+		void unsubscribe() override;
+		void subscribe() override;
+	};
 	class hud{
 		public:
 			/**

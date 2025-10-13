@@ -1,0 +1,11 @@
+
+TOOD hud foundations
+-> draw the art
+
+
+-> make and queue the events
+-> build the hud elements
+-> implement the remainder of the on events
+
+-> then the interaction key
+-> consider the parts

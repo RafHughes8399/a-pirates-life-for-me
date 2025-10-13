@@ -39,10 +39,35 @@ void hud::ship_hud_builder::build_map() {
 }
 //TODO implement
 void hud::ship_hud_builder::build_player_components(){
+    // these are pending art implementation
     // build compass
-
+    auto compass_texture = LoadTexture(COMPASS_HUD_PATH);
+    auto compass_sprite = sprite::sprite(compass_texture, COMPASS_HUD_FRAME_WIDTH, COMPASS_HUD_FRAME_HEIGHT, COMPASS_HUD_FRAMES, COMPASS_HUD_ANIMATIONS);
+    // ! placeholder, left of the anchor 
+    auto compass_position = Vector2 {10, 800};
+    //TODO 10/10 combine the two sail events into one 
+    std::unique_ptr<event_strategy> compass_event_strategy = std::make_unique<player_direction_change_strategy>(&compass_sprite);
+    auto sail_hud_element = std::make_unique<hud::hud_element>(compass_sprite, compass_position, std::move(compass_event_strategy));
+    hud_.add_element(std::move(sail_hud_element));
     // build sail 
+    auto sail_texture = LoadTexture(SAIL_HUD_PATH);
+    auto sail_sprite = sprite::sprite(sail_texture, SAIL_HUD_FRAME_WIDTH, SAIL_HUD_FRAME_HEIGHT, SAIL_HUD_FRAMES, SAIL_HUD_ANIMATIONS);
+    auto sail_position = Vector2 {10, 550};
+    //TODO 10/10 combine the two sail events into one 
+    std::unique_ptr<event_strategy> sail_event_strategy = std::make_unique<sail_length_change_strategy>(&sail_sprite);
+    auto sail_hud_element = std::make_unique<hud::hud_element>(sail_sprite, sail_position, std::move(sail_event_strategy));
+    hud_.add_element(std::move(sail_hud_element));
 
+    // build minimap
+
+    auto mini_map_texture = LoadTexture(MAP_HUD_PATH);
+    auto mini_map_sprite = sprite::sprite(mini_map_texture, MAP_HUD_FRAME_WIDTH, MAP_HUD_FRAME_HEIGHT, MAP_HUD_FRAMES, MAP_HUD_ANIMATIONS);
+
+    // ! placeholder, top right of the screen
+    auto map_position = Vector2 {1800 ,100};
+    std::unique_ptr<event_strategy> position_event_strategy = std::make_unique<player_position_change_strategy>(&mini_map_sprite);
+    auto mini_map_hud_element = std::make_unique<hud::hud_element>(mini_map_sprite, map_position, std::move(position_event_strategy));
+    hud_.add_element(std::move(mini_map_hud_element));
     // build anchor
     // ok so you build the element, which needs a sprite
     auto anchor_texture = LoadTexture(ANCHOR_HUD_PATH);
@@ -51,7 +76,8 @@ void hud::ship_hud_builder::build_player_components(){
     // a position 
     // for now the position will be rigid and based on the 1920 x 1080 resolution, 
     // TODO in the future is to make it scale based on the current machine resolution
-    auto anchor_position = Vector2{50, 800}; // subject to change 
+    // ! placeholder - next to the compass, below the sail
+    auto anchor_position = Vector2{200, 800}; // subject to change 
 
     // and a strategy
     std::unique_ptr<event_strategy> anchor_event_strategy = std::make_unique<anchor_height_change_strategy>(&anchor_sprite);
@@ -122,6 +148,23 @@ void hud::sail_wind_change_strategy::on_event(const events::event& event, sprite
     sprite.get_animation().goto_animation(animation); 
     return;
 }
+void hud::player_position_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
+    // cast the event 
+    const events::player_position_change_event& pp_change_event = static_cast<const events::player_position_change_event&>(event);
+    // new position of the ship
+    auto new_ship_position = pp_change_event.get_new_position(); 
+    // the new position should be the centre of the rectangle, 
+    // the rectangle's position is based on the top left corner of the rectangle, 
+    // the ship should be at the centre of the minimap so
+    // calculate the centre of the frame
+    auto current_frame = sprite.get_animation().get_frame();
+    Vector2 frame_centre = Vector2{current_frame.x + (current_frame.width / 2), current_frame.y + (current_frame.height / 2)};
+    Vector2 differnce = Vector2{new_ship_position.x - frame_centre.x, new_ship_position.y - frame_centre.y};
+    // the difference between the current centre and the new centre is how much you change the new position of the frame by
+    Vector2 new_frame_position = Vector2{current_frame.x + differnce.x, current_frame.y + differnce.y};
+    sprite.get_animation().set_frame_position(new_frame_position);
+    return;
+};
 void hud::event_strategy::set_sprite_pointer(sprite::sprite* sprite_pointer){
     sprite_ = sprite_pointer;
 }
@@ -160,17 +203,12 @@ void hud::sail_wind_change_strategy::unsubscribe(){
     auto* casted_handler = static_cast<events::event_handler<events::sail_wind_change_event>*>(handler_.get());
     event_interface::unsubscribe<events::sail_wind_change_event>(*casted_handler);
 }
+void hud::player_position_change_strategy::subscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::sail_wind_change_event>*>(handler_.get());
+    event_interface::subscribe<events::sail_wind_change_event>(*casted_handler);
+}
+void hud::player_position_change_strategy::unsubscribe(){
+    auto* casted_handler = static_cast<events::event_handler<events::player_position_change_event>*>(handler_.get());
+    event_interface::unsubscribe<events::player_position_change_event>(*casted_handler);
+}
 
-//TODO 6/10 implement the remainder of the strategies
-/**
- * will uncomment as implemetned 
-void hud::player_position_change_strategy::on_event(const events::event& event, sprite::sprite& sprite){
-    // cast the event 
-    const events::player_position_change_event& pp_change_event = static_cast<const events::player_position_change_event&>(event);
-    (void) sprite;
-    // ? something along the lines of updating the frame of the animation
-    // ? like the area that it covers 
-    return;
-};
-
-*/

@@ -1,11 +1,15 @@
 #include "animation.h"
 
 
-// TODO update the rectangle's position as well
-const Rectangle& animation::sprite_animation::get_frame() const{
+const Rectangle animation::sprite_animation::get_frame() const{
     return frame_;
 }
 
+// TODO update the rectangle's position as well
+void animation::sprite_animation::set_frame_position(Vector2 position){
+    frame_.x = position.x;
+    frame_.y = position.y;
+}
 int animation::sprite_animation::get_current_frame(){
     return current_frame_;
 }

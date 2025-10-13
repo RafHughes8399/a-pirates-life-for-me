@@ -31,9 +31,12 @@ namespace animation{
                 
             sprite_animation& operator=(const sprite_animation& other) = default;
             sprite_animation& operator=(sprite_animation&& other) = default;
-            const Rectangle& get_frame() const;
+            
+            const Rectangle get_frame() const;
+            void set_frame_position(Vector2 position);
             int get_current_frame(); 
             int get_current_animation();
+
             bool playing();
             void next_frame(bool wrap = true);
             void next_animation();
@@ -46,6 +49,8 @@ namespace animation{
 
             const int num_frames();
             const int num_animations();
+
+
         private:
         // the frame of the sprite sheet
         Rectangle frame_;
